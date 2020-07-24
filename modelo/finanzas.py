@@ -32,10 +32,12 @@ class Service:
             "INSERT INTO movimientos VALUES (%s, %s, %s)", (None, data.nombre, data.descripcion)
         )
         self.conexion.commit()
-        pass
-
-    def registrar_categoria(self, data = CategoriaDTO):
-        pass
+        
+    def registrar_categoria(self, tipo, data = CategoriaDTO):
+        self.cursor.execute(
+            "INSERT INTO categorias_{} VALUES (%s, %s, %s)".format(tipo), (None, data.nombre, data.descripcion)
+        )
+        self.conexion.commit()
 
     def calcular_valance(self):
         pass
@@ -44,8 +46,8 @@ class Service:
         self.conexion.close()
 
 if __name__ == "__main__":
-    movimiento = MovimientoDTO('juan', 'hola')
+    categoria = CategoriaDTO('juan', 'hola')
     modelo = Service()
     
-    modelo.registrar_movimiento(movimiento)
+    modelo.registrar_categoria("egreso", categoria)
     modelo.cerrar_database()
