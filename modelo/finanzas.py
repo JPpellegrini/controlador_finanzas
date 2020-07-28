@@ -69,13 +69,13 @@ class Service:
         )
         self.conexion.commit()
 
-    def calcular_valance(self):
-        valance = 0
+    def calcular_balance(self):
+        balance = 0
         for ingreso in self.buscar("ingresos"):
-            valance += ingreso[1]
+            balance += ingreso[1]
         for egreso in self.buscar("egresos"):
-            valance -= egreso[1]
-        return valance
+            balance -= egreso[1]
+        return balance
 
     def cerrar_database(self):
         self.conexion.close()
