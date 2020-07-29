@@ -3,7 +3,7 @@ from PyQt5 import QtCore, QtWidgets, QtGui
 
 class Vista(QtWidgets.QWidget):
     
-    calcular_valance = QtCore.pyqtSignal()
+    calcular_balance = QtCore.pyqtSignal()
     agregar_ingreso = QtCore.pyqtSignal()
     agregar_egreso = QtCore.pyqtSignal()
 
@@ -12,7 +12,6 @@ class Vista(QtWidgets.QWidget):
         self.__setupUi()
 
     def __setupUi(self):
-        self.calcular_valance.emit()
         self.__layout = QtWidgets.QFormLayout()
 
         #WIDGETS
@@ -35,17 +34,17 @@ class Vista(QtWidgets.QWidget):
     
     def __on_btn_ingreso_clicked(self):
         self.agregar_ingreso.emit()
-        self.calcular_valance.emit()
+        self.calcular_balance.emit()
 
     def __on_btn_egreso_clicked(self):
         self.agregar_egreso.emit()
-        self.calcular_valance.emit()
+        self.calcular_balance.emit()
 
     def obtener_datos(self):
-        return self.__line_cantidad.text()
+        return float(self.__line_cantidad.text())
 
-    def actualizar_valance(self, valor):
-        self.__label_balance.setText(valor)
+    def actualizar_balance(self, valor):
+        self.__label_balance.setText(str(valor))
 
 if __name__ == "__main__":
     app = QtWidgets.QApplication(sys.argv)
