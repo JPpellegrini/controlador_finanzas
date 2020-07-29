@@ -41,7 +41,7 @@ class Vista(QtWidgets.QWidget):
         self.calcular_balance.emit()
 
     def obtener_datos(self):
-        return self.__line_cantidad.text()
+        return float(self.__line_cantidad.text())
 
     def actualizar_balance(self, valor):
         self.__label_balance.setText(str(valor))
