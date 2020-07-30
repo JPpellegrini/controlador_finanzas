@@ -34,5 +34,4 @@ if __name__ == "__main__":
     controlador.set_model(modelo)
     controlador.set_view(vista)
     controlador.show_vista()
-
     app.exec()

@@ -11,5 +11,6 @@ controlador = Controlador()
 
 controlador.set_model(modelo)
 controlador.set_view(vista)
+app.aboutToQuit.connect(modelo.cerrar_database)
 controlador.show_vista()
 app.exec()
