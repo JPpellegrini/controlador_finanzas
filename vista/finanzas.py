@@ -22,15 +22,18 @@ class Ventana_movimiento(QtWidgets.QDialog):
         self.__contenedor.addWidget(self.__boton1)
 
         self.setLayout(self.__contenedor)
+    
 
 class Vista(QtWidgets.QWidget):
     
     calcular_balance = QtCore.pyqtSignal()
     agregar_ingreso = QtCore.pyqtSignal()
     agregar_egreso = QtCore.pyqtSignal()
+    agregar_movimiento = QtCore.pyqtSignal()
 
     def __init__(self):
         QtWidgets.QWidget.__init__(self)
+        self.__ventana_agragar_movimiento = Ventana_movimiento()
         self.__setupUi()
 
     def __setupUi(self):
@@ -66,7 +69,9 @@ class Vista(QtWidgets.QWidget):
         self.calcular_balance.emit()
 
     def __on_btn_movimiento_clicked(self):
-        self.__ventana_agragar_movimiento = Ventana_movimiento().exec_()
+        self.__ventana_agragar_movimiento.exec_()
+        self.agregar_movimiento.emit()
+
     
     def obtener_datos(self):
         return float(self.__line_cantidad.text())
