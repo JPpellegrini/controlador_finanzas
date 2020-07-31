@@ -24,7 +24,7 @@ class Controlador:
                                             1, 1, "hola", "2019"))
 
     def __on_agregar_movimiento(self):
-        datos = self.__vista.ventana_movimiento.obtener_datos()
+        datos = self.__vista.ventana_agregar_movimiento.obtener_datos()
         self.__modelo.registrar_movimiento(MovimientoDTO(datos[0], datos[1]))
 
     def show_vista(self):
