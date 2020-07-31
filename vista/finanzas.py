@@ -67,12 +67,12 @@ class Vista(QtWidgets.QWidget):
 
     def __init__(self):
         QtWidgets.QWidget.__init__(self)
-        self.__ventana_calendario = Ventana_calendario()
-        self.__ventana_agragar_ingreso = Ventana_ingresos_egreso()
-        self.__ventana_agragar_egreso = Ventana_ingresos_egreso()
-        self.__ventana_agragar_movimiento = Ventana_movimiento_categoria()
-        self.__ventana_agragar_categoria_ingreso = Ventana_movimiento_categoria()
-        self.__ventana_agragar_categoria_egreso = Ventana_movimiento_categoria()
+        self.ventana_calendario = Ventana_calendario()
+        self.ventana_agragar_ingreso = Ventana_ingresos_egreso()
+        self.ventana_agragar_egreso = Ventana_ingresos_egreso()
+        self.ventana_agragar_movimiento = Ventana_movimiento_categoria()
+        self.ventana_agragar_categoria_ingreso = Ventana_movimiento_categoria()
+        self.ventana_agragar_categoria_egreso = Ventana_movimiento_categoria()
         self.__setupUi()
 
     def __setupUi(self):
@@ -107,27 +107,22 @@ class Vista(QtWidgets.QWidget):
         self.setLayout(self.__layout)
     
     def __on_btn_calendario_clicked(self):
-        self.__ventana_calendario.exec()
+        self.ventana_calendario.exec()
     
     def __on_btn_ingreso_clicked(self):
-        self.__ventana_agragar_ingreso.exec()
-        self.agregar_ingreso.emit()
-        self.calcular_balance.emit()
+        self.ventana_agragar_ingreso.exec()
 
     def __on_btn_egreso_clicked(self):
-        self.__ventana_agragar_egreso.exec()
-        self.agregar_egreso.emit()
-        self.calcular_balance.emit()
+        self.ventana_agragar_egreso.exec()
 
     def __on_btn_movimiento_clicked(self):
-        self.__ventana_agragar_movimiento.exec_()
-        self.agregar_movimiento.emit()
+        self.ventana_agragar_movimiento.exec_()
     
     def __on_btn_categoria_ingreso_clicked(self):
-        self.__ventana_agragar_categoria_ingreso.exec_()
+        self.ventana_agragar_categoria_ingreso.exec_()
 
     def __on_btn_categoria_egreso_clicked(self):
-        self.__ventana_agragar_categoria_egreso.exec_()
+        self.ventana_agragar_categoria_egreso.exec_()
 
     def obtener_datos(self):
         return float(self.__line_cantidad.text())
