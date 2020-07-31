@@ -2,6 +2,9 @@ import sys
 from PyQt5 import QtCore, QtWidgets, QtGui
 
 class Ventana_movimiento(QtWidgets.QDialog):
+
+    signal = QtCore.pyqtSignal()
+
     def __init__(self, parent = None):
         QtWidgets.QDialog.__init__(self, parent)
         self.__setupUi()
@@ -12,16 +15,25 @@ class Ventana_movimiento(QtWidgets.QDialog):
         #WIDGETS
         self.__line_nombre = QtWidgets.QLineEdit()
         self.__line_descripcion = QtWidgets.QTextEdit()
-        self.__boton1 = QtWidgets.QPushButton("Aceptar")
+        self.__btn_registrar = QtWidgets.QPushButton("Aceptar")
         
         self.__line_nombre.setPlaceholderText("Nombre")
         self.__line_descripcion.setPlaceholderText("Descripción")
         
         self.__contenedor.addWidget(self.__line_nombre)
         self.__contenedor.addWidget(self.__line_descripcion)
-        self.__contenedor.addWidget(self.__boton1)
+        self.__contenedor.addWidget(self.__btn_registrar)
+
+        self.__btn_registrar.clicked.connect(self.__on_btn_registrar)
 
         self.setLayout(self.__contenedor)
+
+    def __on_btn_registrar(self):
+        self.signal.emit()
+        self.close()
+    
+    def obtener_datos(self):
+        return self.__line_nombre.text(), self.__line_descripcion.toPlainText()
     
 
 class Vista(QtWidgets.QWidget):
@@ -31,9 +43,11 @@ class Vista(QtWidgets.QWidget):
     agregar_egreso = QtCore.pyqtSignal()
     agregar_movimiento = QtCore.pyqtSignal()
 
+
     def __init__(self):
         QtWidgets.QWidget.__init__(self)
-        self.__ventana_agragar_movimiento = Ventana_movimiento()
+        self.ventana_movimiento = Ventana_movimiento()
+        self.ventana_movimiento.signal.connect(lambda: self.agregar_movimiento.emit())
         self.__setupUi()
 
     def __setupUi(self):
@@ -72,10 +86,8 @@ class Vista(QtWidgets.QWidget):
         self.calcular_balance.emit()
 
     def __on_btn_movimiento_clicked(self):
-        self.__ventana_agragar_movimiento.exec_()
-        self.agregar_movimiento.emit()
+        self.ventana_movimiento.exec_()
 
-    
     def __on_btn_categoria_ingreso_clicked(self):
         pass
 

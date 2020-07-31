@@ -14,6 +14,7 @@ class Controlador:
         self.__vista.calcular_balance.emit()
         self.__vista.agregar_ingreso.connect(lambda: self.__on_agregar("ingresos"))
         self.__vista.agregar_egreso.connect(lambda: self.__on_agregar("egresos"))
+        self.__vista.agregar_movimiento.connect(self.__on_agregar_movimiento)
 
     def __on_calcular_balance(self):
         self.__vista.actualizar_balance(self.__modelo.calcular_balance())
@@ -21,6 +22,10 @@ class Controlador:
     def __on_agregar(self, tipo):
         self.__modelo.registrar_transaccion(tipo, TransaccionDTO(self.__vista.obtener_datos(),
                                             1, 1, "hola", "2019"))
+
+    def __on_agregar_movimiento(self):
+        datos = self.__vista.ventana_movimiento.obtener_datos()
+        self.__modelo.registrar_movimiento(MovimientoDTO(datos[0], datos[1]))
 
     def show_vista(self):
         self.__vista.show()
