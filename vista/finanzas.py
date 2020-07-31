@@ -43,6 +43,7 @@ class Vista(QtWidgets.QWidget):
         self.__btn_ingreso = QtWidgets.QPushButton("+")
         self.__btn_egreso = QtWidgets.QPushButton("-")
         self.__btn_movimiento = QtWidgets.QPushButton("Agregar movimiento")
+        self.__btn_categoria_ingreso = QtWidgets.QPushButton("Agregar categoria de ingreso")
         
         self.__layout.addRow("Balance: ", self.__label_balance)
         self.__layout.addRow(self.__btn_calendario)
@@ -50,10 +51,12 @@ class Vista(QtWidgets.QWidget):
         self.__layout.addRow(self.__btn_ingreso)
         self.__layout.addRow(self.__btn_egreso)
         self.__layout.addRow(self.__btn_movimiento)
+        self.__layout.addRow(self.__btn_categoria_ingreso)
 
         self.__btn_ingreso.clicked.connect(self.__on_btn_ingreso_clicked)
         self.__btn_egreso.clicked.connect(self.__on_btn_egreso_clicked)
         self.__btn_movimiento.clicked.connect(self.__on_btn_movimiento_clicked)
+        self.__btn_categoria_ingreso.clicked.connect(self.__on_btn_categoria_ingreso_clicked)
                 
         self.setLayout(self.__layout)
     
@@ -68,6 +71,9 @@ class Vista(QtWidgets.QWidget):
     def __on_btn_movimiento_clicked(self):
         self.__ventana_agragar_movimiento = Ventana_movimiento().exec_()
     
+    def __on_btn_categoria_ingreso_clicked(self):
+        pass
+
     def obtener_datos(self):
         return float(self.__line_cantidad.text())
 
