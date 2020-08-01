@@ -18,7 +18,7 @@ class Ventana_calendario(QtWidgets.QDialog):
         self.setLayout(self.__contenedor)
 
 class Ventana_movimiento_categoria(QtWidgets.QDialog):
-    signal = QtCore.pyqtSignal()
+    signal= QtCore.pyqtSignal()
 
     def __init__(self, parent = None):
         QtWidgets.QDialog.__init__(self, parent)
@@ -51,6 +51,8 @@ class Ventana_movimiento_categoria(QtWidgets.QDialog):
         return self.__line_nombre.text(), self.__line_descripcion.toPlainText()
 
 class Ventana_ingresos_egreso(QtWidgets.QDialog):
+    signal = QtCore.pyqtSignal()
+
     def __init__(self, parent = None):
         QtWidgets.QDialog.__init__(self, parent)
         self.__setupUi()
@@ -67,7 +69,16 @@ class Ventana_ingresos_egreso(QtWidgets.QDialog):
         self.__contenedor.addWidget(self.__line_monto)
         self.__contenedor.addWidget(self.__boton)
 
+        self.__boton.clicked.connect(self.__on_btn_registrar)
+
         self.setLayout(self.__contenedor)
+
+    def __on_btn_registrar(self):
+        self.signal.emit()
+        self.close()
+    
+    def obtener_datos(self):
+        return self.__line_monto.text()
 
 class Vista(QtWidgets.QWidget):
     
@@ -88,6 +99,8 @@ class Vista(QtWidgets.QWidget):
         self.ventana_agregar_categoria_egreso = Ventana_movimiento_categoria()
 
         self.ventana_agregar_movimiento.signal.connect(lambda: self.agregar_movimiento.emit())
+        self.ventana_agregar_ingreso.signal.connect(lambda: [signal.emit() for signal in (self.agregar_ingreso, self.calcular_balance)])
+        self.ventana_agregar_egreso.signal.connect(lambda: [signal.emit() for signal in (self.agregar_egreso, self.calcular_balance)])
 
         self.__setupUi()
 
@@ -97,7 +110,6 @@ class Vista(QtWidgets.QWidget):
         #WIDGETS
         self.__label_balance = QtWidgets.QLabel('$0')
         self.__btn_calendario = QtWidgets.QPushButton("Calendario")
-        self.__line_cantidad = QtWidgets.QLineEdit()
         self.__btn_ingreso = QtWidgets.QPushButton("Nuevo Ingreso")
         self.__btn_egreso = QtWidgets.QPushButton("Nuevo Egreso")
         self.__btn_movimiento = QtWidgets.QPushButton("Nuevo Movimiento")
@@ -106,7 +118,6 @@ class Vista(QtWidgets.QWidget):
         
         self.__layout.addRow("Balance: ", self.__label_balance)
         self.__layout.addRow(self.__btn_calendario)
-        self.__layout.addRow(self.__line_cantidad)
         self.__layout.addRow(self.__btn_ingreso)
         self.__layout.addRow(self.__btn_egreso)
         self.__layout.addRow(self.__btn_movimiento)
@@ -139,9 +150,6 @@ class Vista(QtWidgets.QWidget):
 
     def __on_btn_categoria_egreso_clicked(self):
         self.ventana_agregar_categoria_egreso.exec_()
-
-    def obtener_datos(self):
-        return float(self.__line_cantidad.text())
 
     def actualizar_balance(self, valor):
         self.__label_balance.setText(str(valor))
