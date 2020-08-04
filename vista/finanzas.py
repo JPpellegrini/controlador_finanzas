@@ -62,11 +62,22 @@ class Ventana_ingresos_egreso(QtWidgets.QDialog):
 
         #WIDGETS
         self.__line_monto = QtWidgets.QLineEdit()
+        self.__cbx_movimientos = QtWidgets.QComboBox()
+        self.__cbx_categorias = QtWidgets.QComboBox()
+        self.__line_descripcion = QtWidgets.QTextEdit()
+        self.__cal_fecha = QtWidgets.QCalendarWidget()
         self.__boton = QtWidgets.QPushButton("Aceptar")
         
         self.__line_monto.setPlaceholderText("Monto")
+        self.__cbx_movimientos.setPlaceholderText("Movimiento")
+        self.__cbx_categorias.setPlaceholderText("Categoria")
+        self.__line_descripcion.setPlaceholderText("Descripcion")
         
         self.__contenedor.addWidget(self.__line_monto)
+        self.__contenedor.addWidget(self.__cbx_movimientos)
+        self.__contenedor.addWidget(self.__cbx_categorias)
+        self.__contenedor.addWidget(self.__line_descripcion)
+        self.__contenedor.addWidget(self.__cal_fecha)
         self.__contenedor.addWidget(self.__boton)
 
         self.__boton.clicked.connect(self.__on_btn_registrar)
@@ -77,8 +88,15 @@ class Ventana_ingresos_egreso(QtWidgets.QDialog):
         self.signal.emit()
         self.close()
     
+    def configurar_menu_desplegable(self, movimientos, categorias):
+        self.__cbx_movimientos.addItems(movimientos)
+        self.__cbx_categorias.addItems(categorias)
+
     def obtener_datos(self):
-        return self.__line_monto.text()
+        return self.__line_monto.text(), self.__line_descripcion.toPlainText(),\
+        self.__cal_fecha.selectedDate().toString(), self.__cbx_movimientos.currentIndex(),\
+        self.__cbx_categorias.currentIndex()
+
 
 class Vista(QtWidgets.QWidget):
     
@@ -155,7 +173,16 @@ class Vista(QtWidgets.QWidget):
         self.__label_balance.setText(str(valor))
 
 if __name__ == "__main__":
+    def fun():
+        datos = vista.ventana_agregar_ingreso.obtener_datos()
+        id = list(men1.values())
+        print(id[datos[3]])
+
     app = QtWidgets.QApplication(sys.argv)
     vista = Vista()
+    men1 = {"hola": 0, "camaleon": 1}
+    men2 = {"pantufla": 0, "ladrillo": 1}
+    vista.ventana_agregar_ingreso.configurar_menu_desplegable(men1, men2)
+    vista.agregar_ingreso.connect(fun)
     vista.show()
     app.exec()
