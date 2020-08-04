@@ -86,6 +86,7 @@ class Vista(QtWidgets.QWidget):
     agregar_ingreso = QtCore.pyqtSignal()
     agregar_egreso = QtCore.pyqtSignal()
     agregar_movimiento = QtCore.pyqtSignal()
+    agregar_categoria_ingreso = QtCore.pyqtSignal()
 
 
     def __init__(self):
@@ -98,6 +99,7 @@ class Vista(QtWidgets.QWidget):
         self.ventana_agregar_categoria_ingreso = Ventana_movimiento_categoria()
         self.ventana_agregar_categoria_egreso = Ventana_movimiento_categoria()
 
+        self.ventana_agregar_categoria_ingreso.signal.connect(lambda: self.agregar_categoria_ingreso.emit())
         self.ventana_agregar_movimiento.signal.connect(lambda: self.agregar_movimiento.emit())
         self.ventana_agregar_ingreso.signal.connect(lambda: [signal.emit() for signal in (self.agregar_ingreso, self.calcular_balance)])
         self.ventana_agregar_egreso.signal.connect(lambda: [signal.emit() for signal in (self.agregar_egreso, self.calcular_balance)])
