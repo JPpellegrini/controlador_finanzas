@@ -11,9 +11,9 @@ class Ventana_calendario(QtWidgets.QDialog):
         self.__contenedor = QtWidgets.QVBoxLayout()
 
         #WIDGETS
-        self.__label= QtWidgets.QLabel('Calendario')
+        self.__calendario = QtWidgets.QCalendarWidget()
         
-        self.__contenedor.addWidget(self.__label)
+        self.__contenedor.addWidget(self.__calendario)
 
         self.setLayout(self.__contenedor)
 
