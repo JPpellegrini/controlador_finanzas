@@ -36,7 +36,16 @@ class Controlador:
         self.__vista.actualizar_balance(self.__modelo.calcular_balance())
 
     def __on_agregar_transaccion(self, tipo, datos):
-        self.__modelo.registrar_transaccion(tipo, TransaccionDTO(datos, 1, 1, "hola", "2019"))
+        movimientos = self.__obtener_categorias_movimientos("movimientos")
+        if tipo == "ingresos":
+            categorias = self.__obtener_categorias_movimientos("categorias_ingreso")
+        else:
+            categorias = self.__obtener_categorias_movimientos("categorias_egreso")
+        
+        id_movimiento = list(movimientos.keys())[datos[1]]
+        id_categorias = list(categorias.keys())[datos[2]]
+
+        self.__modelo.registrar_transaccion(tipo, TransaccionDTO(datos[0],id_movimiento,id_categorias,datos[3],datos[4],))
 
     def __on_agregar_movimiento(self):
         datos = self.__vista.ventana_agregar_movimiento.obtener_datos()

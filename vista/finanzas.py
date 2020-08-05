@@ -112,9 +112,10 @@ class Ventana_ingresos_egreso(QtWidgets.QDialog):
         self.__cbx_categorias.addItems(categorias.values())
 
     def obtener_datos(self):
-        return self.__line_monto.text(), self.__line_descripcion.toPlainText(),\
-        self.__cal_fecha.selectedDate().toString(), self.__cbx_movimientos.currentIndex(),\
-        self.__cbx_categorias.currentIndex()
+        return self.__line_monto.text(), self.__cbx_movimientos.currentIndex(),\
+        self.__cbx_categorias.currentIndex(),self.__line_descripcion.toPlainText(),\
+        self.__cal_fecha.selectedDate().toString()
+        
 
 
 class Vista(QtWidgets.QWidget):
