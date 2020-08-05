@@ -83,5 +83,5 @@ class Service:
 if __name__ == "__main__":
     transaccion = TransaccionDTO(0.50, 1, 1, "", "2019")
     modelo = Service()
-    print(modelo.calcular_balance())
+    print(modelo.buscar("movimientos"))
     modelo.cerrar_database()

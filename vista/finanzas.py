@@ -89,8 +89,8 @@ class Ventana_ingresos_egreso(QtWidgets.QDialog):
         self.close()
     
     def configurar_menu_desplegable(self, movimientos, categorias):
-        self.__cbx_movimientos.addItems(movimientos)
-        self.__cbx_categorias.addItems(categorias)
+        self.__cbx_movimientos.addItems(movimientos.values())
+        self.__cbx_categorias.addItems(categorias.values())
 
     def obtener_datos(self):
         return self.__line_monto.text(), self.__line_descripcion.toPlainText(),\
@@ -106,6 +106,8 @@ class Vista(QtWidgets.QWidget):
     agregar_movimiento = QtCore.pyqtSignal()
     agregar_categoria_ingreso = QtCore.pyqtSignal()
     agregar_categoria_egreso = QtCore.pyqtSignal()
+    actualizar_mov_cat_ingreso = QtCore.pyqtSignal()
+    actualizar_mov_cat_egreso = QtCore.pyqtSignal()
 
 
     def __init__(self):
@@ -159,9 +161,11 @@ class Vista(QtWidgets.QWidget):
         self.ventana_calendario.exec()
     
     def __on_btn_ingreso_clicked(self):
+        self.actualizar_mov_cat_ingreso.emit()
         self.ventana_agregar_ingreso.exec()
 
     def __on_btn_egreso_clicked(self):
+        self.actualizar_mov_cat_egreso.emit()
         self.ventana_agregar_egreso.exec()
 
     def __on_btn_movimiento_clicked(self):
