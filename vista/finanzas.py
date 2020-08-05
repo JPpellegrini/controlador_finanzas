@@ -45,8 +45,16 @@ class Ventana_movimiento_categoria(QtWidgets.QDialog):
 
     def __on_btn_registrar(self):
         self.signal.emit()
+        self.__limpiar()
         self.close()
     
+    def __limpiar(self):
+        self.__line_nombre.setText("")
+        self.__line_descripcion.setText("")
+    
+    def closeEvent(self, evnt):
+        self.__limpiar()
+
     def obtener_datos(self):
         return self.__line_nombre.text(), self.__line_descripcion.toPlainText()
 
@@ -86,8 +94,19 @@ class Ventana_ingresos_egreso(QtWidgets.QDialog):
 
     def __on_btn_registrar(self):
         self.signal.emit()
+        self.__limpiar()
         self.close()
-    
+
+    def __limpiar(self):
+        self.__line_monto.setText("")
+        self.__cbx_movimientos.clear()
+        self.__cbx_categorias.clear()
+        self.__line_descripcion.setText("")
+        self.__cal_fecha.setSelectedDate(QtCore.QDate.currentDate())
+
+    def closeEvent(self, evnt):
+        self.__limpiar()
+
     def configurar_menu_desplegable(self, movimientos, categorias):
         self.__cbx_movimientos.addItems(movimientos.values())
         self.__cbx_categorias.addItems(categorias.values())
