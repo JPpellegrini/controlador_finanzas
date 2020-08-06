@@ -1,7 +1,6 @@
 import sys
 from PyQt5 import QtCore, QtWidgets, QtGui
 
-
 class Ventana_calendario(QtWidgets.QDialog):
     def __init__(self, parent = None):
         QtWidgets.QDialog.__init__(self, parent)
@@ -30,13 +29,16 @@ class Ventana_movimiento_categoria(QtWidgets.QDialog):
         #WIDGETS
         self.__line_nombre = QtWidgets.QLineEdit()
         self.__line_descripcion = QtWidgets.QTextEdit()
+        self.__label_error = QtWidgets.QLabel("Campos con * obligatorios")
         self.__btn_registrar = QtWidgets.QPushButton("Aceptar")
 
-        self.__line_nombre.setPlaceholderText("Nombre")
+        self.__line_nombre.setPlaceholderText("Nombre*")
         self.__line_descripcion.setPlaceholderText("Descripción")
+        self.__label_error.setStyleSheet("color: gray")
         
         self.__contenedor.addWidget(self.__line_nombre)
         self.__contenedor.addWidget(self.__line_descripcion)
+        self.__contenedor.addWidget(self.__label_error)
         self.__contenedor.addWidget(self.__btn_registrar)
 
         self.__btn_registrar.clicked.connect(self.__on_btn_registrar)
@@ -44,14 +46,24 @@ class Ventana_movimiento_categoria(QtWidgets.QDialog):
         self.setLayout(self.__contenedor)
 
     def __on_btn_registrar(self):
-        self.signal.emit()
-        self.__limpiar()
-        self.close()
+        if self.__verificar_error():
+            self.signal.emit()
+            self.__limpiar()
+            self.close()
     
     def __limpiar(self):
-        self.__line_nombre.setText("")
-        self.__line_descripcion.setText("")
+        self.__line_nombre.clear()
+        self.__line_descripcion.clear()
+        self.__label_error.setStyleSheet("color: gray")
+        self.__label_error.setText("Campos con * obligatorios")
     
+    def __verificar_error(self):
+        self.__label_error.setStyleSheet("color: red")
+        if self.__line_nombre.text() == "":
+            self.__label_error.setText("Ingrese un nombre")
+            return False
+        else: return True
+
     def closeEvent(self, evnt):
         self.__limpiar()
 
@@ -74,18 +86,21 @@ class Ventana_ingresos_egreso(QtWidgets.QDialog):
         self.__cbx_categorias = QtWidgets.QComboBox()
         self.__line_descripcion = QtWidgets.QTextEdit()
         self.__cal_fecha = QtWidgets.QCalendarWidget()
+        self.__label_error = QtWidgets.QLabel("Campos con * obligatorios")
         self.__boton = QtWidgets.QPushButton("Aceptar")
         
-        self.__line_monto.setPlaceholderText("Monto")
-        self.__cbx_movimientos.setPlaceholderText("Movimiento")
-        self.__cbx_categorias.setPlaceholderText("Categoria")
+        self.__line_monto.setPlaceholderText("Monto*")
+        self.__cbx_movimientos.setPlaceholderText("Movimiento*")
+        self.__cbx_categorias.setPlaceholderText("Categoria*")
         self.__line_descripcion.setPlaceholderText("Descripcion")
+        self.__label_error.setStyleSheet("color: gray")
         
         self.__contenedor.addWidget(self.__line_monto)
         self.__contenedor.addWidget(self.__cbx_movimientos)
         self.__contenedor.addWidget(self.__cbx_categorias)
         self.__contenedor.addWidget(self.__line_descripcion)
         self.__contenedor.addWidget(self.__cal_fecha)
+        self.__contenedor.addWidget(self.__label_error)
         self.__contenedor.addWidget(self.__boton)
 
         self.__boton.clicked.connect(self.__on_btn_registrar)
@@ -93,16 +108,34 @@ class Ventana_ingresos_egreso(QtWidgets.QDialog):
         self.setLayout(self.__contenedor)
 
     def __on_btn_registrar(self):
-        self.signal.emit()
-        self.__limpiar()
-        self.close()
+        if self.__verificar_error():
+            self.signal.emit()
+            self.__limpiar()
+            self.close()
 
     def __limpiar(self):
-        self.__line_monto.setText("")
+        self.__line_monto.clear()
         self.__cbx_movimientos.clear()
         self.__cbx_categorias.clear()
-        self.__line_descripcion.setText("")
+        self.__line_descripcion.clear()
+        self.__label_error.setStyleSheet("color: gray")
+        self.__label_error.setText("Campos con * obligatorios")
         self.__cal_fecha.setSelectedDate(QtCore.QDate.currentDate())
+    
+    def __verificar_error(self):
+        self.__label_error.setStyleSheet("color: red")
+        try:
+            int(self.__line_monto.text())
+            if self.__cbx_movimientos.currentIndex() == -1:
+                self.__label_error.setText("Seleccione movimiento")
+                return False
+            if self.__cbx_categorias.currentIndex() == -1:
+                self.__label_error.setText("Seleccione categoria")
+                return False
+            return True
+        except ValueError:
+            self.__label_error.setText("Ingrese numeros solamente")
+            return False
 
     def closeEvent(self, evnt):
         self.__limpiar()
