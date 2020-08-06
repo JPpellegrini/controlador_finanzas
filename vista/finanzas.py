@@ -2,21 +2,6 @@ import sys
 from PyQt5 import QtCore, QtWidgets, QtGui
 
 
-class Ventana_calendario(QtWidgets.QDialog):
-    def __init__(self, parent = None):
-        QtWidgets.QDialog.__init__(self, parent)
-        self.__setupUi()
-    
-    def __setupUi(self):
-        self.__contenedor = QtWidgets.QVBoxLayout()
-
-        #WIDGETS
-        self.__calendario = QtWidgets.QCalendarWidget()
-        
-        self.__contenedor.addWidget(self.__calendario)
-
-        self.setLayout(self.__contenedor)
-
 class Ventana_movimiento_categoria(QtWidgets.QDialog):
     signal= QtCore.pyqtSignal()
 
@@ -133,7 +118,6 @@ class Vista(QtWidgets.QWidget):
     def __init__(self):
         QtWidgets.QWidget.__init__(self)
 
-        self.ventana_calendario = Ventana_calendario()
         self.ventana_agregar_ingreso = Ventana_ingresos_egreso()
         self.ventana_agregar_egreso = Ventana_ingresos_egreso()
         self.ventana_agregar_movimiento = Ventana_movimiento_categoria()
@@ -153,22 +137,21 @@ class Vista(QtWidgets.QWidget):
 
         #WIDGETS
         self.__label_balance = QtWidgets.QLabel('$0')
-        self.__btn_calendario = QtWidgets.QPushButton("Calendario")
         self.__btn_ingreso = QtWidgets.QPushButton("Nuevo Ingreso")
         self.__btn_egreso = QtWidgets.QPushButton("Nuevo Egreso")
         self.__btn_movimiento = QtWidgets.QPushButton("Nuevo Movimiento")
         self.__btn_categoria_ingreso = QtWidgets.QPushButton("Nueva Categoria Ingreso")
         self.__btn_categoria_egreso = QtWidgets.QPushButton("Nueva Categoria Egreso")
+        self.__calendario = QtWidgets.QCalendarWidget()
         
         self.__layout.addRow("Balance: ", self.__label_balance)
-        self.__layout.addRow(self.__btn_calendario)
         self.__layout.addRow(self.__btn_ingreso)
         self.__layout.addRow(self.__btn_egreso)
         self.__layout.addRow(self.__btn_movimiento)
         self.__layout.addRow(self.__btn_categoria_ingreso)
         self.__layout.addRow(self.__btn_categoria_egreso)
+        self.__layout.addRow(self.__calendario)
 
-        self.__btn_calendario.clicked.connect(self.__on_btn_calendario_clicked)
         self.__btn_ingreso.clicked.connect(self.__on_btn_ingreso_clicked)
         self.__btn_egreso.clicked.connect(self.__on_btn_egreso_clicked)
         self.__btn_movimiento.clicked.connect(self.__on_btn_movimiento_clicked)
@@ -176,9 +159,6 @@ class Vista(QtWidgets.QWidget):
         self.__btn_categoria_egreso.clicked.connect(self.__on_btn_categoria_egreso_clicked)
                 
         self.setLayout(self.__layout)
-    
-    def __on_btn_calendario_clicked(self):
-        self.ventana_calendario.exec()
     
     def __on_btn_ingreso_clicked(self):
         self.actualizar_mov_cat_ingreso.emit()
