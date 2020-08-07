@@ -181,6 +181,7 @@ class Vista(QtWidgets.QWidget):
         self.__main_layout = QtWidgets.QHBoxLayout()
         self.__btn_layout = QtWidgets.QVBoxLayout()
         self.__cal_layout = QtWidgets.QVBoxLayout()
+        self.__opcion_layout = QtWidgets.QHBoxLayout()
 
         #WIDGETS
         self.__line_balance = QtWidgets.QLineEdit()
@@ -194,11 +195,17 @@ class Vista(QtWidgets.QWidget):
         self.__tree_ingresos = QtWidgets.QTreeView()
         self.__label_egresos = QtWidgets.QLabel('Egresos')
         self.__tree_egresos = QtWidgets.QTreeView()
+        self.__btn_editar = QtWidgets.QPushButton("Editar")
+        self.__btn_eliminar = QtWidgets.QPushButton("Eliminar")
 
+        #CONFIG WIDGETS
         self.__line_balance.setReadOnly(1)
+        self.__btn_editar.setEnabled(False)
+        self.__btn_eliminar.setEnabled(False)
         self.__label_ingresos.setStyleSheet("color: green")
         self.__label_egresos.setStyleSheet("color: red")
 
+        #IPLEMENTACION WIDGETS
         self.__main_layout.addLayout(self.__btn_layout)
         self.__main_layout.addLayout(self.__cal_layout)
         
@@ -215,6 +222,11 @@ class Vista(QtWidgets.QWidget):
         self.__cal_layout.addWidget(self.__label_egresos)
         self.__cal_layout.addWidget(self.__tree_egresos)
 
+        self.__btn_layout.addLayout(self.__opcion_layout)
+        self.__opcion_layout.addWidget(self.__btn_editar)
+        self.__opcion_layout.addWidget(self.__btn_eliminar)
+
+        #BOTONES
         self.__btn_ingreso.clicked.connect(self.__on_btn_ingreso_clicked)
         self.__btn_egreso.clicked.connect(self.__on_btn_egreso_clicked)
         self.__btn_movimiento.clicked.connect(self.__on_btn_movimiento_clicked)
