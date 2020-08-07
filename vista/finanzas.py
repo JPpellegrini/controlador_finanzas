@@ -178,10 +178,12 @@ class Vista(QtWidgets.QWidget):
         self.__setupUi()
 
     def __setupUi(self):
-        self.__layout = QtWidgets.QFormLayout()
+        self.__main_layout = QtWidgets.QHBoxLayout()
+        self.__btn_layout = QtWidgets.QVBoxLayout()
+        self.__cal_layout = QtWidgets.QVBoxLayout()
 
         #WIDGETS
-        self.__label_balance = QtWidgets.QLabel('$0')
+        self.__line_balance = QtWidgets.QLineEdit()
         self.__btn_ingreso = QtWidgets.QPushButton("Nuevo Ingreso")
         self.__btn_egreso = QtWidgets.QPushButton("Nuevo Egreso")
         self.__btn_movimiento = QtWidgets.QPushButton("Nuevo Movimiento")
@@ -193,20 +195,25 @@ class Vista(QtWidgets.QWidget):
         self.__label_egresos = QtWidgets.QLabel('Egresos')
         self.__tree_egresos = QtWidgets.QTreeView()
 
+        self.__line_balance.setReadOnly(1)
         self.__label_ingresos.setStyleSheet("color: green")
         self.__label_egresos.setStyleSheet("color: red")
 
-        self.__layout.addRow("Balance: ", self.__label_balance)
-        self.__layout.addRow(self.__btn_ingreso)
-        self.__layout.addRow(self.__btn_egreso)
-        self.__layout.addRow(self.__btn_movimiento)
-        self.__layout.addRow(self.__btn_categoria_ingreso)
-        self.__layout.addRow(self.__btn_categoria_egreso)
-        self.__layout.addRow(self.__calendario)
-        self.__layout.addRow(self.__label_ingresos)
-        self.__layout.addRow(self.__tree_ingresos)
-        self.__layout.addRow(self.__label_egresos)
-        self.__layout.addRow(self.__tree_egresos)
+        self.__main_layout.addLayout(self.__btn_layout)
+        self.__main_layout.addLayout(self.__cal_layout)
+        
+        self.__btn_layout.addWidget(self.__btn_ingreso)
+        self.__btn_layout.addWidget(self.__btn_egreso)
+        self.__btn_layout.addWidget(self.__btn_movimiento)
+        self.__btn_layout.addWidget(self.__btn_categoria_ingreso)
+        self.__btn_layout.addWidget(self.__btn_categoria_egreso)
+        self.__btn_layout.addWidget(self.__line_balance)
+
+        self.__cal_layout.addWidget(self.__calendario)
+        self.__cal_layout.addWidget(self.__label_ingresos)
+        self.__cal_layout.addWidget(self.__tree_ingresos)
+        self.__cal_layout.addWidget(self.__label_egresos)
+        self.__cal_layout.addWidget(self.__tree_egresos)
 
         self.__btn_ingreso.clicked.connect(self.__on_btn_ingreso_clicked)
         self.__btn_egreso.clicked.connect(self.__on_btn_egreso_clicked)
@@ -214,7 +221,7 @@ class Vista(QtWidgets.QWidget):
         self.__btn_categoria_ingreso.clicked.connect(self.__on_btn_categoria_ingreso_clicked)
         self.__btn_categoria_egreso.clicked.connect(self.__on_btn_categoria_egreso_clicked)
                 
-        self.setLayout(self.__layout)
+        self.setLayout(self.__main_layout)
     
     def __on_btn_ingreso_clicked(self):
         self.actualizar_mov_cat_ingreso.emit()
@@ -234,7 +241,7 @@ class Vista(QtWidgets.QWidget):
         self.ventana_agregar_categoria_egreso.exec_()
 
     def actualizar_balance(self, valor):
-        self.__label_balance.setText(str(valor))
+        self.__line_balance.setText("Balance: " + str(valor))
 
 if __name__ == "__main__":
     def fun():
