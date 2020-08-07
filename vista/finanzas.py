@@ -242,18 +242,3 @@ class Vista(QtWidgets.QWidget):
 
     def actualizar_balance(self, valor):
         self.__line_balance.setText("Balance: " + str(valor))
-
-if __name__ == "__main__":
-    def fun():
-        datos = vista.ventana_agregar_ingreso.obtener_datos()
-        id = list(men1.values())
-        print(id[datos[3]])
-
-    app = QtWidgets.QApplication(sys.argv)
-    vista = Vista()
-    men1 = {"hola": 0, "camaleon": 1}
-    men2 = {"pantufla": 0, "ladrillo": 1}
-    vista.ventana_agregar_ingreso.configurar_menu_desplegable(men1, men2)
-    vista.agregar_ingreso.connect(fun)
-    vista.show()
-    app.exec()
