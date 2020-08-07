@@ -177,7 +177,14 @@ class Vista(QtWidgets.QWidget):
         self.__btn_categoria_ingreso = QtWidgets.QPushButton("Nueva Categoria Ingreso")
         self.__btn_categoria_egreso = QtWidgets.QPushButton("Nueva Categoria Egreso")
         self.__calendario = QtWidgets.QCalendarWidget()
-        
+        self.__label_ingresos = QtWidgets.QLabel('Ingresos')
+        self.__tree_ingresos = QtWidgets.QTreeView()
+        self.__label_egresos = QtWidgets.QLabel('Egresos')
+        self.__tree_egresos = QtWidgets.QTreeView()
+
+        self.__label_ingresos.setStyleSheet("color: green")
+        self.__label_egresos.setStyleSheet("color: red")
+
         self.__layout.addRow("Balance: ", self.__label_balance)
         self.__layout.addRow(self.__btn_ingreso)
         self.__layout.addRow(self.__btn_egreso)
@@ -185,6 +192,10 @@ class Vista(QtWidgets.QWidget):
         self.__layout.addRow(self.__btn_categoria_ingreso)
         self.__layout.addRow(self.__btn_categoria_egreso)
         self.__layout.addRow(self.__calendario)
+        self.__layout.addRow(self.__label_ingresos)
+        self.__layout.addRow(self.__tree_ingresos)
+        self.__layout.addRow(self.__label_egresos)
+        self.__layout.addRow(self.__tree_egresos)
 
         self.__btn_ingreso.clicked.connect(self.__on_btn_ingreso_clicked)
         self.__btn_egreso.clicked.connect(self.__on_btn_egreso_clicked)
