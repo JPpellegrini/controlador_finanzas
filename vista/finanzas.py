@@ -5,8 +5,12 @@ from PyQt5 import QtCore, QtWidgets, QtGui
 class Ventana_movimiento_categoria(QtWidgets.QDialog):
     signal= QtCore.pyqtSignal()
 
-    def __init__(self, parent = None):
+    def __init__(self, titulo, parent = None):
         QtWidgets.QDialog.__init__(self, parent)
+
+        #CONFIG
+        self.setWindowTitle(titulo)
+
         self.__setupUi()
     
     def __setupUi(self):
@@ -59,8 +63,12 @@ class Ventana_movimiento_categoria(QtWidgets.QDialog):
 class Ventana_ingresos_egreso(QtWidgets.QDialog):
     signal = QtCore.pyqtSignal()
 
-    def __init__(self, parent = None):
+    def __init__(self, titulo, parent = None):
         QtWidgets.QDialog.__init__(self, parent)
+
+        #CONFIG
+        self.setWindowTitle(titulo)
+
         self.__setupUi()
     
     def __setupUi(self):
@@ -136,9 +144,9 @@ class Ventana_ingresos_egreso(QtWidgets.QDialog):
         self.__cal_fecha.selectedDate().toString()
         
 
-
 class Vista(QtWidgets.QWidget):
     
+    #SIGNALS
     calcular_balance = QtCore.pyqtSignal()
     agregar_ingreso = QtCore.pyqtSignal()
     agregar_egreso = QtCore.pyqtSignal()
@@ -148,15 +156,18 @@ class Vista(QtWidgets.QWidget):
     actualizar_mov_cat_ingreso = QtCore.pyqtSignal()
     actualizar_mov_cat_egreso = QtCore.pyqtSignal()
 
-
     def __init__(self):
         QtWidgets.QWidget.__init__(self)
 
-        self.ventana_agregar_ingreso = Ventana_ingresos_egreso()
-        self.ventana_agregar_egreso = Ventana_ingresos_egreso()
-        self.ventana_agregar_movimiento = Ventana_movimiento_categoria()
-        self.ventana_agregar_categoria_ingreso = Ventana_movimiento_categoria()
-        self.ventana_agregar_categoria_egreso = Ventana_movimiento_categoria()
+        #CONFIG
+        self.setWindowTitle("Controlador de Finanzas")
+
+        #VENTANAS
+        self.ventana_agregar_ingreso = Ventana_ingresos_egreso("Ingreso")
+        self.ventana_agregar_egreso = Ventana_ingresos_egreso("Egreso")
+        self.ventana_agregar_movimiento = Ventana_movimiento_categoria("Movimiento")
+        self.ventana_agregar_categoria_ingreso = Ventana_movimiento_categoria("Categoria de Ingreso")
+        self.ventana_agregar_categoria_egreso = Ventana_movimiento_categoria("Categoria de Engreso")
 
         self.ventana_agregar_categoria_egreso.signal.connect(lambda: self.agregar_categoria_egreso.emit())
         self.ventana_agregar_categoria_ingreso.signal.connect(lambda: self.agregar_categoria_ingreso.emit())
@@ -174,8 +185,8 @@ class Vista(QtWidgets.QWidget):
         self.__btn_ingreso = QtWidgets.QPushButton("Nuevo Ingreso")
         self.__btn_egreso = QtWidgets.QPushButton("Nuevo Egreso")
         self.__btn_movimiento = QtWidgets.QPushButton("Nuevo Movimiento")
-        self.__btn_categoria_ingreso = QtWidgets.QPushButton("Nueva Categoria Ingreso")
-        self.__btn_categoria_egreso = QtWidgets.QPushButton("Nueva Categoria Egreso")
+        self.__btn_categoria_ingreso = QtWidgets.QPushButton("Nueva Categoria de Ingreso")
+        self.__btn_categoria_egreso = QtWidgets.QPushButton("Nueva Categoria de Egreso")
         self.__calendario = QtWidgets.QCalendarWidget()
         self.__label_ingresos = QtWidgets.QLabel('Ingresos')
         self.__tree_ingresos = QtWidgets.QTreeView()
