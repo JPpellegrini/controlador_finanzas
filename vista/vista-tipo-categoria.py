@@ -37,8 +37,6 @@ class Ventana_tipo_categoria(QtWidgets.QDialog):
 
     def __on_btn_registrar(self):
         self.signal.emit()
-        self.__limpiar()
-        self.close()
     
     def __limpiar(self):
         self.__line_nombre.clear()
