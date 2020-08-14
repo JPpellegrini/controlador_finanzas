@@ -104,3 +104,45 @@ class Service_categoria_ingresos():
         return self.database.ejecutar(
             "SELECT * FROM categoria_ingresos"
         ).fetchall()
+
+class Service_categoria_egresos():
+    def __init__(self, database):
+        self.database = database
+
+    def registrar(self, data = CategoriaDTO):
+        if data.nombre != "":
+            self.database.ejecutar(
+                "INSERT INTO categoria_egresos VALUES (%s, %s, %s)", (None, data.nombre, data.descripcion)
+            )
+            self.database.guardar()
+        else : return "Ingrese el nombre"
+    
+    def editar(self, id, data = CategoriaDTO):
+        if data.nombre != "":
+            self.database.ejecutar(
+                "UPDATE categoria_egresos SET nombre=%s, descripcion=%s WHERE id = %s", (data.nombre, data.descripcion, id)
+            )
+            self.database.guardar()
+        else : return "Ingrese el nombre"
+
+    def eliminar(self, *ids):
+        try:
+            self.database.ejecutar(
+                "DELETE FROM categoria_egresos WHERE id IN ({})".format(('%s,'*len(ids))[:-1]), ids
+            )
+            self.database.guardar()
+        except pymysql.Error:
+            return "Error, categoria/s en uso"
+    
+    def obtener_tipos(self):
+        return self.database.ejecutar(
+            "SELECT * FROM categoria_egresos"
+        ).fetchall()
+
+    
+if __name__ == "__main__":
+    database = Database()
+    service = Service_tipo_transaccion(database)
+    tipo1 = Tipo_transaccionDTO("prueba", "comentario")
+
+    database.cerrar_database()
