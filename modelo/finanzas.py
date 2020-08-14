@@ -36,17 +36,18 @@ class Database:
     def cerrar_database(self):
         self.__conexion.close()
 
+
 class Service_tipo_transaccion():
     def __init__(self, database):
         self.database = database
 
     def registrar(self, data = Tipo_transaccionDTO):
-        if data.nombre != "":
+        if data.nombre:
             self.database.ejecutar(
                 "INSERT INTO movimientos VALUES (%s, %s, %s)", (None, data.nombre, data.descripcion)
             )
             self.database.guardar()
-        else : return "Ingrese el nombre"
+        else: return "Ingrese el nombre"
     
     def editar(self, id, data = Tipo_transaccionDTO):
         if data.nombre != "":
@@ -56,18 +57,50 @@ class Service_tipo_transaccion():
             self.database.guardar()
         else : return "Ingrese el nombre"
 
-    def eliminar(self, id):
-        self.database.ejecutar(
-            "DELETE FROM movimientos WHERE id = %s", (id)
-        )
-        self.database.guardar()
+    def eliminar(self, *ids):
+        try:
+            self.database.ejecutar(
+                "DELETE FROM movimientos WHERE id IN ({})".format(('%s,'*len(ids))[:-1]), ids
+            )
+            self.database.guardar()
+        except pymysql.Error:
+            return "Error, tipo/s de transaccion en uso"
     
     def obtener_tipos(self):
         return self.database.ejecutar(
             "SELECT * FROM movimientos"
         ).fetchall()
+
+class Service_categoria_ingresos():
+    def __init__(self, database):
+        self.database = database
+
+    def registrar(self, data = CategoriaDTO):
+        if data.nombre != "":
+            self.database.ejecutar(
+                "INSERT INTO categoria_ingresos VALUES (%s, %s, %s)", (None, data.nombre, data.descripcion)
+            )
+            self.database.guardar()
+        else : return "Ingrese el nombre"
     
-if __name__ == "__main__":
-    database = Database()
-    service = Service_tipo_transaccion(database)
-    tipo1 = Tipo_transaccionDTO("prueba", "comentario")
+    def editar(self, id, data = CategoriaDTO):
+        if data.nombre != "":
+            self.database.ejecutar(
+                "UPDATE categoria_ingresos SET nombre=%s, descripcion=%s WHERE id = %s", (data.nombre, data.descripcion, id)
+            )
+            self.database.guardar()
+        else : return "Ingrese el nombre"
+
+    def eliminar(self, *ids):
+        try:
+            self.database.ejecutar(
+                "DELETE FROM categoria_ingresos WHERE id IN ({})".format(('%s,'*len(ids))[:-1]), ids
+            )
+            self.database.guardar()
+        except pymysql.Error:
+            return "Error, categoria/s en uso"
+    
+    def obtener_tipos(self):
+        return self.database.ejecutar(
+            "SELECT * FROM categoria_ingresos"
+        ).fetchall()
