@@ -44,7 +44,7 @@ class Service_tipo_transaccion():
     def registrar(self, data = Tipo_transaccionDTO):
         if data.nombre:
             self.database.ejecutar(
-                "INSERT INTO movimientos VALUES (%s, %s, %s)", (None, data.nombre, data.descripcion)
+                "INSERT INTO tipos_transaccion VALUES (%s, %s, %s)", (None, data.nombre, data.descripcion)
             )
             self.database.guardar()
         else: return "Ingrese el nombre"
@@ -52,7 +52,7 @@ class Service_tipo_transaccion():
     def editar(self, id, data = Tipo_transaccionDTO):
         if data.nombre != "":
             self.database.ejecutar(
-                "UPDATE movimientos SET nombre=%s, descripcion=%s WHERE id = %s", (data.nombre, data.descripcion, id)
+                "UPDATE tipos_transaccion SET nombre=%s, descripcion=%s WHERE id = %s", (data.nombre, data.descripcion, id)
             )
             self.database.guardar()
         else : return "Ingrese el nombre"
@@ -60,7 +60,7 @@ class Service_tipo_transaccion():
     def eliminar(self, *ids):
         try:
             self.database.ejecutar(
-                "DELETE FROM movimientos WHERE id IN ({})".format(('%s,'*len(ids))[:-1]), ids
+                "DELETE FROM tipos_transaccion WHERE id IN ({})".format(('%s,'*len(ids))[:-1]), ids
             )
             self.database.guardar()
         except pymysql.Error:
@@ -68,7 +68,7 @@ class Service_tipo_transaccion():
     
     def obtener_tipos(self):
         return self.database.ejecutar(
-            "SELECT * FROM movimientos"
+            "SELECT * FROM tipos_transaccion"
         ).fetchall()
 
 class Service_categoria_ingresos():
