@@ -18,7 +18,7 @@ class Ventana_ingreso_egreso(QtWidgets.QDialog):
 
         #WIDGETS
         self.__line_monto = QtWidgets.QLineEdit()
-        self.__cbx_movimientos = QtWidgets.QComboBox()
+        self.__cbx_tipo_transaccion = QtWidgets.QComboBox()
         self.__cbx_categorias = QtWidgets.QComboBox()
         self.__line_descripcion = QtWidgets.QTextEdit()
         self.__cal_fecha = QtWidgets.QCalendarWidget()
@@ -26,13 +26,13 @@ class Ventana_ingreso_egreso(QtWidgets.QDialog):
         self.__boton = QtWidgets.QPushButton("Aceptar")
         
         self.__line_monto.setPlaceholderText("Monto*")
-        self.__cbx_movimientos.setPlaceholderText("Movimiento*")
+        self.__cbx_tipo_transaccion.setPlaceholderText("Tipo de Transaccion*")
         self.__cbx_categorias.setPlaceholderText("Categoria*")
         self.__line_descripcion.setPlaceholderText("Descripcion")
         self.__label_error.setStyleSheet("color: gray")
         
         self.__contenedor.addWidget(self.__line_monto)
-        self.__contenedor.addWidget(self.__cbx_movimientos)
+        self.__contenedor.addWidget(self.__cbx_tipo_transaccion)
         self.__contenedor.addWidget(self.__cbx_categorias)
         self.__contenedor.addWidget(self.__line_descripcion)
         self.__contenedor.addWidget(self.__cal_fecha)
@@ -48,7 +48,7 @@ class Ventana_ingreso_egreso(QtWidgets.QDialog):
 
     def __limpiar(self):
         self.__line_monto.clear()
-        self.__cbx_movimientos.clear()
+        self.__cbx_tipo_transaccion.clear()
         self.__cbx_categorias.clear()
         self.__line_descripcion.clear()
         self.__label_error.setStyleSheet("color: gray")
@@ -59,8 +59,8 @@ class Ventana_ingreso_egreso(QtWidgets.QDialog):
         self.__label_error.setStyleSheet("color: red")
         try:
             int(self.__line_monto.text())
-            if self.__cbx_movimientos.currentIndex() == -1:
-                self.__label_error.setText("Seleccione movimiento")
+            if self.__cbx_tipo_transaccion.currentIndex() == -1:
+                self.__label_error.setText("Seleccione tipo de transaccion")
                 return False
             if self.__cbx_categorias.currentIndex() == -1:
                 self.__label_error.setText("Seleccione categoria")
@@ -73,12 +73,12 @@ class Ventana_ingreso_egreso(QtWidgets.QDialog):
     def closeEvent(self, evnt):
         self.__limpiar()
 
-    def configurar_menu_desplegable(self, movimientos, categorias):
-        self.__cbx_movimientos.addItems(movimientos.values())
+    def configurar_menu_desplegable(self, tipo_transaccion, categorias):
+        self.__cbx_tipo_transaccion.addItems(tipo_transaccion.values())
         self.__cbx_categorias.addItems(categorias.values())
 
     def obtener_datos(self):
-        return self.__line_monto.text(), self.__cbx_movimientos.currentIndex(),\
+        return self.__line_monto.text(), self.__cbx_tipo_transaccion.currentIndex(),\
         self.__cbx_categorias.currentIndex(),self.__line_descripcion.toPlainText(),\
         self.__cal_fecha.selectedDate().toString()
 
