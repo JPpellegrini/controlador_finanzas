@@ -143,7 +143,7 @@ class Service_ingreso:
     def __init__(self, database):
         self.database = database
 
-    def registrar(self, data = CategoriaDTO):
+    def registrar(self, data = TransaccionDTO):
         try:
             self.database.ejecutar(
                 "INSERT INTO ingresos VALUES (%s, %s, %s, %s, %s, %s)",\
@@ -153,7 +153,7 @@ class Service_ingreso:
         except pymysql.Error:
             return "Error, ingrese monto valido"
     
-    def editar(self, id, data = CategoriaDTO):
+    def editar(self, id, data = TransaccionDTO):
         try:
             self.database.ejecutar(
                 "UPDATE ingresos SET monto=%s, tipo=%s, categoria_ingreso=%s, descripcion=%s, fecha=%s WHERE id = %s",\
@@ -174,7 +174,43 @@ class Service_ingreso:
             "SELECT i.id, i.monto, t.nombre, c.nombre, i.descripcion, i.fecha FROM ingresos i JOIN\
              tipos_transaccion t ON i.tipo=t.id JOIN categorias_ingreso c ON i.categoria_ingreso=c.id"
         ).fetchall()
+
+class Service_egreso:
+    def __init__(self, database):
+        self.database = database
+
+    def registrar(self, data = TransaccionDTO):
+        try:
+            self.database.ejecutar(
+                "INSERT INTO egresos VALUES (%s, %s, %s, %s, %s, %s)",\
+                (None, data.monto, data.id_tipo_transaccion, data.id_categoria, data.descripcion, data.fecha)
+            )
+            self.database.guardar()
+        except pymysql.Error:
+            return "Error, ingrese monto valido"
     
+    def editar(self, id, data = TransaccionDTO):
+        try:
+            self.database.ejecutar(
+                "UPDATE egresos SET monto=%s, tipo=%s, categoria_egreso=%s, descripcion=%s, fecha=%s WHERE id = %s",\
+                (data.monto, data.id_tipo_transaccion, data.id_categoria, data.descripcion, data.fecha, id)
+            )
+            self.database.guardar()
+        except pymysql.Error:
+            return "Error, ingrese monto valido"
+
+    def eliminar(self, *ids):
+        self.database.ejecutar(
+            "DELETE FROM egresos WHERE id IN ({})".format(('%s,'*len(ids))[:-1]), ids
+        )
+        self.database.guardar()
+    
+    def obtener_ingresos(self):
+        return self.database.ejecutar(
+            "SELECT e.id, e.monto, t.nombre, c.nombre, e.descripcion, e.fecha FROM egresos e JOIN\
+             tipos_transaccion t ON e.tipo=t.id JOIN categorias_egreso c ON e.categoria_ingreso=c.id"
+        ).fetchall()
+
 
 
 if __name__ == "__main__":
