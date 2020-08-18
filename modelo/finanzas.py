@@ -33,11 +33,18 @@ class Database:
     def guardar(self):
         self.__conexion.commit()
     
-    def cerrar_database(self):
+    def cerrar(self):
         self.__conexion.close()
+        
 
+class Balance:
+    @staticmethod
+    def calcular(database):
+        return database.ejecutar(
+            "SELECT SUM(i.monto - e.monto) FROM ingresos i, egresos e"
+        ).fetchone()[0]
 
-class Service_tipo_transaccion():
+class Service_tipo_transaccion:
     def __init__(self, database):
         self.database = database
 
@@ -71,7 +78,7 @@ class Service_tipo_transaccion():
             "SELECT * FROM tipos_transaccion"
         ).fetchall()
 
-class Service_categoria_ingreso():
+class Service_categoria_ingreso:
     def __init__(self, database):
         self.database = database
 
@@ -105,7 +112,7 @@ class Service_categoria_ingreso():
             "SELECT * FROM categorias_ingreso"
         ).fetchall()
 
-class Service_categoria_egreso():
+class Service_categoria_egreso:
     def __init__(self, database):
         self.database = database
 
@@ -218,5 +225,5 @@ if __name__ == "__main__":
     service = Service_ingreso(database)
     ingreso = TransaccionDTO("", 1, 1, "asd", "hoy")
 
-    print(service.obtener_ingresos())
-    database.cerrar_database()
+    print(Balance.calcular(database))
+    database.cerrar()
