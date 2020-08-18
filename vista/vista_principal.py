@@ -69,28 +69,13 @@ class Vista(QtWidgets.QWidget):
         self.__opcion_layout.addWidget(self.__btn_eliminar)
 
         #BOTONES
-        self.__btn_ingreso.clicked.connect(self.__on_btn_ingreso_clicked)
-        self.__btn_egreso.clicked.connect(self.__on_btn_egreso_clicked)
-        self.__btn_tipo_transaccion.clicked.connect(self.__on_btn_tipo_transaccion_clicked)
-        self.__btn_categoria_ingreso.clicked.connect(self.__on_btn_categoria_ingreso_clicked)
-        self.__btn_categoria_egreso.clicked.connect(self.__on_btn_categoria_egreso_clicked)
+        self.__btn_ingreso.clicked.connect(lambda: self.agregar_ingreso.emit())
+        self.__btn_egreso.clicked.connect(lambda: self.agregar_egreso.emit())
+        self.__btn_tipo_transaccion.clicked.connect(lambda: self.agregar_tipo_transaccion.emit())
+        self.__btn_categoria_ingreso.clicked.connect(lambda: self.agregar_categoria_ingreso.emit())
+        self.__btn_categoria_egreso.clicked.connect(lambda: self.agregar_categoria_egreso.emit())
                 
         self.setLayout(self.__main_layout)
-    
-    def __on_btn_ingreso_clicked(self):
-        self.agregar_ingreso.emit()
-
-    def __on_btn_egreso_clicked(self):
-        self.agregar_egreso.emit()
-
-    def __on_btn_tipo_transaccion_clicked(self):
-        self.agregar_tipo_transaccion.emit()
-
-    def __on_btn_categoria_ingreso_clicked(self):
-        self.agregar_categoria_ingreso.emit()
-
-    def __on_btn_categoria_egreso_clicked(self):
-        self.agregar_categoria_egreso.emit()
 
     def actualizar_balance(self, valor):
         self.__line_balance.setText("Balance: " + str(valor))
