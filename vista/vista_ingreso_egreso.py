@@ -44,8 +44,14 @@ class Ventana_ingreso_egreso(QtWidgets.QDialog):
         self.setLayout(self.__contenedor)
 
     def __on_btn_registrar(self):
-        self.signal.emit()
-
+        self.__label_error.setStyleSheet("color: red")
+        if self.__cbx_tipo_transaccion.currentIndex() == -1:
+            self.__label_error.setText("Seleccione tipo de transaccion")
+        elif self.__cbx_categorias.currentIndex() == -1:
+            self.__label_error.setText("Seleccione categoria")
+        else:
+            self.signal.emit()
+        
     def __limpiar(self):
         self.__line_monto.clear()
         self.__cbx_tipo_transaccion.clear()
@@ -55,20 +61,13 @@ class Ventana_ingreso_egreso(QtWidgets.QDialog):
         self.__label_error.setText("Campos con * obligatorios")
         self.__cal_fecha.setSelectedDate(QtCore.QDate.currentDate())
     
-    '''def __verificar_error(self):
-        self.__label_error.setStyleSheet("color: red")
-        try:
-            int(self.__line_monto.text())
-            if self.__cbx_tipo_transaccion.currentIndex() == -1:
-                self.__label_error.setText("Seleccione tipo de transaccion")
-                return False
-            if self.__cbx_categorias.currentIndex() == -1:
-                self.__label_error.setText("Seleccione categoria")
-                return False
-            return True
-        except ValueError:
-            self.__label_error.setText("Ingrese numeros solamente")
-            return False'''
+    def verificar_error(self, mensaje_error):
+        if mensaje_error != None:
+            self.__label_error.setStyleSheet("color: red")
+            self.__label_error.setText(mensaje_error)
+        else:
+            self.__limpiar()
+            self.close()
 
     def closeEvent(self, evnt):
         self.__limpiar()

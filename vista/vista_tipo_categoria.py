@@ -3,7 +3,7 @@ from PyQt5 import QtCore, QtWidgets, QtGui
 
 
 class Ventana_tipo_categoria(QtWidgets.QDialog):
-    signal= QtCore.pyqtSignal()
+    registrar = QtCore.pyqtSignal()
 
     def __init__(self, titulo, parent = None):
         QtWidgets.QDialog.__init__(self, parent)
@@ -36,7 +36,7 @@ class Ventana_tipo_categoria(QtWidgets.QDialog):
         self.setLayout(self.__contenedor)
 
     def __on_btn_registrar(self):
-        self.signal.emit()
+        self.registrar.emit()
     
     def __limpiar(self):
         self.__line_nombre.clear()
@@ -44,12 +44,13 @@ class Ventana_tipo_categoria(QtWidgets.QDialog):
         self.__label_error.setStyleSheet("color: gray")
         self.__label_error.setText("Campos con * obligatorios")
     
-    '''def __verificar_error(self):
-        self.__label_error.setStyleSheet("color: red")
-        if self.__line_nombre.text() == "":
-            self.__label_error.setText("Ingrese un nombre")
-            return False
-        else: return True'''
+    def verificar_error(self, mensaje_error):
+        if mensaje_error != None:
+            self.__label_error.setStyleSheet("color: red")
+            self.__label_error.setText(mensaje_error)
+        else:
+            self.__limpiar()
+            self.close()
 
     def closeEvent(self, evnt):
         self.__limpiar()
@@ -63,5 +64,5 @@ if __name__ == "__main__":
     def visualizar_datos():
         print(ventana.obtener_datos())
     ventana.show()
-    ventana.signal.connect(lambda: visualizar_datos())
+    ventana.registrar.connect(lambda: visualizar_datos())
     app.exec()
