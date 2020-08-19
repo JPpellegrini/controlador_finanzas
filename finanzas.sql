@@ -27,7 +27,7 @@ CREATE TABLE `categorias_egreso` (
   `nombre` varchar(50) NOT NULL,
   `descripcion` varchar(250) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -36,7 +36,7 @@ CREATE TABLE `categorias_egreso` (
 
 LOCK TABLES `categorias_egreso` WRITE;
 /*!40000 ALTER TABLE `categorias_egreso` DISABLE KEYS */;
-INSERT INTO `categorias_egreso` VALUES (1,'juan','hola'),(2,'juan','hola'),(3,'juan','hola'),(4,'juan','hola'),(5,'juan','hola'),(6,'juan','hola'),(7,'juan','hola');
+INSERT INTO `categorias_egreso` VALUES (1,'juan','asd');
 /*!40000 ALTER TABLE `categorias_egreso` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -61,7 +61,7 @@ CREATE TABLE `categorias_ingreso` (
 
 LOCK TABLES `categorias_ingreso` WRITE;
 /*!40000 ALTER TABLE `categorias_ingreso` DISABLE KEYS */;
-INSERT INTO `categorias_ingreso` VALUES (1,'juan','hola');
+INSERT INTO `categorias_ingreso` VALUES (1,'juan','asd');
 /*!40000 ALTER TABLE `categorias_ingreso` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -75,16 +75,16 @@ DROP TABLE IF EXISTS `egresos`;
 CREATE TABLE `egresos` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `monto` float NOT NULL,
-  `movimiento` int(11) DEFAULT NULL,
+  `tipo` int(11) DEFAULT NULL,
   `categoria_egreso` int(11) DEFAULT NULL,
   `descripcion` varchar(250) DEFAULT NULL,
   `fecha` varchar(45) NOT NULL,
   PRIMARY KEY (`id`),
-  KEY `id_mov_idx` (`movimiento`),
+  KEY `id_mov_idx` (`tipo`),
   KEY `id_cat_egr_idx` (`categoria_egreso`),
   CONSTRAINT `id_cat_egr` FOREIGN KEY (`categoria_egreso`) REFERENCES `categorias_egreso` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  CONSTRAINT `id_mov` FOREIGN KEY (`movimiento`) REFERENCES `movimientos` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=latin1;
+  CONSTRAINT `id_tipos` FOREIGN KEY (`tipo`) REFERENCES `tipos_transaccion` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -93,7 +93,6 @@ CREATE TABLE `egresos` (
 
 LOCK TABLES `egresos` WRITE;
 /*!40000 ALTER TABLE `egresos` DISABLE KEYS */;
-INSERT INTO `egresos` VALUES (1,110,1,1,'','2019'),(2,0,1,1,'','2019'),(3,0.5,1,1,'','2019'),(4,12,1,1,'hola','2019'),(5,12,1,1,'hola','2019'),(6,12,1,1,'hola','2019'),(7,12,1,1,'hola','2019'),(8,12.5,1,1,'hola','2019');
 /*!40000 ALTER TABLE `egresos` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -107,16 +106,16 @@ DROP TABLE IF EXISTS `ingresos`;
 CREATE TABLE `ingresos` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `monto` float NOT NULL,
-  `movimiento` int(11) DEFAULT NULL,
+  `tipo` int(11) DEFAULT NULL,
   `categoria_ingreso` int(11) DEFAULT NULL,
   `descripcion` varchar(250) DEFAULT NULL,
   `fecha` varchar(45) NOT NULL,
   PRIMARY KEY (`id`),
-  KEY `id_movimiento_idx` (`movimiento`),
   KEY `id_categotia_ing_idx` (`categoria_ingreso`),
+  KEY `id_movimiento_idx` (`tipo`),
   CONSTRAINT `id_categotia_ing` FOREIGN KEY (`categoria_ingreso`) REFERENCES `categorias_ingreso` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  CONSTRAINT `id_movimiento` FOREIGN KEY (`movimiento`) REFERENCES `movimientos` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=20 DEFAULT CHARSET=latin1;
+  CONSTRAINT `id_tipo` FOREIGN KEY (`tipo`) REFERENCES `tipos_transaccion` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -125,33 +124,32 @@ CREATE TABLE `ingresos` (
 
 LOCK TABLES `ingresos` WRITE;
 /*!40000 ALTER TABLE `ingresos` DISABLE KEYS */;
-INSERT INTO `ingresos` VALUES (2,200,1,1,'','2019'),(3,200,1,1,'','2019'),(4,200,1,1,'','2019'),(5,120,1,1,'hola','2019'),(6,120,1,1,'hola','2019'),(7,120,1,1,'hola','2019'),(8,12,1,1,'hola','2019'),(9,12,1,1,'hola','2019'),(10,12,1,1,'hola','2019'),(11,12,1,1,'hola','2019'),(12,12,1,1,'hola','2019'),(13,12,1,1,'hola','2019'),(14,10,1,1,'hola','2019'),(15,10,1,1,'hola','2019'),(16,125,1,1,'hola','2019'),(17,12,1,1,'hola','2019'),(18,12,1,1,'hola','2019'),(19,12.5,1,1,'hola','2019');
 /*!40000 ALTER TABLE `ingresos` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
--- Table structure for table `movimientos`
+-- Table structure for table `tipos_transaccion`
 --
 
-DROP TABLE IF EXISTS `movimientos`;
+DROP TABLE IF EXISTS `tipos_transaccion`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `movimientos` (
+CREATE TABLE `tipos_transaccion` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `nombre` varchar(50) NOT NULL,
   `descripcion` varchar(45) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `movimientos`
+-- Dumping data for table `tipos_transaccion`
 --
 
-LOCK TABLES `movimientos` WRITE;
-/*!40000 ALTER TABLE `movimientos` DISABLE KEYS */;
-INSERT INTO `movimientos` VALUES (1,'juan','hola'),(2,'juan','hola');
-/*!40000 ALTER TABLE `movimientos` ENABLE KEYS */;
+LOCK TABLES `tipos_transaccion` WRITE;
+/*!40000 ALTER TABLE `tipos_transaccion` DISABLE KEYS */;
+INSERT INTO `tipos_transaccion` VALUES (1,'prueba','asd');
+/*!40000 ALTER TABLE `tipos_transaccion` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
@@ -163,4 +161,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2020-07-29 12:35:40
+-- Dump completed on 2020-08-17 16:02:04
