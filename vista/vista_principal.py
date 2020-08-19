@@ -7,7 +7,7 @@ class Vista(QtWidgets.QWidget):
     calcular_balance = QtCore.pyqtSignal()
     agregar_ingreso = QtCore.pyqtSignal()
     agregar_egreso = QtCore.pyqtSignal()
-    agregar_movimiento = QtCore.pyqtSignal()
+    agregar_tipo_transaccion = QtCore.pyqtSignal()
     agregar_categoria_ingreso = QtCore.pyqtSignal()
     agregar_categoria_egreso = QtCore.pyqtSignal()
 
@@ -29,7 +29,7 @@ class Vista(QtWidgets.QWidget):
         self.__line_balance = QtWidgets.QLineEdit()
         self.__btn_ingreso = QtWidgets.QPushButton("Nuevo Ingreso")
         self.__btn_egreso = QtWidgets.QPushButton("Nuevo Egreso")
-        self.__btn_movimiento = QtWidgets.QPushButton("Nuevo Movimiento")
+        self.__btn_tipo_transaccion = QtWidgets.QPushButton("Nuevo Tipo de Transaccion")
         self.__btn_categoria_ingreso = QtWidgets.QPushButton("Nueva Categoria de Ingreso")
         self.__btn_categoria_egreso = QtWidgets.QPushButton("Nueva Categoria de Egreso")
         self.__calendario = QtWidgets.QCalendarWidget()
@@ -53,7 +53,7 @@ class Vista(QtWidgets.QWidget):
         
         self.__btn_layout.addWidget(self.__btn_ingreso)
         self.__btn_layout.addWidget(self.__btn_egreso)
-        self.__btn_layout.addWidget(self.__btn_movimiento)
+        self.__btn_layout.addWidget(self.__btn_tipo_transaccion)
         self.__btn_layout.addWidget(self.__btn_categoria_ingreso)
         self.__btn_layout.addWidget(self.__btn_categoria_egreso)
         self.__btn_layout.addWidget(self.__line_balance)
@@ -71,7 +71,7 @@ class Vista(QtWidgets.QWidget):
         #BOTONES
         self.__btn_ingreso.clicked.connect(self.__on_btn_ingreso_clicked)
         self.__btn_egreso.clicked.connect(self.__on_btn_egreso_clicked)
-        self.__btn_movimiento.clicked.connect(self.__on_btn_movimiento_clicked)
+        self.__btn_tipo_transaccion.clicked.connect(self.__on_btn_tipo_transaccion_clicked)
         self.__btn_categoria_ingreso.clicked.connect(self.__on_btn_categoria_ingreso_clicked)
         self.__btn_categoria_egreso.clicked.connect(self.__on_btn_categoria_egreso_clicked)
                 
@@ -83,8 +83,8 @@ class Vista(QtWidgets.QWidget):
     def __on_btn_egreso_clicked(self):
         self.agregar_egreso.emit()
 
-    def __on_btn_movimiento_clicked(self):
-        self.agregar_movimiento.emit()
+    def __on_btn_tipo_transaccion_clicked(self):
+        self.agregar_tipo_transaccion.emit()
 
     def __on_btn_categoria_ingreso_clicked(self):
         self.agregar_categoria_ingreso.emit()
