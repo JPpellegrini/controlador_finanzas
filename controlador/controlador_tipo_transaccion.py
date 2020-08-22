@@ -1,5 +1,4 @@
 import sys
-from PyQt5 import QtWidgets
 sys.path.append("..")
 from vista.vista_tipo_categoria import *
 from modelo.modelo import Service_tipo_transaccion as Service, Tipo_transaccionDTO, Database

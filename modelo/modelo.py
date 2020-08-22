@@ -44,6 +44,7 @@ class Balance:
             "SELECT SUM(i.monto - e.monto) FROM ingresos i, egresos e"
         ).fetchone()[0]
 
+
 class Service_tipo_transaccion:
     def __init__(self, database):
         self.database = database
@@ -78,6 +79,7 @@ class Service_tipo_transaccion:
             "SELECT * FROM tipos_transaccion"
         ).fetchall()
 
+
 class Service_categoria_ingreso:
     def __init__(self, database):
         self.database = database
@@ -107,10 +109,11 @@ class Service_categoria_ingreso:
         except pymysql.Error:
             return "Error, categoria/s en uso"
     
-    def obtener_tipos(self):
+    def obtener_categorias(self):
         return self.database.ejecutar(
             "SELECT * FROM categorias_ingreso"
         ).fetchall()
+
 
 class Service_categoria_egreso:
     def __init__(self, database):
@@ -141,14 +144,17 @@ class Service_categoria_egreso:
         except pymysql.Error:
             return "Error, categoria/s en uso"
     
-    def obtener_tipos(self):
+    def obtener_categorias(self):
         return self.database.ejecutar(
             "SELECT * FROM categorias_egreso"
         ).fetchall() 
 
+
 class Service_ingreso:
     def __init__(self, database):
         self.database = database
+        self.tipos = Service_tipo_transaccion(self.database)
+        self.categorias = Service_categoria_ingreso(self.database)
 
     def registrar(self, data = TransaccionDTO):
         try:
@@ -181,10 +187,16 @@ class Service_ingreso:
             "SELECT i.id, i.monto, t.nombre, c.nombre, i.descripcion, i.fecha FROM ingresos i JOIN\
              tipos_transaccion t ON i.tipo=t.id JOIN categorias_ingreso c ON i.categoria_ingreso=c.id"
         ).fetchall()
+    
+    def obtener_tipos_categorias(self):
+        return self.tipos.obtener_tipos(), self.categorias.obtener_categorias()
+
 
 class Service_egreso:
     def __init__(self, database):
         self.database = database
+        self.tipos = Service_tipo_transaccion(self.database)
+        self.categorias = Service_categoria_egreso(self.database)
 
     def registrar(self, data = TransaccionDTO):
         try:
@@ -212,12 +224,14 @@ class Service_egreso:
         )
         self.database.guardar()
     
-    def obtener_ingresos(self):
+    def obtener_egresos(self):
         return self.database.ejecutar(
             "SELECT e.id, e.monto, t.nombre, c.nombre, e.descripcion, e.fecha FROM egresos e JOIN\
              tipos_transaccion t ON e.tipo=t.id JOIN categorias_egreso c ON e.categoria_ingreso=c.id"
         ).fetchall()
 
+    def obtener_tipos_categorias(self):
+        return self.tipos.obtener_tipos(), self.categorias.obtener_categorias()
 
 
 if __name__ == "__main__":

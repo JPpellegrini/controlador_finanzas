@@ -3,7 +3,7 @@ from PyQt5 import QtCore, QtWidgets, QtGui
 
 
 class Ventana_ingreso_egreso(QtWidgets.QDialog):
-    signal = QtCore.pyqtSignal()
+    registrar = QtCore.pyqtSignal()
 
     def __init__(self, titulo, parent = None):
         QtWidgets.QDialog.__init__(self, parent)
@@ -50,7 +50,7 @@ class Ventana_ingreso_egreso(QtWidgets.QDialog):
         elif self.__cbx_categorias.currentIndex() == -1:
             self.__label_error.setText("Seleccione categoria")
         else:
-            self.signal.emit()
+            self.registrar.emit()
         
     def __limpiar(self):
         self.__line_monto.clear()
@@ -72,13 +72,14 @@ class Ventana_ingreso_egreso(QtWidgets.QDialog):
     def closeEvent(self, evnt):
         self.__limpiar()
 
-    def configurar_menu_desplegable(self, tipo_transaccion, categorias):
-        self.__cbx_tipo_transaccion.addItems(tipo_transaccion.values())
-        self.__cbx_categorias.addItems(categorias.values())
+    def configurar_menu_desplegable(self, tipos_transaccion, categorias):
+        self.tipos, self.categorias = tipos_transaccion, categorias
+        self.__cbx_tipo_transaccion.addItems([tipo[1] for tipo in self.tipos])
+        self.__cbx_categorias.addItems([categoria[1] for categoria in self.categorias])
 
     def obtener_datos(self):
-        return self.__line_monto.text(), self.__cbx_tipo_transaccion.currentIndex(),\
-        self.__cbx_categorias.currentIndex(),self.__line_descripcion.toPlainText(),\
+        return self.__line_monto.text(), self.tipos[self.__cbx_tipo_transaccion.currentIndex()][0],\
+        self.categorias[self.__cbx_categorias.currentIndex()][0],self.__line_descripcion.toPlainText(),\
         self.__cal_fecha.selectedDate().toString()
 
 if __name__ == "__main__":
