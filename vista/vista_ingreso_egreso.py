@@ -3,7 +3,7 @@ from PyQt5 import QtCore, QtWidgets, QtGui
 
 
 class Ventana_ingreso_egreso(QtWidgets.QDialog):
-    signal = QtCore.pyqtSignal()
+    registrar = QtCore.pyqtSignal()
 
     def __init__(self, titulo, parent = None):
         QtWidgets.QDialog.__init__(self, parent)
@@ -44,8 +44,14 @@ class Ventana_ingreso_egreso(QtWidgets.QDialog):
         self.setLayout(self.__contenedor)
 
     def __on_btn_registrar(self):
-        self.signal.emit()
-
+        self.__label_error.setStyleSheet("color: red")
+        if self.__cbx_tipo_transaccion.currentIndex() == -1:
+            self.__label_error.setText("Seleccione tipo de transaccion")
+        elif self.__cbx_categorias.currentIndex() == -1:
+            self.__label_error.setText("Seleccione categoria")
+        else:
+            self.registrar.emit()
+        
     def __limpiar(self):
         self.__line_monto.clear()
         self.__cbx_tipo_transaccion.clear()
@@ -55,31 +61,25 @@ class Ventana_ingreso_egreso(QtWidgets.QDialog):
         self.__label_error.setText("Campos con * obligatorios")
         self.__cal_fecha.setSelectedDate(QtCore.QDate.currentDate())
     
-    '''def __verificar_error(self):
-        self.__label_error.setStyleSheet("color: red")
-        try:
-            int(self.__line_monto.text())
-            if self.__cbx_tipo_transaccion.currentIndex() == -1:
-                self.__label_error.setText("Seleccione tipo de transaccion")
-                return False
-            if self.__cbx_categorias.currentIndex() == -1:
-                self.__label_error.setText("Seleccione categoria")
-                return False
-            return True
-        except ValueError:
-            self.__label_error.setText("Ingrese numeros solamente")
-            return False'''
+    def verificar_error(self, mensaje_error):
+        if mensaje_error != None:
+            self.__label_error.setStyleSheet("color: red")
+            self.__label_error.setText(mensaje_error)
+        else:
+            self.__limpiar()
+            self.close()
 
     def closeEvent(self, evnt):
         self.__limpiar()
 
-    def configurar_menu_desplegable(self, tipo_transaccion, categorias):
-        self.__cbx_tipo_transaccion.addItems(tipo_transaccion.values())
-        self.__cbx_categorias.addItems(categorias.values())
+    def configurar_menu_desplegable(self, tipos_transaccion, categorias):
+        self.tipos, self.categorias = tipos_transaccion, categorias
+        self.__cbx_tipo_transaccion.addItems([tipo[1] for tipo in self.tipos])
+        self.__cbx_categorias.addItems([categoria[1] for categoria in self.categorias])
 
     def obtener_datos(self):
-        return self.__line_monto.text(), self.__cbx_tipo_transaccion.currentIndex(),\
-        self.__cbx_categorias.currentIndex(),self.__line_descripcion.toPlainText(),\
+        return self.__line_monto.text(), self.tipos[self.__cbx_tipo_transaccion.currentIndex()][0],\
+        self.categorias[self.__cbx_categorias.currentIndex()][0],self.__line_descripcion.toPlainText(),\
         self.__cal_fecha.selectedDate().toString()
 
 if __name__ == "__main__":
