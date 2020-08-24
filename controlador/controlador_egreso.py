@@ -5,8 +5,11 @@ from modelo.modelo import Service_egreso as Service, TransaccionDTO,\
     Database, Service_tipo_transaccion as Tipos, Service_categoria_egreso as Categorias
 
 
-class Controlador_ingreso():
+class Controlador_egreso(QtCore.QObject):
+    actualizar_balance = QtCore.pyqtSignal()
+
     def __init__(self, database):
+        super().__init__()
         self.__modelo = Service(database)
         self.__vista = Ventana_ingreso_egreso("Egreso")
         self.__vista.registrar.connect(self.__on_registrar_egreso)
@@ -16,6 +19,7 @@ class Controlador_ingreso():
         self.__vista.verificar_error(self.__modelo.registrar(
             TransaccionDTO(datos[0], datos[1], datos[2], datos[3], datos[4]))
         )
+        self.actualizar_balance.emit()
     
     def show_vista(self):
         tipos_categorias = self.__modelo.obtener_tipos_categorias()
