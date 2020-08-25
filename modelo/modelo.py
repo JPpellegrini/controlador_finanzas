@@ -11,7 +11,7 @@ class TransaccionDTO:
     fecha: str
 
 @dataclass
-class Tipo_transaccionDTO:
+class TipoTransaccionDTO:
     nombre: str
     descripcion: str
 
@@ -45,11 +45,11 @@ class Balance:
         return ingresos - egresos
 
 
-class Service_tipo_transaccion:
+class ServiceTipoTransaccion:
     def __init__(self, database):
         self.database = database
 
-    def registrar(self, data = Tipo_transaccionDTO):
+    def registrar(self, data = TipoTransaccionDTO):
         if data.nombre != "":
             self.database.ejecutar(
                 "INSERT INTO tipos_transaccion VALUES (%s, %s, %s)", (None, data.nombre, data.descripcion)
@@ -57,7 +57,7 @@ class Service_tipo_transaccion:
             self.database.guardar()
         else: return "Ingrese el nombre"
     
-    def editar(self, id, data = Tipo_transaccionDTO):
+    def editar(self, id, data = TipoTransaccionDTO):
         if data.nombre != "":
             self.database.ejecutar(
                 "UPDATE tipos_transaccion SET nombre=%s, descripcion=%s WHERE id = %s", (data.nombre, data.descripcion, id)
@@ -80,7 +80,7 @@ class Service_tipo_transaccion:
         ).fetchall()
 
 
-class Service_categoria_ingreso:
+class ServiceCategoriaIngreso:
     def __init__(self, database):
         self.database = database
 
@@ -115,7 +115,7 @@ class Service_categoria_ingreso:
         ).fetchall()
 
 
-class Service_categoria_egreso:
+class ServiceCategoriaEgreso:
     def __init__(self, database):
         self.database = database
 
@@ -150,11 +150,11 @@ class Service_categoria_egreso:
         ).fetchall() 
 
 
-class Service_ingreso:
+class ServiceIngreso:
     def __init__(self, database):
         self.database = database
-        self.tipos = Service_tipo_transaccion(self.database)
-        self.categorias = Service_categoria_ingreso(self.database)
+        self.srv_tipos = ServiceTipoTransaccion(self.database)
+        self.srv_categorias = ServiceCategoriaIngreso(self.database)
 
     def registrar(self, data = TransaccionDTO):
         try:
@@ -189,14 +189,14 @@ class Service_ingreso:
         ).fetchall()
     
     def obtener_tipos_categorias(self):
-        return self.tipos.obtener_tipos(), self.categorias.obtener_categorias()
+        return self.srv_tipos.obtener_tipos(), self.srv_categorias.obtener_categorias()
 
 
-class Service_egreso:
+class ServiceEgreso:
     def __init__(self, database):
         self.database = database
-        self.tipos = Service_tipo_transaccion(self.database)
-        self.categorias = Service_categoria_egreso(self.database)
+        self.svc_tipos = ServiceTipoTransaccion(self.database)
+        self.svc_categorias = ServiceCategoriaEgreso(self.database)
 
     def registrar(self, data = TransaccionDTO):
         try:
@@ -231,12 +231,12 @@ class Service_egreso:
         ).fetchall()
 
     def obtener_tipos_categorias(self):
-        return self.tipos.obtener_tipos(), self.categorias.obtener_categorias()
+        return self.svc_tipos.obtener_tipos(), self.svc_categorias.obtener_categorias()
 
 
 if __name__ == "__main__":
     database = Database()
-    service = Service_ingreso(database)
+    service = ServiceIngreso(database)
     ingreso = TransaccionDTO("", 1, 1, "asd", "hoy")
 
     print(Balance.calcular(database))

@@ -2,7 +2,7 @@ import sys
 from PyQt5 import QtCore, QtWidgets, QtGui
 
 
-class Ventana_ingreso_egreso(QtWidgets.QDialog):
+class VentanaIngresoEgreso(QtWidgets.QDialog):
     registrar = QtCore.pyqtSignal()
 
     def __init__(self, titulo, parent = None):
@@ -84,9 +84,9 @@ class Ventana_ingreso_egreso(QtWidgets.QDialog):
 
 if __name__ == "__main__":
     app = QtWidgets.QApplication(sys.argv)
-    ventana = Ventana_ingreso_egreso("ventana")
+    ventana = VentanaIngresoEgreso("ventana")
     def visualizar_datos():
         print(ventana.obtener_datos())
     ventana.show()
-    ventana.signal.connect(lambda: visualizar_datos())
+    ventana.registrar.connect(lambda: visualizar_datos())
     app.exec()
