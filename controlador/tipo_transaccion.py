@@ -1,7 +1,8 @@
 import sys
 sys.path.append("..")
-from vista.vista_tipo_categoria import *
+from vista.tipo_categoria import VentanaTipoCategoria
 from modelo.modelo import ServiceTipoTransaccion as Service, TipoTransaccionDTO
+
 
 class ControladorTipoTransaccion():
     def __init__(self, database):
@@ -16,8 +17,11 @@ class ControladorTipoTransaccion():
     def show_vista(self):
         self.__vista.show()
 
+
 if __name__ == "__main__":
     from modelo.modelo import Database
+    from PyQt5 import QtCore, QtWidgets, QtGui
+
     app = QtWidgets.QApplication(sys.argv)
     base = Database()
     controlador = ControladorTipoTransaccion(base)
