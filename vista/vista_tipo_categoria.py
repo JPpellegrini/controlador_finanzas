@@ -2,7 +2,7 @@ import sys
 from PyQt5 import QtCore, QtWidgets, QtGui
 
 
-class Ventana_tipo_categoria(QtWidgets.QDialog):
+class VentanaTipoCategoria(QtWidgets.QDialog):
     registrar = QtCore.pyqtSignal()
 
     def __init__(self, titulo, parent = None):
@@ -60,7 +60,7 @@ class Ventana_tipo_categoria(QtWidgets.QDialog):
 
 if __name__ == "__main__":
     app = QtWidgets.QApplication(sys.argv)
-    ventana = Ventana_tipo_categoria("ventana")
+    ventana = VentanaTipoCategoria("ventana")
     def visualizar_datos():
         print(ventana.obtener_datos())
     ventana.show()
