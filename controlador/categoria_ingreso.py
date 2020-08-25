@@ -1,8 +1,7 @@
 import sys
-from PyQt5 import QtWidgets
 sys.path.append("..")
-from vista.vista_tipo_categoria import *
-from modelo.modelo import Service_categoria_ingreso as Service, CategoriaDTO
+from vista.tipo_categoria import VentanaTipoCategoria
+from modelo.modelo import ServiceCategoriaIngreso as Service, CategoriaDTO
 
 class Controlador_categoria_ingreso:
     def __init__(self, database):
@@ -18,10 +17,10 @@ class Controlador_categoria_ingreso:
         self.__vista.show()
     
 if __name__ == "__main__":
+    from PyQt5 import QtWidgets
     from modelo.modelo import Database
     BDD = Database()
     app = QtWidgets.QApplication(sys.argv)
     controlador = Controlador_categoria_ingreso(BDD)
-
     controlador.show_vista()
     app.exec()

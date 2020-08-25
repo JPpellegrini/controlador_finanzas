@@ -1,12 +1,11 @@
 import sys
-from PyQt5 import QtWidgets
 sys.path.append("..")
-from vista.vista_principal import *
-from controlador.controlador_categoria_egreso import *
-from controlador.controlador_categoria_ingreso import *
-from controlador.controlador_egreso import *
-from controlador.controlador_ingreso import *
-from controlador.controlador_tipo_transaccion import *
+from vista.principal import Vista
+from controlador.categoria_egreso import ControladorCategoriaEgreso
+from controlador.categoria_ingreso import ControladorCategoriaIngreso
+from controlador.egreso import ControladorEgreso
+from controlador.ingreso import ControladorIngreso
+from controlador.tipo_transaccion import ControladorTipoTransaccion
 from modelo.modelo import Balance, Database
 
 class Controlador:
@@ -58,6 +57,7 @@ class Controlador:
         self.__database.cerrar()
     
 if __name__ == "__main__":
+    from PyQt5 import QtWidgets
     app = QtWidgets.QApplication(sys.argv)
     controlador = Controlador()
     controlador.show_vista()
