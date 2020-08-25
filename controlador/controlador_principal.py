@@ -53,7 +53,9 @@ class Controlador:
 
     def show_vista(self):
         self.__vista.show()
-        
+    
+    def cerrar_database(self):
+        self.__database.cerrar()
     
 if __name__ == "__main__":
     app = QtWidgets.QApplication(sys.argv)
