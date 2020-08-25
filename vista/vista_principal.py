@@ -4,7 +4,6 @@ from PyQt5 import QtCore, QtWidgets, QtGui
 class Vista(QtWidgets.QWidget):
     
     #SIGNALS
-    calcular_balance = QtCore.pyqtSignal()
     agregar_ingreso = QtCore.pyqtSignal()
     agregar_egreso = QtCore.pyqtSignal()
     agregar_tipo_transaccion = QtCore.pyqtSignal()
@@ -79,6 +78,7 @@ class Vista(QtWidgets.QWidget):
 
     def actualizar_balance(self, valor):
         self.__line_balance.setText("Balance: " + str(valor))
+
 
 if __name__ == "__main__":
     app = QtWidgets.QApplication(sys.argv)
