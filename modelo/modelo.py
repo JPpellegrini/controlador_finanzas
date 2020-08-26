@@ -40,9 +40,14 @@ class Database:
 class Balance:
     @staticmethod
     def calcular(database):
-        ingresos = database.ejecutar("SELECT SUM(monto) FROM ingresos").fetchone()[0]
-        egresos = database.ejecutar("SELECT SUM(monto) FROM egresos").fetchone()[0]
-        return ingresos - egresos
+        try:
+            ingresos = database.ejecutar("SELECT SUM(monto) FROM ingresos").fetchone()[0]
+            egresos = database.ejecutar("SELECT SUM(monto) FROM egresos").fetchone()[0]
+            return ingresos - egresos
+        except TypeError:
+            if ingresos != None: return 0 + ingresos
+            elif egresos != None: return 0 - egresos
+            else: return 0
 
 
 class ServiceTipoTransaccion:
