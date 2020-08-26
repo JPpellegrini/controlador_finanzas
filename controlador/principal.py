@@ -9,8 +9,8 @@ from controlador.tipo_transaccion import ControladorTipoTransaccion
 from modelo.modelo import Balance, Database
 
 class Controlador:
-    def __init__(self):
-        self.__database = Database()
+    def __init__(self, db_username, db_password):
+        self.__database = Database(db_username, db_password)
         self.__vista = Vista()
         self.__calcular_balance()
         self.__ctl_ingreso = ControladorIngreso(self.__database)
