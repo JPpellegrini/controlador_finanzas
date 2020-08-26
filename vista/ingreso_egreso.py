@@ -7,10 +7,6 @@ class VentanaIngresoEgreso(QtWidgets.QDialog):
 
     def __init__(self, parent = None):
         QtWidgets.QDialog.__init__(self, parent)
-
-        #CONFIG
-        #self.setWindowTitle(titulo)
-
         self.__setupUi()
     
     def __setupUi(self):
