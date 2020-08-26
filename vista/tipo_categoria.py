@@ -5,11 +5,10 @@ from PyQt5 import QtCore, QtWidgets, QtGui
 class VentanaTipoCategoria(QtWidgets.QDialog):
     registrar = QtCore.pyqtSignal()
 
-    def __init__(self, titulo, parent = None):
+    def __init__(self, parent = None):
         QtWidgets.QDialog.__init__(self, parent)
 
         #CONFIG
-        self.setWindowTitle(titulo)
 
         self.__setupUi()
     
@@ -58,9 +57,24 @@ class VentanaTipoCategoria(QtWidgets.QDialog):
     def obtener_datos(self):
         return self.__line_nombre.text(), self.__line_descripcion.toPlainText()
 
+class VentanaTipo(VentanaTipoCategoria):
+    def __init__(self, parent = None):
+        VentanaTipoCategoria.__init__(self)
+        self.setWindowTitle("Tipo de transaccion")
+
+class VentanaCategoriaIngreso(VentanaTipoCategoria):
+    def __init__(self, parent = None):
+        VentanaTipoCategoria.__init__(self)
+        self.setWindowTitle("Categoria Ingreso")
+
+class VentanaCategoriaEgreso(VentanaTipoCategoria):
+    def __init__(self, parent = None):
+        VentanaTipoCategoria.__init__(self)
+        self.setWindowTitle("Categoria Egreso")
+
 if __name__ == "__main__":
     app = QtWidgets.QApplication(sys.argv)
-    ventana = VentanaTipoCategoria("ventana")
+    ventana = VentanaCategoriaEgreso()
     def visualizar_datos():
         print(ventana.obtener_datos())
     ventana.show()
