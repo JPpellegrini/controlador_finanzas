@@ -1,5 +1,5 @@
-from dataclasses import dataclass
 import pymysql
+from dataclasses import dataclass
 
 
 @dataclass
@@ -21,9 +21,9 @@ class CategoriaDTO:
     descripcion: str
 
 class Database:
-    def __init__(self):
-        self.__conexion = pymysql.connect(host="localhost", port=3306, user="usuario",
-                                        passwd="1234", db="finanzas")
+    def __init__(self, username, password):
+        self.__conexion = pymysql.connect(host="localhost", port=3306, user=username,
+                                        passwd=password, db="finanzas")
         self.__cursor = self.__conexion.cursor()
     
     def ejecutar(self, sentencia, argumentos = None):
