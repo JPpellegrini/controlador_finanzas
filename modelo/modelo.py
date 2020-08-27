@@ -62,7 +62,8 @@ class ServiceTipoTransaccion:
                 "INSERT INTO tipos_transaccion VALUES (%s, %s, %s)", (None, data.nombre, data.descripcion)
             )
             self.database.guardar()
-        else: return "Ingrese el nombre"
+        else: 
+            return "Ingrese el nombre"
     
     def editar(self, id, data = TipoTransaccionDTO):
         if data.nombre != "":
@@ -70,7 +71,8 @@ class ServiceTipoTransaccion:
                 "UPDATE tipos_transaccion SET nombre=%s, descripcion=%s WHERE id = %s", (data.nombre, data.descripcion, id)
             )
             self.database.guardar()
-        else : return "Ingrese el nombre"
+        else:
+            return "Ingrese el nombre"
 
     def eliminar(self, *ids):
         try:
@@ -97,7 +99,8 @@ class ServiceCategoriaIngreso:
                 "INSERT INTO categorias_ingreso VALUES (%s, %s, %s)", (None, data.nombre, data.descripcion)
             )
             self.database.guardar()
-        else : return "Ingrese el nombre"
+        else:
+            return "Ingrese el nombre"
     
     def editar(self, id, data = CategoriaDTO):
         if data.nombre != "":
@@ -105,7 +108,8 @@ class ServiceCategoriaIngreso:
                 "UPDATE categorias_ingreso SET nombre=%s, descripcion=%s WHERE id = %s", (data.nombre, data.descripcion, id)
             )
             self.database.guardar()
-        else : return "Ingrese el nombre"
+        else:
+            return "Ingrese el nombre"
 
     def eliminar(self, *ids):
         try:
@@ -132,7 +136,8 @@ class ServiceCategoriaEgreso:
                 "INSERT INTO categorias_egreso VALUES (%s, %s, %s)", (None, data.nombre, data.descripcion)
             )
             self.database.guardar()
-        else : return "Ingrese el nombre"
+        else:
+            return "Ingrese el nombre"
     
     def editar(self, id, data = CategoriaDTO):
         if data.nombre != "":
@@ -140,7 +145,8 @@ class ServiceCategoriaEgreso:
                 "UPDATE categorias_egreso SET nombre=%s, descripcion=%s WHERE id = %s", (data.nombre, data.descripcion, id)
             )
             self.database.guardar()
-        else : return "Ingrese el nombre"
+        else:
+            return "Ingrese el nombre"
 
     def eliminar(self, *ids):
         try:
