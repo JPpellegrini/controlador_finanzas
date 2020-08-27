@@ -3,3 +3,5 @@ entorno_virtual/
 .idea/
 
 __pycache__/
+
+.env

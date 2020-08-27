@@ -1,5 +1,5 @@
-from dataclasses import dataclass
 import pymysql
+from dataclasses import dataclass
 
 
 @dataclass
@@ -21,9 +21,9 @@ class CategoriaDTO:
     descripcion: str
 
 class Database:
-    def __init__(self):
-        self.__conexion = pymysql.connect(host="localhost", port=3306, user="usuario",
-                                        passwd="1234", db="finanzas")
+    def __init__(self, username, password):
+        self.__conexion = pymysql.connect(host="localhost", port=3306, user=username,
+                                        passwd=password, db="finanzas")
         self.__cursor = self.__conexion.cursor()
     
     def ejecutar(self, sentencia, argumentos = None):
@@ -40,15 +40,17 @@ class Database:
 class Balance:
     @staticmethod
     def calcular(database):
-        if database.ejecutar("SELECT SUM(monto) FROM ingresos").fetchone()[0] == None:
-            ingresos = 0
-        else:
+        try:
             ingresos = database.ejecutar("SELECT SUM(monto) FROM ingresos").fetchone()[0]
-        if database.ejecutar("SELECT SUM(monto) FROM egresos").fetchone()[0] == None:
-            egresos = 0
-        else:
             egresos = database.ejecutar("SELECT SUM(monto) FROM egresos").fetchone()[0]
-        return ingresos - egresos
+            return ingresos - egresos
+        except TypeError:
+            if ingresos != None:
+                return 0 + ingresos
+            elif egresos != None:
+                return 0 - egresos
+            else:
+                return 0
 
 class ServiceTipoTransaccion:
     def __init__(self, database):
