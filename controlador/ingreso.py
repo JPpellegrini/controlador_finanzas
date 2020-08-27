@@ -1,7 +1,7 @@
 import sys
 from PyQt5 import QtCore
 sys.path.append("..")
-from vista.ingreso_egreso import VentanaIngresoEgreso
+from vista.ingreso_egreso import VentanaIngreso
 from modelo.modelo import ServiceIngreso as Service, TransaccionDTO
 
 
@@ -11,7 +11,7 @@ class ControladorIngreso(QtCore.QObject):
     def __init__(self, database):
         super().__init__()
         self.__modelo = Service(database)
-        self.__vista = VentanaIngresoEgreso("Ingreso")
+        self.__vista = VentanaIngreso()
         self.__vista.registrar.connect(self.__on_registrar)
 
     def __on_registrar(self):

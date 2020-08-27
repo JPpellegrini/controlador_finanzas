@@ -45,10 +45,12 @@ class Balance:
             egresos = database.ejecutar("SELECT SUM(monto) FROM egresos").fetchone()[0]
             return ingresos - egresos
         except TypeError:
-            if ingresos != None: return 0 + ingresos
-            elif egresos != None: return 0 - egresos
-            else: return 0
-
+            if ingresos != None:
+                return 0 + ingresos
+            elif egresos != None:
+                return 0 - egresos
+            else:
+                return 0
 
 class ServiceTipoTransaccion:
     def __init__(self, database):

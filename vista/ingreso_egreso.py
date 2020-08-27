@@ -5,12 +5,8 @@ from PyQt5 import QtCore, QtWidgets, QtGui
 class VentanaIngresoEgreso(QtWidgets.QDialog):
     registrar = QtCore.pyqtSignal()
 
-    def __init__(self, titulo, parent = None):
+    def __init__(self, parent = None):
         QtWidgets.QDialog.__init__(self, parent)
-
-        #CONFIG
-        self.setWindowTitle(titulo)
-
         self.__setupUi()
     
     def __setupUi(self):
@@ -82,9 +78,19 @@ class VentanaIngresoEgreso(QtWidgets.QDialog):
         self.categorias[self.__cbx_categorias.currentIndex()][0],self.__line_descripcion.toPlainText(),\
         self.__cal_fecha.selectedDate().toString()
 
+class VentanaIngreso(VentanaIngresoEgreso):
+    def __init__(self, parent = None):
+        VentanaIngresoEgreso.__init__(self)
+        self.setWindowTitle("Ingreso")
+
+class VentanaEgreso(VentanaIngresoEgreso):
+    def __init__(self, parent = None):
+        VentanaIngresoEgreso.__init__(self)
+        self.setWindowTitle("Egreso")
+
 if __name__ == "__main__":
     app = QtWidgets.QApplication(sys.argv)
-    ventana = VentanaIngresoEgreso("ventana")
+    ventana = VentanaEgreso()
     def visualizar_datos():
         print(ventana.obtener_datos())
     ventana.show()

@@ -1,13 +1,13 @@
 import sys
 sys.path.append("..")
-from vista.tipo_categoria import VentanaTipoCategoria
+from vista.tipo_categoria import VentanaCategoriaIngreso
 from modelo.modelo import ServiceCategoriaIngreso as Service, CategoriaDTO
 
 
 class ControladorCategoriaIngreso:
     def __init__(self, database):
         self.__modelo = Service(database)
-        self.__vista = VentanaTipoCategoria("Categoria de Ingreso")
+        self.__vista = VentanaCategoriaIngreso()
         self.__vista.registrar.connect(self.__on_registrar) 
 
     def __on_registrar(self):
