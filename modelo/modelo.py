@@ -21,28 +21,24 @@ class CategoriaDTO:
     descripcion: str
 
 class Database:
-    def __init__(self, username, password):
-        self.__conexion = pymysql.connect(host="localhost", port=3306, user=username,
-                                        passwd=password, db="finanzas")
-        self.__cursor = self.__conexion.cursor()
+    __conexion = None
     
-    def ejecutar(self, sentencia, argumentos = None):
-        self.__cursor.execute(sentencia, argumentos)
-        return self.__cursor
-    
-    def guardar(self):
-        self.__conexion.commit()
-    
-    def cerrar(self):
-        self.__conexion.close()
+    @classmethod
+    def get(cls): 
+        if not cls.__conexion:  
+            cls.__conexion = pymysql.connect(host="localhost", port=3306, user="usuario",
+                                        passwd="1234", db="finanzas")
+        return cls.__conexion
         
 
 class Balance:
     @staticmethod
     def calcular(database):
+        database = Database.get()
+        cursor = database.cursor()
         try:
-            ingresos = database.ejecutar("SELECT SUM(monto) FROM ingresos").fetchone()[0]
-            egresos = database.ejecutar("SELECT SUM(monto) FROM egresos").fetchone()[0]
+            ingresos = cursor.execute("SELECT SUM(monto) FROM ingresos").fetchone()[0]
+            egresos = cursor.execute("SELECT SUM(monto) FROM egresos").fetchone()[0]
             return ingresos - egresos
         except TypeError:
             if ingresos != None:
@@ -52,205 +48,215 @@ class Balance:
             else:
                 return 0
 
+
 class ServiceTipoTransaccion:
-    def __init__(self, database):
-        self.database = database
+    def __init__(self):
+        self.database = Database.get()
+        self.cursor = self.database.cursor()
 
     def registrar(self, data = TipoTransaccionDTO):
         if data.nombre != "":
-            self.database.ejecutar(
+            self.cursor.execute(
                 "INSERT INTO tipos_transaccion VALUES (%s, %s, %s)", (None, data.nombre, data.descripcion)
             )
-            self.database.guardar()
+            self.database.commit()
         else: 
             return "Ingrese el nombre"
     
     def editar(self, id, data = TipoTransaccionDTO):
         if data.nombre != "":
-            self.database.ejecutar(
+            self.cursor.execute(
                 "UPDATE tipos_transaccion SET nombre=%s, descripcion=%s WHERE id = %s", (data.nombre, data.descripcion, id)
             )
-            self.database.guardar()
+            self.database.commit()
         else:
             return "Ingrese el nombre"
 
     def eliminar(self, *ids):
         try:
-            self.database.ejecutar(
+            self.cursor.execute(
                 "DELETE FROM tipos_transaccion WHERE id IN ({})".format(('%s,'*len(ids))[:-1]), ids
             )
-            self.database.guardar()
+            self.database.commit()
         except pymysql.Error:
             return "Error, tipo/s de transaccion en uso"
     
     def obtener_tipos(self):
-        return self.database.ejecutar(
+        self.cursor.execute(
             "SELECT * FROM tipos_transaccion"
-        ).fetchall()
+        )
+        return self.cursor.fetchall()
 
 
 class ServiceCategoriaIngreso:
-    def __init__(self, database):
-        self.database = database
+    def __init__(self):
+        self.database = Database.get()
+        self.cursor = self.database.cursor()
 
     def registrar(self, data = CategoriaDTO):
         if data.nombre != "":
-            self.database.ejecutar(
+            self.cursor.execute(
                 "INSERT INTO categorias_ingreso VALUES (%s, %s, %s)", (None, data.nombre, data.descripcion)
             )
-            self.database.guardar()
+            self.database.commit()
         else:
             return "Ingrese el nombre"
     
     def editar(self, id, data = CategoriaDTO):
         if data.nombre != "":
-            self.database.ejecutar(
+            self.cursor.execute(
                 "UPDATE categorias_ingreso SET nombre=%s, descripcion=%s WHERE id = %s", (data.nombre, data.descripcion, id)
             )
-            self.database.guardar()
+            self.database.commit()
         else:
             return "Ingrese el nombre"
 
     def eliminar(self, *ids):
         try:
-            self.database.ejecutar(
+            self.cursor.execute(
                 "DELETE FROM categorias_ingreso WHERE id IN ({})".format(('%s,'*len(ids))[:-1]), ids
             )
-            self.database.guardar()
+            self.database.commit()
         except pymysql.Error:
             return "Error, categoria/s en uso"
     
     def obtener_categorias(self):
-        return self.database.ejecutar(
+        self.cursor.execute(
             "SELECT * FROM categorias_ingreso"
-        ).fetchall()
+        )
+        return self.cursor.fetchall()
 
 
 class ServiceCategoriaEgreso:
-    def __init__(self, database):
-        self.database = database
+    def __init__(self):
+        self.database = Database.get()
+        self.cursor = self.database.cursor()
 
     def registrar(self, data = CategoriaDTO):
         if data.nombre != "":
-            self.database.ejecutar(
+            self.cursor.execute(
                 "INSERT INTO categorias_egreso VALUES (%s, %s, %s)", (None, data.nombre, data.descripcion)
             )
-            self.database.guardar()
+            self.database.commit()
         else:
             return "Ingrese el nombre"
     
     def editar(self, id, data = CategoriaDTO):
         if data.nombre != "":
-            self.database.ejecutar(
+            self.cursor.execute(
                 "UPDATE categorias_egreso SET nombre=%s, descripcion=%s WHERE id = %s", (data.nombre, data.descripcion, id)
             )
-            self.database.guardar()
+            self.database.commit()
         else:
             return "Ingrese el nombre"
 
     def eliminar(self, *ids):
         try:
-            self.database.ejecutar(
+            self.cursor.execute(
                 "DELETE FROM categorias_egreso WHERE id IN ({})".format(('%s,'*len(ids))[:-1]), ids
             )
-            self.database.guardar()
+            self.database.commit()
         except pymysql.Error:
             return "Error, categoria/s en uso"
     
     def obtener_categorias(self):
-        return self.database.ejecutar(
+        self.cursor.execute(
             "SELECT * FROM categorias_egreso"
-        ).fetchall() 
+        )
+        return self.cursor.fetchall() 
 
 
 class ServiceIngreso:
-    def __init__(self, database):
-        self.database = database
-        self.srv_tipos = ServiceTipoTransaccion(self.database)
-        self.srv_categorias = ServiceCategoriaIngreso(self.database)
+    def __init__(self):
+        self.database = Database.get()
+        self.cursor = self.database.cursor()
+        self.srv_tipos = ServiceTipoTransaccion()
+        self.srv_categorias = ServiceCategoriaIngreso()
 
     def registrar(self, data = TransaccionDTO):
         try:
-            self.database.ejecutar(
+            self.cursor.execute(
                 "INSERT INTO ingresos VALUES (%s, %s, %s, %s, %s, %s)",\
                 (None, data.monto, data.id_tipo_transaccion, data.id_categoria, data.descripcion, data.fecha)
             )
-            self.database.guardar()
+            self.database.commit()
         except pymysql.Error:
             return "Error, ingrese monto valido"
     
     def editar(self, id, data = TransaccionDTO):
         try:
-            self.database.ejecutar(
+            self.cursor.execute(
                 "UPDATE ingresos SET monto=%s, tipo=%s, categoria_ingreso=%s, descripcion=%s, fecha=%s WHERE id = %s",\
                 (data.monto, data.id_tipo_transaccion, data.id_categoria, data.descripcion, data.fecha, id)
             )
-            self.database.guardar()
+            self.database.commit()
         except pymysql.Error:
             return "Error, ingrese monto valido"
 
     def eliminar(self, *ids):
-        self.database.ejecutar(
+        self.cursor.execute(
             "DELETE FROM ingresos WHERE id IN ({})".format(('%s,'*len(ids))[:-1]), ids
         )
-        self.database.guardar()
+        self.database.commit()
     
     def obtener_ingresos(self):
-        return self.database.ejecutar(
+        self.cursor.execute(
             "SELECT i.id, i.monto, t.nombre, c.nombre, i.descripcion, i.fecha FROM ingresos i JOIN\
              tipos_transaccion t ON i.tipo=t.id JOIN categorias_ingreso c ON i.categoria_ingreso=c.id"
-        ).fetchall()
+        )
+        return self.cursor.fetchall()
     
     def obtener_tipos_categorias(self):
         return self.srv_tipos.obtener_tipos(), self.srv_categorias.obtener_categorias()
 
 
 class ServiceEgreso:
-    def __init__(self, database):
-        self.database = database
-        self.svc_tipos = ServiceTipoTransaccion(self.database)
-        self.svc_categorias = ServiceCategoriaEgreso(self.database)
+    def __init__(self):
+        self.database = Database.get()
+        self.cursor = self.database.cursor()
+        self.svc_tipos = ServiceTipoTransaccion()
+        self.svc_categorias = ServiceCategoriaEgreso()
 
     def registrar(self, data = TransaccionDTO):
         try:
-            self.database.ejecutar(
+            self.cursor.execute(
                 "INSERT INTO egresos VALUES (%s, %s, %s, %s, %s, %s)",\
                 (None, data.monto, data.id_tipo_transaccion, data.id_categoria, data.descripcion, data.fecha)
             )
-            self.database.guardar()
+            self.database.commit()
         except pymysql.Error:
             return "Error, ingrese monto valido"
     
     def editar(self, id, data = TransaccionDTO):
         try:
-            self.database.ejecutar(
+            self.cursor.execute(
                 "UPDATE egresos SET monto=%s, tipo=%s, categoria_egreso=%s, descripcion=%s, fecha=%s WHERE id = %s",\
                 (data.monto, data.id_tipo_transaccion, data.id_categoria, data.descripcion, data.fecha, id)
             )
-            self.database.guardar()
+            self.database.commit()
         except pymysql.Error:
             return "Error, ingrese monto valido"
 
     def eliminar(self, *ids):
-        self.database.ejecutar(
+        self.cursor.execute(
             "DELETE FROM egresos WHERE id IN ({})".format(('%s,'*len(ids))[:-1]), ids
         )
-        self.database.guardar()
+        self.database.commit()
     
     def obtener_egresos(self):
-        return self.database.ejecutar(
+        self.cursor.execute(
             "SELECT e.id, e.monto, t.nombre, c.nombre, e.descripcion, e.fecha FROM egresos e JOIN\
              tipos_transaccion t ON e.tipo=t.id JOIN categorias_egreso c ON e.categoria_ingreso=c.id"
-        ).fetchall()
+        )
+        return self.cursor.fetchall()
 
     def obtener_tipos_categorias(self):
         return self.svc_tipos.obtener_tipos(), self.svc_categorias.obtener_categorias()
 
 
 if __name__ == "__main__":
-    database = Database()
-    service = ServiceIngreso(database)
-    ingreso = TransaccionDTO("", 1, 1, "asd", "hoy")
+    service = ServiceIngreso()
+    tipo = TipoTransaccionDTO("tarjeta", "xd")
 
-    print(Balance.calcular(database))
-    database.cerrar()
+    print(service.obtener_ingresos())
+    Database.get().close()
