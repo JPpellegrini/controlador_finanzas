@@ -7,9 +7,9 @@ class VentanaTipoCategoria(QtWidgets.QDialog):
 
     def __init__(self, parent = None):
         QtWidgets.QDialog.__init__(self, parent)
-        self.__setupUi()
+        self.__setup_ui()
     
-    def __setupUi(self):
+    def __setup_ui(self):
         self.__contenedor = QtWidgets.QVBoxLayout()
 
         #WIDGETS

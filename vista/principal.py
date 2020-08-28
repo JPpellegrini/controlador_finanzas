@@ -12,13 +12,10 @@ class Vista(QtWidgets.QWidget):
 
     def __init__(self):
         QtWidgets.QWidget.__init__(self)
+        self.__setup_ui()
 
-        #CONFIG
+    def __setup_ui(self):
         self.setWindowTitle("Controlador de Finanzas")
-
-        self.__setupUi()
-
-    def __setupUi(self):
         self.__main_layout = QtWidgets.QHBoxLayout()
         self.__btn_layout = QtWidgets.QVBoxLayout()
         self.__cal_layout = QtWidgets.QVBoxLayout()
