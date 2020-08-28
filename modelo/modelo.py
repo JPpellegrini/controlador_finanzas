@@ -22,23 +22,25 @@ class CategoriaDTO:
 
 class Database:
     __conexion = None
-    
+
     @classmethod
-    def get(cls): 
+    def get(cls, username = None, password = None): 
         if not cls.__conexion:  
-            cls.__conexion = pymysql.connect(host="localhost", port=3306, user="usuario",
-                                        passwd="1234", db="finanzas")
+            cls.__conexion = pymysql.connect(host="localhost", port=3306, user=username,
+                                        passwd=password, db="finanzas")
         return cls.__conexion
         
 
 class Balance:
     @staticmethod
-    def calcular(database):
+    def calcular():
         database = Database.get()
         cursor = database.cursor()
         try:
-            ingresos = cursor.execute("SELECT SUM(monto) FROM ingresos").fetchone()[0]
-            egresos = cursor.execute("SELECT SUM(monto) FROM egresos").fetchone()[0]
+            cursor.execute("SELECT SUM(monto) FROM ingresos")
+            ingresos = cursor.fetchone()[0] 
+            cursor.execute("SELECT SUM(monto) FROM egresos")
+            egresos = cursor.fetchone()[0]
             return ingresos - egresos
         except TypeError:
             if ingresos != None:
