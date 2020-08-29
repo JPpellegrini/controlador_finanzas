@@ -2,6 +2,24 @@ import pymysql
 from dataclasses import dataclass
 
 
+#EXCEPCIONES
+class NombreError(Exception):
+    def __str__(self):
+        return "Ingrese nombre"
+
+class MontoError(Exception):
+    def __str__(self):
+        return "Ingrese monto valido"
+
+class TipoUsoError(Exception):
+    def __str__(self):
+        return "Error, tipo/s en uso"
+
+class CategoriaUsoError(Exception):
+    def __str__(self):
+        return "Error, categoria/s en uso"
+
+
 @dataclass
 class TransaccionDTO:
     monto: str
@@ -19,7 +37,7 @@ class TipoTransaccionDTO:
 class CategoriaDTO:
     nombre: str
     descripcion: str
-
+   
 class Database:
     __conexion = None
 
@@ -47,8 +65,7 @@ class Balance:
                 return 0 + ingresos
             elif egresos != None:
                 return 0 - egresos
-            else:
-                return 0
+            return 0
 
 
 class ServiceTipoTransaccion:
@@ -57,22 +74,20 @@ class ServiceTipoTransaccion:
         self.cursor = self.database.cursor()
 
     def registrar(self, data = TipoTransaccionDTO):
-        if data.nombre != "":
-            self.cursor.execute(
-                "INSERT INTO tipos_transaccion VALUES (%s, %s, %s)", (None, data.nombre, data.descripcion)
-            )
-            self.database.commit()
-        else: 
-            return "Ingrese el nombre"
+        if data.nombre == "":
+            raise NombreError
+        self.cursor.execute(
+            "INSERT INTO tipos_transaccion VALUES (%s, %s, %s)", (None, data.nombre, data.descripcion)
+        )
+        self.database.commit() 
     
     def editar(self, id, data = TipoTransaccionDTO):
-        if data.nombre != "":
-            self.cursor.execute(
-                "UPDATE tipos_transaccion SET nombre=%s, descripcion=%s WHERE id = %s", (data.nombre, data.descripcion, id)
-            )
-            self.database.commit()
-        else:
-            return "Ingrese el nombre"
+        if data.nombre == "":
+            raise NombreError
+        self.cursor.execute(
+            "UPDATE tipos_transaccion SET nombre=%s, descripcion=%s WHERE id = %s", (data.nombre, data.descripcion, id)
+        )
+        self.database.commit()
 
     def eliminar(self, *ids):
         try:
@@ -81,7 +96,7 @@ class ServiceTipoTransaccion:
             )
             self.database.commit()
         except pymysql.Error:
-            return "Error, tipo/s de transaccion en uso"
+            raise TipoUsoError
     
     def obtener_tipos(self):
         self.cursor.execute(
@@ -96,22 +111,20 @@ class ServiceCategoriaIngreso:
         self.cursor = self.database.cursor()
 
     def registrar(self, data = CategoriaDTO):
-        if data.nombre != "":
-            self.cursor.execute(
-                "INSERT INTO categorias_ingreso VALUES (%s, %s, %s)", (None, data.nombre, data.descripcion)
-            )
-            self.database.commit()
-        else: 
-            return "Ingrese el nombre"
-    
+        if data.nombre == "":
+            raise NombreError
+        self.cursor.execute(
+            "INSERT INTO categorias_ingreso VALUES (%s, %s, %s)", (None, data.nombre, data.descripcion)
+        )
+        self.database.commit()
+            
     def editar(self, id, data = CategoriaDTO):
-        if data.nombre != "":
-            self.cursor.execute(
-                "UPDATE categorias_ingreso SET nombre=%s, descripcion=%s WHERE id = %s", (data.nombre, data.descripcion, id)
-            )
-            self.database.commit()
-        else:
-            return "Ingrese el nombre"
+        if data.nombre == "":
+            raise NombreError
+        self.cursor.execute(
+            "UPDATE categorias_ingreso SET nombre=%s, descripcion=%s WHERE id = %s", (data.nombre, data.descripcion, id)
+        )
+        self.database.commit()       
 
     def eliminar(self, *ids):
         try:
@@ -120,7 +133,7 @@ class ServiceCategoriaIngreso:
             )
             self.database.commit()
         except pymysql.Error:
-            return "Error, categoria/s en uso"
+            raise CategoriaUsoError
     
     def obtener_categorias(self):
         self.cursor.execute(
@@ -135,22 +148,20 @@ class ServiceCategoriaEgreso:
         self.cursor = self.database.cursor()
 
     def registrar(self, data = CategoriaDTO):
-        if data.nombre != "":
-            self.cursor.execute(
-                "INSERT INTO categorias_egreso VALUES (%s, %s, %s)", (None, data.nombre, data.descripcion)
-            )
-            self.database.commit()
-        else:
-            return "Ingrese el nombre"
+        if data.nombre == "":
+            raise NombreError
+        self.cursor.execute(
+            "INSERT INTO categorias_egreso VALUES (%s, %s, %s)", (None, data.nombre, data.descripcion)
+        )
+        self.database.commit()
     
     def editar(self, id, data = CategoriaDTO):
-        if data.nombre != "":
-            self.cursor.execute(
-                "UPDATE categorias_egreso SET nombre=%s, descripcion=%s WHERE id = %s", (data.nombre, data.descripcion, id)
-            )
-            self.database.commit()
-        else:
-            return "Ingrese el nombre"
+        if data.nombre == "":
+            raise NombreError
+        self.cursor.execute(
+            "UPDATE categorias_egreso SET nombre=%s, descripcion=%s WHERE id = %s", (data.nombre, data.descripcion, id)
+        )
+        self.database.commit()
 
     def eliminar(self, *ids):
         try:
@@ -159,7 +170,7 @@ class ServiceCategoriaEgreso:
             )
             self.database.commit()
         except pymysql.Error:
-            return "Error, categoria/s en uso"
+            raise CategoriaUsoError
     
     def obtener_categorias(self):
         self.cursor.execute(
@@ -183,7 +194,7 @@ class ServiceIngreso:
             )
             self.database.commit()
         except pymysql.Error:
-            return "Error, ingrese monto valido"
+            raise MontoError
     
     def editar(self, id, data = TransaccionDTO):
         try:
@@ -193,7 +204,7 @@ class ServiceIngreso:
             )
             self.database.commit()
         except pymysql.Error:
-            return "Error, ingrese monto valido"
+            raise MontoError
 
     def eliminar(self, *ids):
         self.cursor.execute(
@@ -227,7 +238,7 @@ class ServiceEgreso:
             )
             self.database.commit()
         except pymysql.Error:
-            return "Error, ingrese monto valido"
+            raise MontoError
     
     def editar(self, id, data = TransaccionDTO):
         try:
@@ -237,7 +248,7 @@ class ServiceEgreso:
             )
             self.database.commit()
         except pymysql.Error:
-            return "Error, ingrese monto valido"
+            raise MontoError
 
     def eliminar(self, *ids):
         self.cursor.execute(
