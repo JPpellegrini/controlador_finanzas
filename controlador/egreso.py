@@ -8,9 +8,9 @@ from modelo.modelo import ServiceEgreso as Service, TransaccionDTO
 class ControladorEgreso(QtCore.QObject):
     actualizar_balance = QtCore.pyqtSignal()
 
-    def __init__(self, database):
+    def __init__(self):
         super().__init__()
-        self.__modelo = Service(database)
+        self.__modelo = Service()
         self.__vista = VentanaEgreso()
         self.__vista.registrar.connect(self.__on_registrar)
 
@@ -28,11 +28,9 @@ class ControladorEgreso(QtCore.QObject):
 
 
 if __name__ == "__main__":
-    from modelo.modelo import Database
     from PyQt5 import QtWidgets
     
     app = QtWidgets.QApplication(sys.argv)
-    base = Database()
-    controlador = ControladorEgreso(base)
+    controlador = ControladorEgreso()
     controlador.show_vista()
     app.exec()

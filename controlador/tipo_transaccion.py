@@ -5,8 +5,8 @@ from modelo.modelo import ServiceTipoTransaccion as Service, TipoTransaccionDTO
 
 
 class ControladorTipoTransaccion():
-    def __init__(self, database):
-        self.__modelo = Service(database)
+    def __init__(self):
+        self.__modelo = Service()
         self.__vista = VentanaTipo()
         self.__vista.registrar.connect(self.__on_registrar)
     
@@ -19,12 +19,10 @@ class ControladorTipoTransaccion():
 
 
 if __name__ == "__main__":
-    from modelo.modelo import Database
-    from PyQt5 import QtCore, QtWidgets, QtGui
+    from PyQt5 import QtWidgets
 
     app = QtWidgets.QApplication(sys.argv)
-    base = Database()
-    controlador = ControladorTipoTransaccion(base)
+    controlador = ControladorTipoTransaccion()
     controlador.show_vista()
     app.exec()
 

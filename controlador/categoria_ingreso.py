@@ -5,8 +5,8 @@ from modelo.modelo import ServiceCategoriaIngreso as Service, CategoriaDTO
 
 
 class ControladorCategoriaIngreso:
-    def __init__(self, database):
-        self.__modelo = Service(database)
+    def __init__(self):
+        self.__modelo = Service()
         self.__vista = VentanaCategoriaIngreso()
         self.__vista.registrar.connect(self.__on_registrar) 
 
@@ -20,9 +20,8 @@ class ControladorCategoriaIngreso:
     
 if __name__ == "__main__":
     from PyQt5 import QtWidgets
-    from modelo.modelo import Database
-    BDD = Database()
+
     app = QtWidgets.QApplication(sys.argv)
-    controlador = ControladorCategoriaIngreso(BDD)
+    controlador = ControladorCategoriaIngreso()
     controlador.show_vista()
     app.exec()

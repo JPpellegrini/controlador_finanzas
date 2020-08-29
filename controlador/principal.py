@@ -6,18 +6,17 @@ from controlador.categoria_ingreso import ControladorCategoriaIngreso
 from controlador.egreso import ControladorEgreso
 from controlador.ingreso import ControladorIngreso
 from controlador.tipo_transaccion import ControladorTipoTransaccion
-from modelo.modelo import Balance, Database
+from modelo.modelo import Balance
 
 class Controlador:
-    def __init__(self, db_username, db_password):
-        self.__database = Database(db_username, db_password)
+    def __init__(self):
         self.__vista = Vista()
         self.__calcular_balance()
-        self.__ctl_ingreso = ControladorIngreso(self.__database)
-        self.__ctl_egreso = ControladorEgreso(self.__database)
-        self.__ctl_tipo = ControladorTipoTransaccion(self.__database)
-        self.__ctl_cat_ingreso = ControladorCategoriaIngreso(self.__database)
-        self.__ctl_cat_egreso = ControladorCategoriaEgreso(self.__database)
+        self.__ctl_ingreso = ControladorIngreso()
+        self.__ctl_egreso = ControladorEgreso()
+        self.__ctl_tipo = ControladorTipoTransaccion()
+        self.__ctl_cat_ingreso = ControladorCategoriaIngreso()
+        self.__ctl_cat_egreso = ControladorCategoriaEgreso()
 
         self.__ctl_ingreso.actualizar_balance.connect(self.__on_actualizar_balance)
         self.__ctl_egreso.actualizar_balance.connect(self.__on_actualizar_balance)
@@ -48,13 +47,11 @@ class Controlador:
         self.__calcular_balance()
 
     def __calcular_balance(self):
-        self.__vista.actualizar_balance(Balance.calcular(self.__database))
+        self.__vista.actualizar_balance(Balance.calcular())
 
     def show_vista(self):
         self.__vista.show()
-    
-    def cerrar_database(self):
-        self.__database.cerrar()
+        
     
 if __name__ == "__main__":
     from PyQt5 import QtWidgets
