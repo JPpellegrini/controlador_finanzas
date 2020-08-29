@@ -102,7 +102,7 @@ class ServiceTipoTransaccion:
         self.cursor.execute(
             "SELECT * FROM tipos_transaccion"
         )
-        return self.cursor.fetchall()
+        return [TipoTransaccionDTO(tipo[1], tipo[2]) for tipo in self.cursor.fetchall()]
 
 
 class ServiceCategoriaIngreso:
@@ -139,7 +139,7 @@ class ServiceCategoriaIngreso:
         self.cursor.execute(
             "SELECT * FROM categorias_ingreso"
         )
-        return self.cursor.fetchall()
+        return [CategoriaDTO(categoria[1], categoria[2]) for categoria in self.cursor.fetchall()]
 
 
 class ServiceCategoriaEgreso:
@@ -176,7 +176,7 @@ class ServiceCategoriaEgreso:
         self.cursor.execute(
             "SELECT * FROM categorias_egreso"
         )
-        return self.cursor.fetchall() 
+        return [CategoriaDTO(categoria[1], categoria[2]) for categoria in self.cursor.fetchall()]
 
 
 class ServiceIngreso:
@@ -217,7 +217,7 @@ class ServiceIngreso:
             "SELECT i.id, i.monto, t.nombre, c.nombre, i.descripcion, i.fecha FROM ingresos i JOIN\
              tipos_transaccion t ON i.tipo=t.id JOIN categorias_ingreso c ON i.categoria_ingreso=c.id"
         )
-        return self.cursor.fetchall()
+        return [TransaccionDTO(transaccion[1], transaccion[2], transaccion[3], transaccion[4], transaccion[5]) for transaccion in self.cursor.fetchall()]
     
     def obtener_tipos_categorias(self):
         return self.srv_tipos.obtener_tipos(), self.srv_categorias.obtener_categorias()
@@ -259,21 +259,18 @@ class ServiceEgreso:
     def obtener_egresos(self):
         self.cursor.execute(
             "SELECT e.id, e.monto, t.nombre, c.nombre, e.descripcion, e.fecha FROM egresos e JOIN\
-             tipos_transaccion t ON e.tipo=t.id JOIN categorias_egreso c ON e.categoria_ingreso=c.id"
+             tipos_transaccion t ON e.tipo=t.id JOIN categorias_egreso c ON e.categoria_egreso=c.id"
         )
-        return self.cursor.fetchall()
+        return [TransaccionDTO(transaccion[1], transaccion[2], transaccion[3], transaccion[4], transaccion[5]) for transaccion in self.cursor.fetchall()]
 
     def obtener_tipos_categorias(self):
         return self.svc_tipos.obtener_tipos(), self.svc_categorias.obtener_categorias()
 
 
 if __name__ == "__main__":
-    database = Database.get("usuario", "1234")
-    service = ServiceTipoTransaccion()
-    tipo = TipoTransaccionDTO("", "xd")
-
-    try:
-        service.registrar(tipo)
-    except NombreError as error:
-        print(error)
+    Database.get("usuario", "1234")
+    service = ServiceEgreso()
+    tipo = TipoTransaccionDTO("tarjeta", "xd")
+    
+    print(service.obtener_egresos())
     Database.get().close()
