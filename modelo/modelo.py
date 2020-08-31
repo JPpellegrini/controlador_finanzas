@@ -2,7 +2,6 @@ import pymysql
 from dataclasses import dataclass
 
 
-#EXCEPCIONES
 class NombreError(Exception):
     def __str__(self):
         return "Ingrese nombre"
@@ -44,8 +43,8 @@ class Database:
     @classmethod
     def get(cls, username = None, password = None): 
         if not cls.__conexion:  
-            cls.__conexion = pymysql.connect(host="localhost", port=3306, user=username,
-                                        passwd=password, db="finanzas")
+            cls.__conexion = pymysql.connect(cursorclass=pymysql.cursors.DictCursor,host="localhost",
+                                            port=3306, user=username, passwd=password, db="finanzas")
         return cls.__conexion
         
 
@@ -55,10 +54,10 @@ class Balance:
         database = Database.get()
         cursor = database.cursor()
         try:
-            cursor.execute("SELECT SUM(monto) FROM ingresos")
-            ingresos = cursor.fetchone()[0] 
-            cursor.execute("SELECT SUM(monto) FROM egresos")
-            egresos = cursor.fetchone()[0]
+            cursor.execute("SELECT SUM(monto) as total FROM ingresos")
+            ingresos = cursor.fetchone()["total"]
+            cursor.execute("SELECT SUM(monto) as total FROM egresos")
+            egresos = cursor.fetchone()["total"]
             return ingresos - egresos
         except TypeError:
             if ingresos != None:
@@ -100,9 +99,9 @@ class ServiceTipoTransaccion:
     
     def obtener_tipos(self):
         self.cursor.execute(
-            "SELECT * FROM tipos_transaccion"
+            "SELECT nombre, descripcion FROM tipos_transaccion"
         )
-        return [TipoTransaccionDTO(tipo[1], tipo[2]) for tipo in self.cursor.fetchall()]
+        return [TipoTransaccionDTO(tipo["nombre"], tipo["descripcion"]) for tipo in self.cursor.fetchall()]
 
 
 class ServiceCategoriaIngreso:
@@ -137,9 +136,9 @@ class ServiceCategoriaIngreso:
     
     def obtener_categorias(self):
         self.cursor.execute(
-            "SELECT * FROM categorias_ingreso"
+            "SELECT nombre, descripcion FROM categorias_ingreso"
         )
-        return [CategoriaDTO(categoria[1], categoria[2]) for categoria in self.cursor.fetchall()]
+        return [CategoriaDTO(categoria["nombre"], categoria["descripcion"]) for categoria in self.cursor.fetchall()]
 
 
 class ServiceCategoriaEgreso:
@@ -174,9 +173,9 @@ class ServiceCategoriaEgreso:
     
     def obtener_categorias(self):
         self.cursor.execute(
-            "SELECT * FROM categorias_egreso"
+            "SELECT nombre, descripcion FROM categorias_egreso"
         )
-        return [CategoriaDTO(categoria[1], categoria[2]) for categoria in self.cursor.fetchall()]
+        return [CategoriaDTO(categoria["nombre"], categoria["descripcion"]) for categoria in self.cursor.fetchall()]
 
 
 class ServiceIngreso:
@@ -214,10 +213,10 @@ class ServiceIngreso:
     
     def obtener_ingresos(self):
         self.cursor.execute(
-            "SELECT i.id, i.monto, t.nombre, c.nombre, i.descripcion, i.fecha FROM ingresos i JOIN\
+            "SELECT i.id, i.monto, t.nombre as tipo, c.nombre as categoria, i.descripcion, i.fecha FROM ingresos i JOIN\
              tipos_transaccion t ON i.tipo=t.id JOIN categorias_ingreso c ON i.categoria_ingreso=c.id"
         )
-        return [TransaccionDTO(transaccion[1], transaccion[2], transaccion[3], transaccion[4], transaccion[5]) for transaccion in self.cursor.fetchall()]
+        return [TransaccionDTO(transaccion["monto"], transaccion["tipo"], transaccion["categoria"], transaccion["descripcion"], transaccion["fecha"]) for transaccion in self.cursor.fetchall()]
     
     def obtener_tipos_categorias(self):
         return self.srv_tipos.obtener_tipos(), self.srv_categorias.obtener_categorias()
@@ -258,10 +257,10 @@ class ServiceEgreso:
     
     def obtener_egresos(self):
         self.cursor.execute(
-            "SELECT e.id, e.monto, t.nombre, c.nombre, e.descripcion, e.fecha FROM egresos e JOIN\
+            "SELECT e.id, e.monto, t.nombre as tipo, c.nombre as categoria, e.descripcion, e.fecha FROM egresos e JOIN\
              tipos_transaccion t ON e.tipo=t.id JOIN categorias_egreso c ON e.categoria_egreso=c.id"
         )
-        return [TransaccionDTO(transaccion[1], transaccion[2], transaccion[3], transaccion[4], transaccion[5]) for transaccion in self.cursor.fetchall()]
+        return [TransaccionDTO(transaccion["monto"], transaccion["tipo"], transaccion["categoria"], transaccion["descripcion"], transaccion["fecha"]) for transaccion in self.cursor.fetchall()]
 
     def obtener_tipos_categorias(self):
         return self.svc_tipos.obtener_tipos(), self.svc_categorias.obtener_categorias()
