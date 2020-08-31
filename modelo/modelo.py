@@ -72,7 +72,7 @@ class ServiceTipoTransaccion:
         self.database = Database.get()
         self.cursor = self.database.cursor()
 
-    def registrar(self, data = TipoTransaccionDTO):
+    def registrar_tipo(self, data = TipoTransaccionDTO):
         if data.nombre == "":
             raise NombreError
         self.cursor.execute(
@@ -80,7 +80,7 @@ class ServiceTipoTransaccion:
         )
         self.database.commit() 
     
-    def editar(self, id, data = TipoTransaccionDTO):
+    def editar_tipo(self, id, data = TipoTransaccionDTO):
         if data.nombre == "":
             raise NombreError
         self.cursor.execute(
@@ -88,7 +88,7 @@ class ServiceTipoTransaccion:
         )
         self.database.commit()
 
-    def eliminar(self, *ids):
+    def eliminar_tipo(self, *ids):
         try:
             self.cursor.execute(
                 "DELETE FROM tipos_transaccion WHERE id IN ({})".format(('%s,'*len(ids))[:-1]), ids
@@ -109,7 +109,7 @@ class ServiceCategoriaIngreso:
         self.database = Database.get()
         self.cursor = self.database.cursor()
 
-    def registrar(self, data = CategoriaDTO):
+    def registrar_cat_ingreso(self, data = CategoriaDTO):
         if data.nombre == "":
             raise NombreError
         self.cursor.execute(
@@ -117,7 +117,7 @@ class ServiceCategoriaIngreso:
         )
         self.database.commit()
             
-    def editar(self, id, data = CategoriaDTO):
+    def editar_cat_ingreso(self, id, data = CategoriaDTO):
         if data.nombre == "":
             raise NombreError
         self.cursor.execute(
@@ -125,7 +125,7 @@ class ServiceCategoriaIngreso:
         )
         self.database.commit()       
 
-    def eliminar(self, *ids):
+    def eliminar_cat_ingreso(self, *ids):
         try:
             self.cursor.execute(
                 "DELETE FROM categorias_ingreso WHERE id IN ({})".format(('%s,'*len(ids))[:-1]), ids
@@ -134,7 +134,7 @@ class ServiceCategoriaIngreso:
         except pymysql.Error:
             raise CategoriaUsoError
     
-    def obtener_categorias(self):
+    def obtener_cat_ingreso(self):
         self.cursor.execute(
             "SELECT nombre, descripcion FROM categorias_ingreso"
         )
@@ -146,7 +146,7 @@ class ServiceCategoriaEgreso:
         self.database = Database.get()
         self.cursor = self.database.cursor()
 
-    def registrar(self, data = CategoriaDTO):
+    def registrar_cat_egreso(self, data = CategoriaDTO):
         if data.nombre == "":
             raise NombreError
         self.cursor.execute(
@@ -154,7 +154,7 @@ class ServiceCategoriaEgreso:
         )
         self.database.commit()
     
-    def editar(self, id, data = CategoriaDTO):
+    def editar_cat_egreso(self, id, data = CategoriaDTO):
         if data.nombre == "":
             raise NombreError
         self.cursor.execute(
@@ -162,7 +162,7 @@ class ServiceCategoriaEgreso:
         )
         self.database.commit()
 
-    def eliminar(self, *ids):
+    def eliminar_cat_egreso(self, *ids):
         try:
             self.cursor.execute(
                 "DELETE FROM categorias_egreso WHERE id IN ({})".format(('%s,'*len(ids))[:-1]), ids
@@ -171,7 +171,7 @@ class ServiceCategoriaEgreso:
         except pymysql.Error:
             raise CategoriaUsoError
     
-    def obtener_categorias(self):
+    def obtener_cat_egreso(self):
         self.cursor.execute(
             "SELECT nombre, descripcion FROM categorias_egreso"
         )
@@ -185,7 +185,7 @@ class ServiceIngreso:
         self.srv_tipos = ServiceTipoTransaccion()
         self.srv_categorias = ServiceCategoriaIngreso()
 
-    def registrar(self, data = TransaccionDTO):
+    def registrar_ingreso(self, data = TransaccionDTO):
         try:
             self.cursor.execute(
                 "INSERT INTO ingresos VALUES (%s, %s, %s, %s, %s, %s)",\
@@ -195,7 +195,7 @@ class ServiceIngreso:
         except pymysql.Error:
             raise MontoError
     
-    def editar(self, id, data = TransaccionDTO):
+    def editar_ingreso(self, id, data = TransaccionDTO):
         try:
             self.cursor.execute(
                 "UPDATE ingresos SET monto=%s, tipo=%s, categoria_ingreso=%s, descripcion=%s, fecha=%s WHERE id = %s",\
@@ -205,7 +205,7 @@ class ServiceIngreso:
         except pymysql.Error:
             raise MontoError
 
-    def eliminar(self, *ids):
+    def eliminar_ingreso(self, *ids):
         self.cursor.execute(
             "DELETE FROM ingresos WHERE id IN ({})".format(('%s,'*len(ids))[:-1]), ids
         )
@@ -229,7 +229,7 @@ class ServiceEgreso:
         self.svc_tipos = ServiceTipoTransaccion()
         self.svc_categorias = ServiceCategoriaEgreso()
 
-    def registrar(self, data = TransaccionDTO):
+    def registrar_egreso(self, data = TransaccionDTO):
         try:
             self.cursor.execute(
                 "INSERT INTO egresos VALUES (%s, %s, %s, %s, %s, %s)",\
@@ -239,7 +239,7 @@ class ServiceEgreso:
         except pymysql.Error:
             raise MontoError
     
-    def editar(self, id, data = TransaccionDTO):
+    def editar_egreso(self, id, data = TransaccionDTO):
         try:
             self.cursor.execute(
                 "UPDATE egresos SET monto=%s, tipo=%s, categoria_egreso=%s, descripcion=%s, fecha=%s WHERE id = %s",\
@@ -249,7 +249,7 @@ class ServiceEgreso:
         except pymysql.Error:
             raise MontoError
 
-    def eliminar(self, *ids):
+    def eliminar_egreso(self, *ids):
         self.cursor.execute(
             "DELETE FROM egresos WHERE id IN ({})".format(('%s,'*len(ids))[:-1]), ids
         )
