@@ -37,7 +37,7 @@ class Vista(QtWidgets.QWidget):
         self.__btn_eliminar = QtWidgets.QPushButton("Eliminar")
 
         #CONFIG WIDGETS
-        self.__line_balance.setReadOnly(1)
+        self.__line_balance.setReadOnly(True)
         self.__btn_editar.setEnabled(False)
         self.__btn_eliminar.setEnabled(False)
         self.__label_ingresos.setStyleSheet("color: green")
