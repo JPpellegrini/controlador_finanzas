@@ -1,6 +1,6 @@
 import sys
 sys.path.append("..")
-from vista.principal import Vista
+from vista.principal import VistaPrincipal
 from controlador.categoria_egreso import ControladorCategoriaEgreso
 from controlador.categoria_ingreso import ControladorCategoriaIngreso
 from controlador.egreso import ControladorEgreso
@@ -10,7 +10,7 @@ from modelo.modelo import Balance
 
 class ControladorPrincipal:
     def __init__(self):
-        self.__vista = Vista()
+        self.__vista = VistaPrincipal()
         self.__calcular_balance()
         self.__ctl_ingreso = ControladorIngreso()
         self.__ctl_egreso = ControladorEgreso()

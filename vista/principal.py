@@ -1,7 +1,7 @@
 import sys
 from PyQt5 import QtCore, QtWidgets, QtGui
 
-class Vista(QtWidgets.QWidget):
+class VistaPrincipal(QtWidgets.QWidget):
     
     #SIGNALS
     agregar_ingreso = QtCore.pyqtSignal()
@@ -79,7 +79,7 @@ class Vista(QtWidgets.QWidget):
 
 if __name__ == "__main__":
     app = QtWidgets.QApplication(sys.argv)
-    ventana = Vista()
+    ventana = VistaPrincipal()
     ventana.actualizar_balance(1000)
     ventana.show()
     app.exec()
