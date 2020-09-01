@@ -52,6 +52,10 @@ class Vista(QtWidgets.QWidget):
         self.__btn_layout.addWidget(self.__btn_tipo_transaccion)
         self.__btn_layout.addWidget(self.__btn_categoria_ingreso)
         self.__btn_layout.addWidget(self.__btn_categoria_egreso)
+        
+        self.__spacer = QtWidgets.QSpacerItem(0, 0, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
+        self.__btn_layout.addSpacerItem(self.__spacer)
+        
         self.__btn_layout.addWidget(self.__line_balance)
 
         self.__cal_layout.addWidget(self.__calendario)
