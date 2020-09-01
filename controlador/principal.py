@@ -1,6 +1,6 @@
 import sys
 sys.path.append("..")
-from vista.principal import Vista
+from vista.principal import VistaPrincipal
 from controlador.categoria_egreso import ControladorCategoriaEgreso
 from controlador.categoria_ingreso import ControladorCategoriaIngreso
 from controlador.egreso import ControladorEgreso
@@ -8,9 +8,9 @@ from controlador.ingreso import ControladorIngreso
 from controlador.tipo_transaccion import ControladorTipoTransaccion
 from modelo.modelo import Balance
 
-class Controlador:
+class ControladorPrincipal:
     def __init__(self):
-        self.__vista = Vista()
+        self.__vista = VistaPrincipal()
         self.__calcular_balance()
         self.__ctl_ingreso = ControladorIngreso(self.__vista)
         self.__ctl_egreso = ControladorEgreso(self.__vista)
@@ -56,6 +56,6 @@ class Controlador:
 if __name__ == "__main__":
     from PyQt5 import QtWidgets
     app = QtWidgets.QApplication(sys.argv)
-    controlador = Controlador()
+    controlador = ControladorPrincipal()
     controlador.show_vista()
     app.exec()
