@@ -8,7 +8,7 @@ from controlador.ingreso import ControladorIngreso
 from controlador.tipo_transaccion import ControladorTipoTransaccion
 from modelo.modelo import Balance
 
-class Controlador:
+class ControladorPrincipal:
     def __init__(self):
         self.__vista = Vista()
         self.__calcular_balance()
@@ -56,6 +56,6 @@ class Controlador:
 if __name__ == "__main__":
     from PyQt5 import QtWidgets
     app = QtWidgets.QApplication(sys.argv)
-    controlador = Controlador()
+    controlador = ControladorPrincipal()
     controlador.show_vista()
     app.exec()

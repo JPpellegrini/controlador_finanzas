@@ -1,7 +1,7 @@
 import sys
 import os
 from PyQt5 import QtWidgets
-from controlador.principal import Controlador
+from controlador.principal import ControladorPrincipal
 from modelo.modelo import Database
 from dotenv import load_dotenv
 load_dotenv()
