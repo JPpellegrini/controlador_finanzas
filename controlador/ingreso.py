@@ -17,7 +17,7 @@ class ControladorIngreso(QtCore.QObject):
     def __on_registrar(self):
         ingreso = self.__vista.obtener_datos()
         try:
-            self.__modelo.registrar_ingreso(TransaccionDTO(ingreso.monto, ingreso.id_tipo, ingreso.id_categoria,\n
+            self.__modelo.registrar_ingreso(TransaccionDTO(ingreso.monto, ingreso.id_tipo, ingreso.id_categoria,
                                                             ingreso.descripcion, ingreso.fecha))
             self.__vista.verificar_error()
             self.actualizar_balance.emit()
