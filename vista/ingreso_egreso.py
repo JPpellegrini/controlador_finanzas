@@ -2,6 +2,7 @@ import sys
 from PyQt5 import QtCore, QtWidgets, QtGui
 from dataclasses import dataclass
 
+
 @dataclass
 class TransaccionDTO:
     monto: str
@@ -48,30 +49,35 @@ class VentanaIngresoEgreso(QtWidgets.QDialog):
         self.setLayout(self.__contenedor)
 
     def __on_btn_registrar(self):
-        self.__label_error.setStyleSheet("color: red")
-        if self.__cbx_tipo_transaccion.currentIndex() == -1:
-            self.__label_error.setText("Seleccione tipo de transaccion")
-        elif self.__cbx_categorias.currentIndex() == -1:
-            self.__label_error.setText("Seleccione categoria")
-        else:
+        if self.__verificar_combobox():
             self.registrar.emit()
         
+    def __set_label_error(self, color, mensaje):
+        self.__label_error.setStyleSheet(f"color: {color}")
+        self.__label_error.setText(mensaje)
+
     def __limpiar(self):
         self.__line_monto.clear()
         self.__cbx_tipo_transaccion.clear()
         self.__cbx_categorias.clear()
         self.__line_descripcion.clear()
-        self.__label_error.setStyleSheet("color: gray")
-        self.__label_error.setText("Campos con * obligatorios")
         self.__cal_fecha.setSelectedDate(QtCore.QDate.currentDate())
+        self.__set_label_error("gray", "Campos con * obligatorios")
     
-    def verificar_error(self, mensaje_error):
-        if mensaje_error != None:
-            self.__label_error.setStyleSheet("color: red")
-            self.__label_error.setText(mensaje_error)
+    def __verificar_combobox(self):
+        if self.__cbx_tipo_transaccion.currentIndex() == -1:
+            self.__set_label_error("red", "Seleccione tipo de transaccion")
+        elif self.__cbx_categorias.currentIndex() == -1:
+            self.__set_label_error("red", "Seleccione categoria")
         else:
-            self.__limpiar()
-            self.close()
+            return True
+    
+    def verificar_error(self, error):
+        if error:
+            self.__set_label_error("red", str(error))
+            return none
+        self.__limpiar()
+        self.close()
 
     def closeEvent(self, evnt):
         self.__limpiar()

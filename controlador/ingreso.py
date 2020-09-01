@@ -2,7 +2,7 @@ import sys
 from PyQt5 import QtCore
 sys.path.append("..")
 from vista.ingreso_egreso import VentanaIngreso
-from modelo.modelo import ServiceIngreso as Service, TransaccionDTO
+from modelo.modelo import ServiceIngreso, TransaccionDTO, MontoError
 
 
 class ControladorIngreso(QtCore.QObject):
@@ -10,16 +10,19 @@ class ControladorIngreso(QtCore.QObject):
 
     def __init__(self):
         super().__init__()
-        self.__modelo = Service()
+        self.__modelo = ServiceIngreso()
         self.__vista = VentanaIngreso()
         self.__vista.registrar.connect(self.__on_registrar)
 
     def __on_registrar(self):
-        datos = self.__vista.obtener_datos()
-        self.__vista.verificar_error(self.__modelo.registrar(
-            TransaccionDTO(datos[0], datos[1], datos[2], datos[3], datos[4]))
-        )
-        self.actualizar_balance.emit()
+        ingreso = self.__vista.obtener_datos()
+        try:
+            self.__modelo.registrar_ingreso(TransaccionDTO(ingreso.monto, ingreso.id_tipo, ingreso.id_categoria,\n
+                                                            ingreso.descripcion, ingreso.fecha))
+            self.__vista.verificar_error()
+            self.actualizar_balance.emit()
+        except MontoError as error:
+            self.__vista.verificar_error(error)
     
     def show_vista(self):
         tipos_categorias = self.__modelo.obtener_tipos_categorias()
