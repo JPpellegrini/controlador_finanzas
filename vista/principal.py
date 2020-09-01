@@ -29,10 +29,8 @@ class Vista(QtWidgets.QWidget):
         self.__btn_categoria_ingreso = QtWidgets.QPushButton("Nueva Categoria de Ingreso")
         self.__btn_categoria_egreso = QtWidgets.QPushButton("Nueva Categoria de Egreso")
         self.__calendario = QtWidgets.QCalendarWidget()
-        self.__label_ingresos = QtWidgets.QLabel('Ingresos')
-        self.__tree_ingresos = QtWidgets.QTreeView()
-        self.__label_egresos = QtWidgets.QLabel('Egresos')
-        self.__tree_egresos = QtWidgets.QTreeView()
+        self.__label_transaccion = QtWidgets.QLabel('Transacciones')
+        self.__table_transaccion = QtWidgets.QTableView()
         self.__btn_editar = QtWidgets.QPushButton("Editar")
         self.__btn_eliminar = QtWidgets.QPushButton("Eliminar")
 
@@ -40,8 +38,7 @@ class Vista(QtWidgets.QWidget):
         self.__line_balance.setReadOnly(True)
         self.__btn_editar.setEnabled(False)
         self.__btn_eliminar.setEnabled(False)
-        self.__label_ingresos.setStyleSheet("color: green")
-        self.__label_egresos.setStyleSheet("color: red")
+        self.__label_transaccion.setStyleSheet("color: #1E90FF")
 
         #IPLEMENTACION WIDGETS
         self.__main_layout.addLayout(self.__btn_layout)
@@ -59,10 +56,8 @@ class Vista(QtWidgets.QWidget):
         self.__btn_layout.addWidget(self.__line_balance)
 
         self.__cal_layout.addWidget(self.__calendario)
-        self.__cal_layout.addWidget(self.__label_ingresos)
-        self.__cal_layout.addWidget(self.__tree_ingresos)
-        self.__cal_layout.addWidget(self.__label_egresos)
-        self.__cal_layout.addWidget(self.__tree_egresos)
+        self.__cal_layout.addWidget(self.__label_transaccion)
+        self.__cal_layout.addWidget(self.__table_transaccion)
 
         self.__btn_layout.addLayout(self.__opcion_layout)
         self.__opcion_layout.addWidget(self.__btn_editar)
