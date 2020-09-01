@@ -1,6 +1,14 @@
 import sys
 from PyQt5 import QtCore, QtWidgets, QtGui
+from dataclasses import dataclass
 
+@dataclass
+class TransaccionDTO:
+    monto: str
+    id_tipo_transaccion: int
+    id_categoria: int
+    descripcion: str
+    fecha: str
 
 class VentanaIngresoEgreso(QtWidgets.QDialog):
     registrar = QtCore.pyqtSignal()
@@ -74,9 +82,12 @@ class VentanaIngresoEgreso(QtWidgets.QDialog):
         self.__cbx_categorias.addItems([categoria[1] for categoria in self.categorias])
 
     def obtener_datos(self):
-        return self.__line_monto.text(), self.tipos[self.__cbx_tipo_transaccion.currentIndex()][0],\
-        self.categorias[self.__cbx_categorias.currentIndex()][0],self.__line_descripcion.toPlainText(),\
-        self.__cal_fecha.selectedDate().toString()
+        monto = self.__line_monto.text()
+        id_tipo = self.tipos[self.__cbx_tipo_transaccion.currentIndex()][0]
+        id_categoria = self.categorias[self.__cbx_categorias.currentIndex()][0]
+        descripcion = self.__line_descripcion.toPlainText()
+        fecha = self.__cal_fecha.selectedDate().toString()
+        return TransaccionDTO(monto, id_tipo, id_categoria, descripcion, fecha)
 
 class VentanaIngreso(VentanaIngresoEgreso):
     def __init__(self, parent = None):
