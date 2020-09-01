@@ -15,6 +15,6 @@ database = Database.get(db_user["username"],db_user["password"])
 
 app = QtWidgets.QApplication(sys.argv)
 app.aboutToQuit.connect(database.close)
-controlador = Controlador()
+controlador = ControladorPrincipal()
 controlador.show_vista()
 app.exec()

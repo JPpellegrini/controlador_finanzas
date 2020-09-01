@@ -12,11 +12,11 @@ class ControladorPrincipal:
     def __init__(self):
         self.__vista = VistaPrincipal()
         self.__calcular_balance()
-        self.__ctl_ingreso = ControladorIngreso()
-        self.__ctl_egreso = ControladorEgreso()
-        self.__ctl_tipo = ControladorTipoTransaccion()
-        self.__ctl_cat_ingreso = ControladorCategoriaIngreso()
-        self.__ctl_cat_egreso = ControladorCategoriaEgreso()
+        self.__ctl_ingreso = ControladorIngreso(self.__vista)
+        self.__ctl_egreso = ControladorEgreso(self.__vista)
+        self.__ctl_tipo = ControladorTipoTransaccion(self.__vista)
+        self.__ctl_cat_ingreso = ControladorCategoriaIngreso(self.__vista)
+        self.__ctl_cat_egreso = ControladorCategoriaEgreso(self.__vista)
 
         self.__ctl_ingreso.actualizar_balance.connect(self.__on_actualizar_balance)
         self.__ctl_egreso.actualizar_balance.connect(self.__on_actualizar_balance)

@@ -1,6 +1,31 @@
 import sys
 from PyQt5 import QtCore, QtWidgets, QtGui
 
+
+class ModeloTablaTransaccion(QtCore.QAbstractTableModel):
+    def __init__(self,headers, maps, data):
+        super().__init__()
+        self.__headers = headers
+        self.__column_field_map = maps
+        self.__data = data
+
+    def data(self, index: QtCore.QModelIndex, role):
+        if role == QtCore.Qt.DisplayRole:
+            row_data = self.__data[index.row()]
+            column_key = self.__column_field_map[index.column()]
+            return row_data[column_key]
+
+    def rowCount(self, index):
+        return len(self.__data)
+    
+    def columnCount(self, parent):
+        return len(self.__headers)
+    
+    def headerData(self, section, orientation, role):
+        if role == QtCore.Qt.DisplayRole and orientation == QtCore.Qt.Horizontal:
+            return self.__headers[section]
+
+
 class VistaPrincipal(QtWidgets.QWidget):
     
     #SIGNALS
@@ -29,19 +54,17 @@ class VistaPrincipal(QtWidgets.QWidget):
         self.__btn_categoria_ingreso = QtWidgets.QPushButton("Nueva Categoria de Ingreso")
         self.__btn_categoria_egreso = QtWidgets.QPushButton("Nueva Categoria de Egreso")
         self.__calendario = QtWidgets.QCalendarWidget()
-        self.__label_ingresos = QtWidgets.QLabel('Ingresos')
-        self.__tree_ingresos = QtWidgets.QTreeView()
-        self.__label_egresos = QtWidgets.QLabel('Egresos')
-        self.__tree_egresos = QtWidgets.QTreeView()
+        self.__label_transaccion = QtWidgets.QLabel('Transacciones')
+        self.__table_transaccion = QtWidgets.QTableView()
         self.__btn_editar = QtWidgets.QPushButton("Editar")
         self.__btn_eliminar = QtWidgets.QPushButton("Eliminar")
+        self.__spacer = QtWidgets.QSpacerItem(0, 0, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
 
         #CONFIG WIDGETS
         self.__line_balance.setReadOnly(True)
         self.__btn_editar.setEnabled(False)
         self.__btn_eliminar.setEnabled(False)
-        self.__label_ingresos.setStyleSheet("color: green")
-        self.__label_egresos.setStyleSheet("color: red")
+        self.__label_transaccion.setStyleSheet("color: #1E90FF")
 
         #IPLEMENTACION WIDGETS        
         self.__btn_layout.addWidget(self.__btn_ingreso)
@@ -49,14 +72,11 @@ class VistaPrincipal(QtWidgets.QWidget):
         self.__btn_layout.addWidget(self.__btn_tipo_transaccion)
         self.__btn_layout.addWidget(self.__btn_categoria_ingreso)
         self.__btn_layout.addWidget(self.__btn_categoria_egreso)
+        self.__btn_layout.addSpacerItem(self.__spacer)
         self.__btn_layout.addWidget(self.__line_balance)
-
         self.__cal_layout.addWidget(self.__calendario)
-        self.__cal_layout.addWidget(self.__label_ingresos)
-        self.__cal_layout.addWidget(self.__tree_ingresos)
-        self.__cal_layout.addWidget(self.__label_egresos)
-        self.__cal_layout.addWidget(self.__tree_egresos)
-        
+        self.__cal_layout.addWidget(self.__label_transaccion)
+        self.__cal_layout.addWidget(self.__table_transaccion)
         self.__opcion_layout.addWidget(self.__btn_editar)
         self.__opcion_layout.addWidget(self.__btn_eliminar)
 
@@ -74,11 +94,19 @@ class VistaPrincipal(QtWidgets.QWidget):
 
     def actualizar_balance(self, valor):
         self.__line_balance.setText(f"Balance: {valor}")
+    
+    def setear_tabla(self, headers = list, maps = dict, data = list):
+        self.__modelo = ModeloTablaTransaccion(headers, maps, data)
+        self.__table_transaccion.setModel(self.__modelo)
 
 
 if __name__ == "__main__":
     app = QtWidgets.QApplication(sys.argv)
+    headers=["Nombre","Apellido"]
+    maps={0:"nombre",1:"apellido"}
+    data=[dict(nombre="Juan Pablo",apellido="Pellegrini"),dict(nombre="Pablo",apellido="Ingegnieri")]
     ventana = VistaPrincipal()
     ventana.actualizar_balance(1000)
+    ventana.setear_tabla(headers,maps,data)
     ventana.show()
     app.exec()
