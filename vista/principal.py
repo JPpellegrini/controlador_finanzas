@@ -43,10 +43,7 @@ class VistaPrincipal(QtWidgets.QWidget):
         self.__label_ingresos.setStyleSheet("color: green")
         self.__label_egresos.setStyleSheet("color: red")
 
-        #IPLEMENTACION WIDGETS
-        self.__main_layout.addLayout(self.__btn_layout)
-        self.__main_layout.addLayout(self.__cal_layout)
-        
+        #IPLEMENTACION WIDGETS        
         self.__btn_layout.addWidget(self.__btn_ingreso)
         self.__btn_layout.addWidget(self.__btn_egreso)
         self.__btn_layout.addWidget(self.__btn_tipo_transaccion)
@@ -59,8 +56,7 @@ class VistaPrincipal(QtWidgets.QWidget):
         self.__cal_layout.addWidget(self.__tree_ingresos)
         self.__cal_layout.addWidget(self.__label_egresos)
         self.__cal_layout.addWidget(self.__tree_egresos)
-
-        self.__btn_layout.addLayout(self.__opcion_layout)
+        
         self.__opcion_layout.addWidget(self.__btn_editar)
         self.__opcion_layout.addWidget(self.__btn_eliminar)
 
@@ -71,10 +67,13 @@ class VistaPrincipal(QtWidgets.QWidget):
         self.__btn_categoria_ingreso.clicked.connect(lambda: self.agregar_categoria_ingreso.emit())
         self.__btn_categoria_egreso.clicked.connect(lambda: self.agregar_categoria_egreso.emit())
                 
+        self.__main_layout.addLayout(self.__btn_layout)
+        self.__main_layout.addLayout(self.__cal_layout)
+        self.__btn_layout.addLayout(self.__opcion_layout)
         self.setLayout(self.__main_layout)
 
     def actualizar_balance(self, valor):
-        self.__line_balance.setText("Balance: " + str(valor))
+        self.__line_balance.setText(f"Balance: {valor}")
 
 
 if __name__ == "__main__":
