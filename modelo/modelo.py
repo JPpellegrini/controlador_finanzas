@@ -222,7 +222,7 @@ class ServiceIngreso:
         return [TransaccionDTO(transaccion["monto"], transaccion["tipo"], transaccion["categoria"], transaccion["descripcion"], transaccion["fecha"], transaccion["id"]) for transaccion in self.cursor.fetchall()]
     
     def obtener_tipos_categorias(self):
-        return dict(tipos = self.srv_tipos.obtener_tipos(), categorias = self.srv_categorias.obtener_categorias())
+        return dict(tipos = self.srv_tipos.obtener_tipos(), categorias = self.srv_categorias.obtener_cat_ingreso())
 
 
 class ServiceEgreso:
@@ -266,7 +266,7 @@ class ServiceEgreso:
         return [TransaccionDTO(transaccion["monto"], transaccion["tipo"], transaccion["categoria"], transaccion["descripcion"], transaccion["fecha"], transaccion["id"]) for transaccion in self.cursor.fetchall()]
 
     def obtener_tipos_categorias(self):
-        return dict(tipos = self.svc_tipos.obtener_tipos(), categorias = self.svc_categorias.obtener_categorias())
+        return dict(tipos = self.svc_tipos.obtener_tipos(), categorias = self.svc_categorias.obtener_cat_egreso())
 
 
 if __name__ == "__main__":
