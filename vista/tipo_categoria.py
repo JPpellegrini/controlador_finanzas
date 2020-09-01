@@ -46,13 +46,13 @@ class VentanaTipoCategoria(QtWidgets.QDialog):
         self.__label_error.setStyleSheet("color: gray")
         self.__label_error.setText("Campos con * obligatorios")
     
-    def verificar_error(self, mensaje_error):
-        if mensaje_error != None:
+    def verificar_error(self, error = None):
+        if error:
             self.__label_error.setStyleSheet("color: red")
-            self.__label_error.setText(mensaje_error)
-        else:
-            self.__limpiar()
-            self.close()
+            self.__label_error.setText(str(error))
+            return None
+        self.__limpiar()
+        self.close()
 
     def closeEvent(self, evnt):
         self.__limpiar()
