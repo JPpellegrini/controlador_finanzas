@@ -11,6 +11,7 @@ class VentanaIngresoEgreso(QtWidgets.QDialog):
     
     def __setup_ui(self):
         self.__contenedor = QtWidgets.QVBoxLayout()
+        self.setWindowModality(QtCore.Qt.WindowModal)
 
         #WIDGETS
         self.__line_monto = QtWidgets.QLineEdit()
@@ -80,12 +81,12 @@ class VentanaIngresoEgreso(QtWidgets.QDialog):
 
 class VentanaIngreso(VentanaIngresoEgreso):
     def __init__(self, parent = None):
-        VentanaIngresoEgreso.__init__(self)
+        VentanaIngresoEgreso.__init__(self, parent)
         self.setWindowTitle("Ingreso")
 
 class VentanaEgreso(VentanaIngresoEgreso):
     def __init__(self, parent = None):
-        VentanaIngresoEgreso.__init__(self)
+        VentanaIngresoEgreso.__init__(self, parent)
         self.setWindowTitle("Egreso")
 
 if __name__ == "__main__":

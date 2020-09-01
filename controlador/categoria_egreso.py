@@ -5,9 +5,9 @@ from modelo.modelo import ServiceCategoriaEgreso as Service, CategoriaDTO
 
 
 class ControladorCategoriaEgreso:
-    def __init__(self):
+    def __init__(self, parent):
         self.__modelo = Service()
-        self.__vista = VentanaCategoriaEgreso()
+        self.__vista = VentanaCategoriaEgreso(parent)
         self.__vista.registrar.connect(self.__on_registrar) 
 
     def __on_registrar(self):

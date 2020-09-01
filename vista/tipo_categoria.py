@@ -11,6 +11,7 @@ class VentanaTipoCategoria(QtWidgets.QDialog):
     
     def __setup_ui(self):
         self.__contenedor = QtWidgets.QVBoxLayout()
+        self.setWindowModality(QtCore.Qt.WindowModal)
 
         #WIDGETS
         self.__line_nombre = QtWidgets.QLineEdit()
@@ -56,17 +57,17 @@ class VentanaTipoCategoria(QtWidgets.QDialog):
 
 class VentanaTipo(VentanaTipoCategoria):
     def __init__(self, parent = None):
-        VentanaTipoCategoria.__init__(self)
+        VentanaTipoCategoria.__init__(self, parent)
         self.setWindowTitle("Tipo de transaccion")
 
 class VentanaCategoriaIngreso(VentanaTipoCategoria):
     def __init__(self, parent = None):
-        VentanaTipoCategoria.__init__(self)
+        VentanaTipoCategoria.__init__(self, parent)
         self.setWindowTitle("Categoria Ingreso")
 
 class VentanaCategoriaEgreso(VentanaTipoCategoria):
     def __init__(self, parent = None):
-        VentanaTipoCategoria.__init__(self)
+        VentanaTipoCategoria.__init__(self, parent)
         self.setWindowTitle("Categoria Egreso")
 
 if __name__ == "__main__":

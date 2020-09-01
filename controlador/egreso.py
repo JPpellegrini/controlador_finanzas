@@ -8,10 +8,10 @@ from modelo.modelo import ServiceEgreso as Service, TransaccionDTO
 class ControladorEgreso(QtCore.QObject):
     actualizar_balance = QtCore.pyqtSignal()
 
-    def __init__(self):
+    def __init__(self, parent):
         super().__init__()
         self.__modelo = Service()
-        self.__vista = VentanaEgreso()
+        self.__vista = VentanaEgreso(parent)
         self.__vista.registrar.connect(self.__on_registrar)
 
     def __on_registrar(self):

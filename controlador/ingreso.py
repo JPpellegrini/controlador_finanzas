@@ -8,10 +8,10 @@ from modelo.modelo import ServiceIngreso as Service, TransaccionDTO
 class ControladorIngreso(QtCore.QObject):
     actualizar_balance = QtCore.pyqtSignal()
 
-    def __init__(self):
+    def __init__(self, parent):
         super().__init__()
         self.__modelo = Service()
-        self.__vista = VentanaIngreso()
+        self.__vista = VentanaIngreso(parent)
         self.__vista.registrar.connect(self.__on_registrar)
 
     def __on_registrar(self):
