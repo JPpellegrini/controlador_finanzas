@@ -1,6 +1,30 @@
 import sys
 from PyQt5 import QtCore, QtWidgets, QtGui
 
+
+class ModeloTablaTransaccion(QtCore.QAbstractTableModel):
+    def __init__(self,headers, maps, data):
+        super().__init__()
+        self.__headers = headers
+        self.__column_field_map = maps
+        self.__data = data
+
+    def data(self, index: QtCore.QModelIndex, role):
+        if role == QtCore.Qt.DisplayRole:
+            row_data = self.__data[index.row()]
+            column_key = self.__column_field_map[index.column()]
+            return row_data[column_key]
+
+    def rowCount(self, index):
+        return len(self.__data)
+    
+    def columnCount(self, parent):
+        return len(self.__headers)
+    
+    def headerData(self, section, orientation, role):
+        if role == QtCore.Qt.DisplayRole and orientation == QtCore.Qt.Horizontal:
+            return self.__headers[section]
+
 class Vista(QtWidgets.QWidget):
     
     #SIGNALS
@@ -74,11 +98,19 @@ class Vista(QtWidgets.QWidget):
 
     def actualizar_balance(self, valor):
         self.__line_balance.setText("Balance: " + str(valor))
+    
+    def setear_tabla(self, headers = list, maps = dict, data = list):
+        self.__modelo = ModeloTablaTransaccion(headers, maps, data)
+        self.__table_transaccion.setModel(self.__modelo)
 
 
 if __name__ == "__main__":
     app = QtWidgets.QApplication(sys.argv)
+    headers=["Nombre","Apellido"]
+    maps={0:"nombre",1:"apellido"}
+    data=[dict(nombre="Juan Pablo",apellido="Pellegrini"),dict(nombre="Pablo",apellido="Ingegnieri")]
     ventana = Vista()
     ventana.actualizar_balance(1000)
+    ventana.setear_tabla(headers,maps,data)
     ventana.show()
     app.exec()
