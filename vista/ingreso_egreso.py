@@ -11,6 +11,41 @@ class TransaccionDTO:
     descripcion: str
     fecha: str
 
+@dataclass
+class TipoCategoriaDTO:
+    nombre: str
+    id: int
+
+class ModeloComboBox(QtCore.QAbstractTableModel):
+    def __init__(self):
+        super().__init__()
+        self.__headers = ["Nombre", "Id"]
+        self.__column_field_map = {0 : "nombre", 1 : "id"}
+        
+    def setData(self, DTOs):
+        self.__data = [dict(nombre = DTO.nombre, id = DTO.id)for DTO in DTOs]
+
+    def data(self, index: QtCore.QModelIndex, role):
+        row_data = self.__data[index.row()]
+
+        if role == QtCore.Qt.DisplayRole:
+            column_key = self.__column_field_map[index.column()]
+            return row_data[column_key]
+        
+        if role == QtCore.Qt.UserRole:
+            return row_data["id"]
+
+    def rowCount(self, index):
+        return len(self.__data)
+    
+    def columnCount(self, parent):
+        return len(self.__headers)
+    
+    def headerData(self, section, orientation, role):
+        if role == QtCore.Qt.DisplayRole and orientation == QtCore.Qt.Horizontal:
+            return self.__headers[section]
+
+
 class VentanaIngresoEgreso(QtWidgets.QDialog):
     registrar = QtCore.pyqtSignal()
 
@@ -19,6 +54,8 @@ class VentanaIngresoEgreso(QtWidgets.QDialog):
         self.__setup_ui()
     
     def __setup_ui(self):
+        self.__modelo_cbx_tipo = ModeloComboBox()
+        self.__modelo_cbx_categoria = ModeloComboBox()
         self.__contenedor = QtWidgets.QVBoxLayout()
         self.setWindowModality(QtCore.Qt.WindowModal)
 
@@ -76,22 +113,26 @@ class VentanaIngresoEgreso(QtWidgets.QDialog):
     def verificar_error(self, error):
         if error:
             self.__set_label_error("red", str(error))
-            return none
+            return None
         self.__limpiar()
         self.close()
 
     def closeEvent(self, evnt):
         self.__limpiar()
+    
+    def enviar_datos(self, tipos, categorias):
+        self.__configurar_menu_desplegable(tipos, categorias)
 
-    def configurar_menu_desplegable(self, tipos_transaccion, categorias):
-        self.tipos, self.categorias = tipos_transaccion, categorias
-        self.__cbx_tipo_transaccion.addItems([tipo[1] for tipo in self.tipos])
-        self.__cbx_categorias.addItems([categoria[1] for categoria in self.categorias])
+    def __configurar_menu_desplegable(self, tipos, categorias):
+        self.__modelo_cbx_tipo.setData(tipos)
+        self.__modelo_cbx_categoria.setData(categorias)
+        self.__cbx_tipo_transaccion.setModel(self.__modelo_cbx_tipo)
+        self.__cbx_categorias.setModel(self.__modelo_cbx_categoria)
 
     def obtener_datos(self):
         monto = self.__line_monto.text()
-        id_tipo = self.tipos[self.__cbx_tipo_transaccion.currentIndex()][0]
-        id_categoria = self.categorias[self.__cbx_categorias.currentIndex()][0]
+        id_tipo = self.__cbx_tipo_transaccion.currentData(QtCore.Qt.UserRole)
+        id_categoria = self.__cbx_categorias.currentData(QtCore.Qt.UserRole)
         descripcion = self.__line_descripcion.toPlainText()
         fecha = self.__cal_fecha.selectedDate().toString()
         return TransaccionDTO(monto, id_tipo, id_categoria, descripcion, fecha)
@@ -107,10 +148,13 @@ class VentanaEgreso(VentanaIngresoEgreso):
         self.setWindowTitle("Egreso")
 
 if __name__ == "__main__":
+    tipos = (TipoCategoriaDTO("efectivo", 1),TipoCategoriaDTO("tarjeta", 2))
+    categoria = (TipoCategoriaDTO("comida", 1),TipoCategoriaDTO("combustible", 2))
     app = QtWidgets.QApplication(sys.argv)
     ventana = VentanaEgreso()
     def visualizar_datos():
         print(ventana.obtener_datos())
+    ventana.enviar_datos(tipos, categoria)
     ventana.show()
     ventana.registrar.connect(lambda: visualizar_datos())
     app.exec()

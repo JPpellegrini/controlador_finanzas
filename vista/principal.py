@@ -95,7 +95,7 @@ class VistaPrincipal(QtWidgets.QWidget):
     def actualizar_balance(self, valor):
         self.__line_balance.setText(f"Balance: {valor}")
     
-    def setear_tabla(self, headers = list, maps = dict, data = list):
+    def setear_tabla(self, headers: list, maps: dict, data: list):
         self.__modelo = ModeloTablaTransaccion(headers, maps, data)
         self.__table_transaccion.setModel(self.__modelo)
 
