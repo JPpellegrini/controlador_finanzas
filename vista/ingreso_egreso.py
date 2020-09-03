@@ -19,32 +19,29 @@ class TipoCategoriaDTO:
 class ModeloComboBox(QtCore.QAbstractTableModel):
     def __init__(self):
         super().__init__()
-        self.__headers = ["Nombre", "Id"]
-        self.__column_field_map = {0 : "nombre", 1 : "id"}
-        
-    def setData(self, DTOs):
-        self.__data = [dict(nombre = DTO.nombre, id = DTO.id)for DTO in DTOs]
+        self.__data = []
 
+    def update_data(self, data):
+        self.modelReset.emit()
+        self.__data = data
+        
+    def setPlaceholderText(self, nombre):
+        self.__place_holder_text = nombre
+        
     def data(self, index: QtCore.QModelIndex, role):
-        row_data = self.__data[index.row()]
+        row = index.row()
 
         if role == QtCore.Qt.DisplayRole:
-            column_key = self.__column_field_map[index.column()]
-            return row_data[column_key]
+            return self.__data[row].nombre
         
         if role == QtCore.Qt.UserRole:
-            return row_data["id"]
+            return self.__data[row].id
 
     def rowCount(self, index):
         return len(self.__data)
     
     def columnCount(self, parent):
-        return len(self.__headers)
-    
-    def headerData(self, section, orientation, role):
-        if role == QtCore.Qt.DisplayRole and orientation == QtCore.Qt.Horizontal:
-            return self.__headers[section]
-
+        return 1
 
 class VentanaIngresoEgreso(QtWidgets.QDialog):
     registrar = QtCore.pyqtSignal()
@@ -55,14 +52,16 @@ class VentanaIngresoEgreso(QtWidgets.QDialog):
     
     def __setup_ui(self):
         self.__modelo_cbx_tipo = ModeloComboBox()
-        self.__modelo_cbx_categoria = ModeloComboBox()
+        self.__modelo_cbx_categoria = ModeloComboBox() 
         self.__contenedor = QtWidgets.QVBoxLayout()
         self.setWindowModality(QtCore.Qt.WindowModal)
 
         #WIDGETS
         self.__line_monto = QtWidgets.QLineEdit()
         self.__cbx_tipo_transaccion = QtWidgets.QComboBox()
+        self.__cbx_tipo_transaccion.setModel(self.__modelo_cbx_tipo)
         self.__cbx_categorias = QtWidgets.QComboBox()
+        self.__cbx_categorias.setModel(self.__modelo_cbx_categoria)
         self.__line_descripcion = QtWidgets.QTextEdit()
         self.__cal_fecha = QtWidgets.QCalendarWidget()
         self.__label_error = QtWidgets.QLabel("Campos con * obligatorios")
@@ -96,8 +95,8 @@ class VentanaIngresoEgreso(QtWidgets.QDialog):
 
     def __limpiar(self):
         self.__line_monto.clear()
-        self.__cbx_tipo_transaccion.clear()
-        self.__cbx_categorias.clear()
+        self.__cbx_tipo_transaccion.setCurrentIndex(-1)
+        self.__cbx_categorias.setCurrentIndex(-1)
         self.__line_descripcion.clear()
         self.__cal_fecha.setSelectedDate(QtCore.QDate.currentDate())
         self.__set_label_error("gray", "Campos con * obligatorios")
@@ -124,10 +123,8 @@ class VentanaIngresoEgreso(QtWidgets.QDialog):
         self.__configurar_menu_desplegable(tipos, categorias)
 
     def __configurar_menu_desplegable(self, tipos, categorias):
-        self.__modelo_cbx_tipo.setData(tipos)
-        self.__modelo_cbx_categoria.setData(categorias)
-        self.__cbx_tipo_transaccion.setModel(self.__modelo_cbx_tipo)
-        self.__cbx_categorias.setModel(self.__modelo_cbx_categoria)
+        self.__modelo_cbx_tipo.update_data(tipos)
+        self.__modelo_cbx_categoria.update_data(categorias)
 
     def obtener_datos(self):
         monto = self.__line_monto.text()
