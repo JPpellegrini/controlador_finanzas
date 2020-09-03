@@ -110,7 +110,7 @@ class VentanaIngresoEgreso(QtWidgets.QDialog):
         else:
             return True
     
-    def verificar_error(self, error):
+    def verificar_error(self, error = None):
         if error:
             self.__set_label_error("red", str(error))
             return None

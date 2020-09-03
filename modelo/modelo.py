@@ -235,7 +235,7 @@ class ServiceEgreso:
     def registrar_egreso(self, data = TransaccionDTO):
         try:
             self.cursor.execute(
-                "INSERT INTO egresos (id, monto, tipo, categoria_ingreso, descripcion, fecha) VALUES (%s, %s, %s, %s, %s, %s)",\
+                "INSERT INTO egresos (id, monto, tipo, categoria_egreso, descripcion, fecha) VALUES (%s, %s, %s, %s, %s, %s)",\
                 (data.id, data.monto, data.id_tipo_transaccion, data.id_categoria, data.descripcion, data.fecha)
             )
             self.database.commit()
