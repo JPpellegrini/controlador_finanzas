@@ -86,8 +86,7 @@ class VentanaIngresoEgreso(QtWidgets.QDialog):
         self.setLayout(self.__contenedor)
 
     def __on_btn_registrar(self):
-        if self.__verificar_combobox():
-            self.registrar.emit()
+        self.registrar.emit()
         
     def __set_label_error(self, color, mensaje):
         self.__label_error.setStyleSheet(f"color: {color}")
@@ -101,30 +100,18 @@ class VentanaIngresoEgreso(QtWidgets.QDialog):
         self.__cal_fecha.setSelectedDate(QtCore.QDate.currentDate())
         self.__set_label_error("gray", "Campos con * obligatorios")
     
-    def __verificar_combobox(self):
-        if self.__cbx_tipo_transaccion.currentIndex() == -1:
-            self.__set_label_error("red", "Seleccione tipo de transaccion")
-        elif self.__cbx_categorias.currentIndex() == -1:
-            self.__set_label_error("red", "Seleccione categoria")
-        else:
-            return True
-    
-    def verificar_error(self, error = None):
-        if error:
-            self.__set_label_error("red", str(error))
-            return None
-        self.__limpiar()
-        self.close()
-
-    def closeEvent(self, evnt):
-        self.__limpiar()
-    
-    def enviar_datos(self, tipos, categorias):
-        self.__configurar_menu_desplegable(tipos, categorias)
-
     def __configurar_menu_desplegable(self, tipos, categorias):
         self.__modelo_cbx_tipo.update_data(tipos)
         self.__modelo_cbx_categoria.update_data(categorias)
+    
+    def closeEvent(self, evnt):
+        self.__limpiar()
+
+    def mostrar_error(self, error):
+        self.__set_label_error("red", str(error))
+
+    def enviar_datos(self, tipos, categorias):
+        self.__configurar_menu_desplegable(tipos, categorias)
 
     def obtener_datos(self):
         monto = self.__line_monto.text()
