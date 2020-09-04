@@ -26,9 +26,7 @@ class ControladorEgreso(QtCore.QObject):
     
     def show_vista(self):
         tipos_categorias = self.__modelo.obtener_tipos_categorias()
-        tipos = [TipoCategoriaDTO(tipo.nombre, tipo.id) for tipo in tipos_categorias["tipos"]]
-        categorias = [TipoCategoriaDTO(categoria.nombre, categoria.id) for categoria in tipos_categorias["categorias"]]
-        self.__vista.enviar_datos(tipos, categorias)
+        self.__vista.enviar_datos(tipos_categorias["tipos"], tipos_categorias["categorias"])
         self.__vista.show()
 
 
