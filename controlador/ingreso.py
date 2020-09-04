@@ -28,7 +28,8 @@ class ControladorIngreso(QtCore.QObject):
         tipos_categorias = self.__modelo.obtener_tipos_categorias()
         tipos = [TipoCategoriaDTO(tipo.nombre, tipo.id) for tipo in tipos_categorias["tipos"]]
         categorias = [TipoCategoriaDTO(categoria.nombre, categoria.id) for categoria in tipos_categorias["categorias"]]
-        self.__vista.enviar_datos(tipos, categorias)
+        self.__vista.actualizar_tipos_transaccion(tipos)
+        self.__vista.actualizar_categorias(categorias)
         self.__vista.show()
 
 

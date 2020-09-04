@@ -119,11 +119,10 @@ class VentanaIngresoEgreso(QtWidgets.QDialog):
     def closeEvent(self, evnt):
         self.__limpiar()
     
-    def enviar_datos(self, tipos, categorias):
-        self.__configurar_menu_desplegable(tipos, categorias)
-
-    def __configurar_menu_desplegable(self, tipos, categorias):
+    def actualizar_tipos_transaccion(self, tipos):
         self.__modelo_cbx_tipo.update_data(tipos)
+    
+    def actualizar_categorias(self, categorias):
         self.__modelo_cbx_categoria.update_data(categorias)
 
     def obtener_transaccion(self):
