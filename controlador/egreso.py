@@ -15,7 +15,7 @@ class ControladorEgreso(QtCore.QObject):
         self.__vista.registrar.connect(self.__on_registrar)
 
     def __on_registrar(self):
-        egreso = self.__vista.obtener_datos()
+        egreso = self.__vista.obtener_transaccion()
         try:
             self.__modelo.registrar_egreso(TransaccionDTO(egreso.monto, egreso.id_tipo_transaccion, egreso.id_categoria,
                                                             egreso.descripcion, egreso.fecha))
@@ -28,7 +28,8 @@ class ControladorEgreso(QtCore.QObject):
         tipos_categorias = self.__modelo.obtener_tipos_categorias()
         tipos = [TipoCategoriaDTO(tipo.nombre, tipo.id) for tipo in tipos_categorias["tipos"]]
         categorias = [TipoCategoriaDTO(categoria.nombre, categoria.id) for categoria in tipos_categorias["categorias"]]
-        self.__vista.enviar_datos(tipos, categorias)
+        self.__vista.actualizar_tipos_transaccion(tipos)
+        self.__vista.actualizar_categorias(categorias)
         self.__vista.show()
 
 
