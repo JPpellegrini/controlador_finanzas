@@ -95,8 +95,8 @@ class VentanaIngresoEgreso(QtWidgets.QDialog):
 
     def __limpiar(self):
         self.__line_monto.clear()
-        self.__cbx_tipo_transaccion.setCurrentIndex(-1)
-        self.__cbx_categorias.setCurrentIndex(-1)
+        self.__modelo_cbx_tipo.update_data([])
+        self.__modelo_cbx_categoria.update_data([])
         self.__line_descripcion.clear()
         self.__cal_fecha.setSelectedDate(QtCore.QDate.currentDate())
         self.__set_label_error("gray", "Campos con * obligatorios")
