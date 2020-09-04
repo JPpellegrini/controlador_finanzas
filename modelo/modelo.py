@@ -4,11 +4,19 @@ from dataclasses import dataclass
 
 class NombreError(Exception):
     def __str__(self):
-        return "Ingrese nombre"
+        return "Nombre invalido"
 
 class MontoError(Exception):
     def __str__(self):
-        return "Ingrese monto valido"
+        return "Monto invalido"
+
+class TipoError(Exception):
+    def __str__(self):
+        return "Tipo invalido"
+
+class CategoriaError(Exception):
+    def __str__(self):
+        return "Categoria invalida"
 
 class TipoUsoError(Exception):
     def __str__(self):
@@ -189,6 +197,10 @@ class ServiceIngreso:
         self.srv_categorias = ServiceCategoriaIngreso()
 
     def registrar_ingreso(self, data = TransaccionDTO):
+        if not data.id_tipo_transaccion:
+            raise TipoError
+        if not data.id_categoria:
+            raise CategoriaError
         try:
             self.cursor.execute(
                 "INSERT INTO ingresos (id, monto, tipo, categoria_ingreso, descripcion, fecha) VALUES (%s, %s, %s, %s, %s, %s)",\
@@ -199,6 +211,10 @@ class ServiceIngreso:
             raise MontoError
     
     def editar_ingreso(self, data = TransaccionDTO):
+        if not data.id_tipo_transaccion:
+            raise TipoError
+        if not data.id_categoria:
+            raise CategoriaError
         try:
             self.cursor.execute(
                 "UPDATE ingresos SET monto=%s, tipo=%s, categoria_ingreso=%s, descripcion=%s, fecha=%s WHERE id = %s",\
@@ -233,6 +249,10 @@ class ServiceEgreso:
         self.svc_categorias = ServiceCategoriaEgreso()
 
     def registrar_egreso(self, data = TransaccionDTO):
+        if not data.id_tipo_transaccion:
+            raise TipoError
+        if not data.id_categoria:
+            raise CategoriaError
         try:
             self.cursor.execute(
                 "INSERT INTO egresos (id, monto, tipo, categoria_egreso, descripcion, fecha) VALUES (%s, %s, %s, %s, %s, %s)",\
@@ -243,6 +263,10 @@ class ServiceEgreso:
             raise MontoError
     
     def editar_egreso(self, data = TransaccionDTO):
+        if not data.id_tipo_transaccion:
+            raise TipoError
+        if not data.id_categoria:
+            raise CategoriaError
         try:
             self.cursor.execute(
                 "UPDATE egresos SET monto=%s, tipo=%s, categoria_egreso=%s, descripcion=%s, fecha=%s WHERE id = %s",\
