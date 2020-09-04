@@ -2,7 +2,7 @@ import sys
 from PyQt5 import QtCore
 sys.path.append("..")
 from vista.ingreso_egreso import VentanaEgreso, TipoCategoriaDTO
-from modelo.modelo import ServiceEgreso, TransaccionDTO, MontoError
+from modelo.modelo import ServiceEgreso, TransaccionDTO, MontoError, TipoError, CategoriaError
 
 
 class ControladorEgreso(QtCore.QObject):
@@ -19,10 +19,10 @@ class ControladorEgreso(QtCore.QObject):
         try:
             self.__modelo.registrar_egreso(TransaccionDTO(egreso.monto, egreso.id_tipo_transaccion, egreso.id_categoria,
                                                             egreso.descripcion, egreso.fecha))
-            self.__vista.verificar_error()
             self.actualizar_balance.emit()
-        except MontoError as error:
-            self.__vista.verificar_error(error)
+            self.__vista.close()
+        except Exception as error:
+            self.__vista.mostrar_error(error)
     
     def show_vista(self):
         tipos_categorias = self.__modelo.obtener_tipos_categorias()
