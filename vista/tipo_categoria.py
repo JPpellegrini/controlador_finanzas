@@ -1,6 +1,12 @@
 import sys
 from PyQt5 import QtCore, QtWidgets, QtGui
+from dataclasses import dataclass
 
+
+@dataclass
+class TipoCategoriaDTO:
+    nombre: str
+    descripcion: str
 
 class VentanaTipoCategoria(QtWidgets.QDialog):
     registrar = QtCore.pyqtSignal()
@@ -11,6 +17,7 @@ class VentanaTipoCategoria(QtWidgets.QDialog):
     
     def __setup_ui(self):
         self.__contenedor = QtWidgets.QVBoxLayout()
+        self.setWindowModality(QtCore.Qt.WindowModal)
 
         #WIDGETS
         self.__line_nombre = QtWidgets.QLineEdit()
@@ -40,33 +47,35 @@ class VentanaTipoCategoria(QtWidgets.QDialog):
         self.__label_error.setStyleSheet("color: gray")
         self.__label_error.setText("Campos con * obligatorios")
     
-    def verificar_error(self, mensaje_error):
-        if mensaje_error != None:
+    def verificar_error(self, error = None):
+        if error:
             self.__label_error.setStyleSheet("color: red")
-            self.__label_error.setText(mensaje_error)
-        else:
-            self.__limpiar()
-            self.close()
+            self.__label_error.setText(str(error))
+            return None
+        self.__limpiar()
+        self.close()
 
     def closeEvent(self, evnt):
         self.__limpiar()
 
     def obtener_datos(self):
-        return self.__line_nombre.text(), self.__line_descripcion.toPlainText()
+        nombre = self.__line_nombre.text()
+        descripcion = self.__line_descripcion.toPlainText()
+        return TipoCategoriaDTO(nombre, descripcion)
 
 class VentanaTipo(VentanaTipoCategoria):
     def __init__(self, parent = None):
-        VentanaTipoCategoria.__init__(self)
+        VentanaTipoCategoria.__init__(self, parent)
         self.setWindowTitle("Tipo de transaccion")
 
 class VentanaCategoriaIngreso(VentanaTipoCategoria):
     def __init__(self, parent = None):
-        VentanaTipoCategoria.__init__(self)
+        VentanaTipoCategoria.__init__(self, parent)
         self.setWindowTitle("Categoria Ingreso")
 
 class VentanaCategoriaEgreso(VentanaTipoCategoria):
     def __init__(self, parent = None):
-        VentanaTipoCategoria.__init__(self)
+        VentanaTipoCategoria.__init__(self, parent)
         self.setWindowTitle("Categoria Egreso")
 
 if __name__ == "__main__":
