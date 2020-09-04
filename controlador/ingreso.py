@@ -15,7 +15,7 @@ class ControladorIngreso(QtCore.QObject):
         self.__vista.registrar.connect(self.__on_registrar)
 
     def __on_registrar(self):
-        ingreso = self.__vista.obtener_datos()
+        ingreso = self.__vista.obtener_transaccion()
         try:
             self.__modelo.registrar_ingreso(TransaccionDTO(ingreso.monto, ingreso.id_tipo_transaccion, ingreso.id_categoria,
                                                             ingreso.descripcion, ingreso.fecha))
@@ -26,7 +26,8 @@ class ControladorIngreso(QtCore.QObject):
     
     def show_vista(self):
         tipos_categorias = self.__modelo.obtener_tipos_categorias()
-        self.__vista.enviar_datos(tipos_categorias["tipos"], tipos_categorias["categorias"])
+        self.__vista.actualizar_tipos_transaccion(tipos_categorias["tipos"])
+        self.__vista.actualizar_categorias(tipos_categorias["categorias"])
         self.__vista.show()
    
 

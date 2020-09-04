@@ -100,20 +100,19 @@ class VentanaIngresoEgreso(QtWidgets.QDialog):
         self.__cal_fecha.setSelectedDate(QtCore.QDate.currentDate())
         self.__set_label_error("gray", "Campos con * obligatorios")
     
-    def __configurar_menu_desplegable(self, tipos, categorias):
-        self.__modelo_cbx_tipo.update_data(tipos)
-        self.__modelo_cbx_categoria.update_data(categorias)
-    
     def closeEvent(self, evnt):
         self.__limpiar()
 
     def mostrar_error(self, error):
         self.__set_label_error("red", str(error))
+    
+    def actualizar_tipos_transaccion(self, tipos):
+        self.__modelo_cbx_tipo.update_data(tipos)
+    
+    def actualizar_categorias(self, categorias):
+        self.__modelo_cbx_categoria.update_data(categorias)
 
-    def enviar_datos(self, tipos, categorias):
-        self.__configurar_menu_desplegable(tipos, categorias)
-
-    def obtener_datos(self):
+    def obtener_transaccion(self):
         monto = self.__line_monto.text()
         id_tipo = self.__cbx_tipo_transaccion.currentData(QtCore.Qt.UserRole)
         id_categoria = self.__cbx_categorias.currentData(QtCore.Qt.UserRole)
