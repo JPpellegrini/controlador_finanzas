@@ -15,7 +15,7 @@ class ControladorEgreso(QtCore.QObject):
         self.__vista.registrar.connect(self.__on_registrar)
 
     def __on_registrar(self):
-        egreso = self.__vista.obtener_datos()
+        egreso = self.__vista.obtener_transaccion()
         try:
             self.__modelo.registrar_egreso(TransaccionDTO(egreso.monto, egreso.id_tipo_transaccion, egreso.id_categoria,
                                                             egreso.descripcion, egreso.fecha))

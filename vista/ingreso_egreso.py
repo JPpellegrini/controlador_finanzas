@@ -126,7 +126,7 @@ class VentanaIngresoEgreso(QtWidgets.QDialog):
         self.__modelo_cbx_tipo.update_data(tipos)
         self.__modelo_cbx_categoria.update_data(categorias)
 
-    def obtener_datos(self):
+    def obtener_transaccion(self):
         monto = self.__line_monto.text()
         id_tipo = self.__cbx_tipo_transaccion.currentData(QtCore.Qt.UserRole)
         id_categoria = self.__cbx_categorias.currentData(QtCore.Qt.UserRole)
