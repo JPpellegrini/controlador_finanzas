@@ -1,4 +1,3 @@
-import sys
 from PyQt5 import QtCore, QtWidgets, QtGui
 from dataclasses import dataclass
 
@@ -59,7 +58,7 @@ class VentanaIngresoEgreso(QtWidgets.QDialog):
         self.__contenedor = QtWidgets.QVBoxLayout()
         self.setWindowModality(QtCore.Qt.WindowModal)
 
-        # WIDGETS
+        
         self.__line_monto = QtWidgets.QLineEdit()
         self.__cbx_tipo_transaccion = QtWidgets.QComboBox()
         self.__cbx_tipo_transaccion.setModel(self.__modelo_cbx_tipo)
@@ -137,15 +136,16 @@ class VentanaEgreso(VentanaIngresoEgreso):
 
 
 if __name__ == "__main__":
+    import sys
+
     tipos = (TipoCategoriaDTO("efectivo", 1), TipoCategoriaDTO("tarjeta", 2))
     categoria = (TipoCategoriaDTO("comida", 1), TipoCategoriaDTO("combustible", 2))
+
     app = QtWidgets.QApplication(sys.argv)
-    ventana = VentanaEgreso()
-
-    def visualizar_datos():
-        print(ventana.obtener_datos())
-
-    ventana.enviar_datos(tipos, categoria)
+    ventana = VentanaIngresoEgreso()
+    ventana.registrar.connect(lambda: print(ventana.obtener_transaccion()))
+    ventana.actualizar_tipos_transaccion(tipos)
+    ventana.actualizar_categorias(categorias)
     ventana.show()
-    ventana.registrar.connect(lambda: visualizar_datos())
+
     app.exec()
