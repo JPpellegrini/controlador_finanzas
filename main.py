@@ -1,16 +1,21 @@
 import sys
+import os
 from PyQt5 import QtWidgets
-from modelo.finanzas import *
-from vista.finanzas import *
-from controlador.finanzas import *
+from controlador.principal import ControladorPrincipal
+from modelo.recursos import Database
+from dotenv import load_dotenv
+
+load_dotenv()
+
+
+db_user = dict(
+    username=os.getenv("MYSQL_USERNAME"),
+    password=os.getenv("MYSQL_PASSWORD"),
+)
+database = Database.get(db_user["username"], db_user["password"])
 
 app = QtWidgets.QApplication(sys.argv)
-modelo = Service()
-vista = Vista()
-controlador = Controlador()
-
-controlador.set_model(modelo)
-controlador.set_view(vista)
-app.aboutToQuit.connect(modelo.cerrar_database)
+app.aboutToQuit.connect(database.close)
+controlador = ControladorPrincipal()
 controlador.show_vista()
 app.exec()
