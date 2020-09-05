@@ -8,6 +8,7 @@ class TipoCategoriaDTO:
     nombre: str
     descripcion: str
 
+
 class VentanaTipoCategoria(QtWidgets.QDialog):
     registrar = QtCore.pyqtSignal()
 
@@ -41,42 +42,51 @@ class VentanaTipoCategoria(QtWidgets.QDialog):
     def __on_btn_registrar(self):
         self.registrar.emit()
     
+    def __set_label_error(self, color, mensaje):
+        self.__label_error.setStyleSheet(f"color: {color}")
+        self.__label_error.setText(mensaje)
+    
     def __limpiar(self):
         self.__line_nombre.clear()
         self.__line_descripcion.clear()
-        self.__label_error.setStyleSheet("color: gray")
-        self.__label_error.setText("Campos con * obligatorios")
+        self.__set_label_error("gray", "Campos con * obligatorios")
     
-    def verificar_error(self, error = None):
-        if error:
-            self.__label_error.setStyleSheet("color: red")
-            self.__label_error.setText(str(error))
-            return None
-        self.__limpiar()
-        self.close()
-
     def closeEvent(self, evnt):
         self.__limpiar()
 
+    def mostrar_error(self, error = None):
+        self.__set_label_error("red", str(error))
+    
     def obtener_datos(self):
         nombre = self.__line_nombre.text()
         descripcion = self.__line_descripcion.toPlainText()
         return TipoCategoriaDTO(nombre, descripcion)
 
+
 class VentanaTipo(VentanaTipoCategoria):
     def __init__(self, parent = None):
         VentanaTipoCategoria.__init__(self, parent)
         self.setWindowTitle("Tipo de transaccion")
+    
+    def obtener_tipo_transaccion(self):
+        return self.obtener_datos()
 
 class VentanaCategoriaIngreso(VentanaTipoCategoria):
     def __init__(self, parent = None):
         VentanaTipoCategoria.__init__(self, parent)
         self.setWindowTitle("Categoria Ingreso")
+    
+    def obtener_cat_ingreso(self):
+        return self.obtener_datos()
 
 class VentanaCategoriaEgreso(VentanaTipoCategoria):
     def __init__(self, parent = None):
         VentanaTipoCategoria.__init__(self, parent)
         self.setWindowTitle("Categoria Egreso")
+
+    def obtener_cat_egreso(self):
+        return self.obtener_datos()
+
 
 if __name__ == "__main__":
     app = QtWidgets.QApplication(sys.argv)
