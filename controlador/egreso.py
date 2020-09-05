@@ -43,12 +43,3 @@ class ControladorEgreso(QtCore.QObject):
         self.__vista.actualizar_tipos_transaccion(tipos_categorias["tipos"])
         self.__vista.actualizar_categorias(tipos_categorias["categorias"])
         self.__vista.show()
-
-
-if __name__ == "__main__":
-    from PyQt5 import QtWidgets
-
-    app = QtWidgets.QApplication(sys.argv)
-    controlador = ControladorEgreso()
-    controlador.show_vista()
-    app.exec()
