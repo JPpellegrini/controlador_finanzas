@@ -3,7 +3,7 @@ from PyQt5 import QtCore, QtWidgets, QtGui
 
 
 class ModeloTablaTransaccion(QtCore.QAbstractTableModel):
-    def __init__(self,headers, maps, data):
+    def __init__(self, headers, maps, data):
         super().__init__()
         self.__headers = headers
         self.__column_field_map = maps
@@ -17,18 +17,18 @@ class ModeloTablaTransaccion(QtCore.QAbstractTableModel):
 
     def rowCount(self, index):
         return len(self.__data)
-    
+
     def columnCount(self, parent):
         return len(self.__headers)
-    
+
     def headerData(self, section, orientation, role):
         if role == QtCore.Qt.DisplayRole and orientation == QtCore.Qt.Horizontal:
             return self.__headers[section]
 
 
 class VistaPrincipal(QtWidgets.QWidget):
-    
-    #SIGNALS
+
+    # SIGNALS
     agregar_ingreso = QtCore.pyqtSignal()
     agregar_egreso = QtCore.pyqtSignal()
     agregar_tipo_transaccion = QtCore.pyqtSignal()
@@ -46,27 +46,31 @@ class VistaPrincipal(QtWidgets.QWidget):
         self.__cal_layout = QtWidgets.QVBoxLayout()
         self.__opcion_layout = QtWidgets.QHBoxLayout()
 
-        #WIDGETS
+        # WIDGETS
         self.__line_balance = QtWidgets.QLineEdit()
         self.__btn_ingreso = QtWidgets.QPushButton("Nuevo Ingreso")
         self.__btn_egreso = QtWidgets.QPushButton("Nuevo Egreso")
         self.__btn_tipo_transaccion = QtWidgets.QPushButton("Nuevo Tipo de Transaccion")
-        self.__btn_categoria_ingreso = QtWidgets.QPushButton("Nueva Categoria de Ingreso")
+        self.__btn_categoria_ingreso = QtWidgets.QPushButton(
+            "Nueva Categoria de Ingreso"
+        )
         self.__btn_categoria_egreso = QtWidgets.QPushButton("Nueva Categoria de Egreso")
         self.__calendario = QtWidgets.QCalendarWidget()
-        self.__label_transaccion = QtWidgets.QLabel('Transacciones')
+        self.__label_transaccion = QtWidgets.QLabel("Transacciones")
         self.__table_transaccion = QtWidgets.QTableView()
         self.__btn_editar = QtWidgets.QPushButton("Editar")
         self.__btn_eliminar = QtWidgets.QPushButton("Eliminar")
-        self.__spacer = QtWidgets.QSpacerItem(0, 0, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
+        self.__spacer = QtWidgets.QSpacerItem(
+            0, 0, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding
+        )
 
-        #CONFIG WIDGETS
+        # CONFIG WIDGETS
         self.__line_balance.setReadOnly(True)
         self.__btn_editar.setEnabled(False)
         self.__btn_eliminar.setEnabled(False)
         self.__label_transaccion.setStyleSheet("color: #1E90FF")
 
-        #IPLEMENTACION WIDGETS        
+        # IPLEMENTACION WIDGETS
         self.__btn_layout.addWidget(self.__btn_ingreso)
         self.__btn_layout.addWidget(self.__btn_egreso)
         self.__btn_layout.addWidget(self.__btn_tipo_transaccion)
@@ -80,13 +84,19 @@ class VistaPrincipal(QtWidgets.QWidget):
         self.__opcion_layout.addWidget(self.__btn_editar)
         self.__opcion_layout.addWidget(self.__btn_eliminar)
 
-        #BOTONES
+        # BOTONES
         self.__btn_ingreso.clicked.connect(lambda: self.agregar_ingreso.emit())
         self.__btn_egreso.clicked.connect(lambda: self.agregar_egreso.emit())
-        self.__btn_tipo_transaccion.clicked.connect(lambda: self.agregar_tipo_transaccion.emit())
-        self.__btn_categoria_ingreso.clicked.connect(lambda: self.agregar_categoria_ingreso.emit())
-        self.__btn_categoria_egreso.clicked.connect(lambda: self.agregar_categoria_egreso.emit())
-                
+        self.__btn_tipo_transaccion.clicked.connect(
+            lambda: self.agregar_tipo_transaccion.emit()
+        )
+        self.__btn_categoria_ingreso.clicked.connect(
+            lambda: self.agregar_categoria_ingreso.emit()
+        )
+        self.__btn_categoria_egreso.clicked.connect(
+            lambda: self.agregar_categoria_egreso.emit()
+        )
+
         self.__main_layout.addLayout(self.__btn_layout)
         self.__main_layout.addLayout(self.__cal_layout)
         self.__btn_layout.addLayout(self.__opcion_layout)
@@ -94,7 +104,7 @@ class VistaPrincipal(QtWidgets.QWidget):
 
     def actualizar_balance(self, valor):
         self.__line_balance.setText(f"Balance: {valor}")
-    
+
     def setear_tabla(self, headers: list, maps: dict, data: list):
         self.__modelo = ModeloTablaTransaccion(headers, maps, data)
         self.__table_transaccion.setModel(self.__modelo)
@@ -102,11 +112,14 @@ class VistaPrincipal(QtWidgets.QWidget):
 
 if __name__ == "__main__":
     app = QtWidgets.QApplication(sys.argv)
-    headers=["Nombre","Apellido"]
-    maps={0:"nombre",1:"apellido"}
-    data=[dict(nombre="Juan Pablo",apellido="Pellegrini"),dict(nombre="Pablo",apellido="Ingegnieri")]
+    headers = ["Nombre", "Apellido"]
+    maps = {0: "nombre", 1: "apellido"}
+    data = [
+        dict(nombre="Juan Pablo", apellido="Pellegrini"),
+        dict(nombre="Pablo", apellido="Ingegnieri"),
+    ]
     ventana = VistaPrincipal()
     ventana.actualizar_balance(1000)
-    ventana.setear_tabla(headers,maps,data)
+    ventana.setear_tabla(headers, maps, data)
     ventana.show()
     app.exec()
