@@ -1,7 +1,7 @@
 import sys
 sys.path.append("..")
 from vista.tipo_categoria import VentanaTipo
-from modelo.modelo import ServiceTipoTransaccion, TipoTransaccionDTO, NombreError
+from modelo.tipo_transaccion import ServiceTipoTransaccion, TipoTransaccionDTO, NombreError
 
 
 class ControladorTipoTransaccion():

@@ -1,7 +1,7 @@
 import sys
 sys.path.append("..")
 from vista.tipo_categoria import VentanaCategoriaEgreso
-from modelo.modelo import ServiceCategoriaEgreso, CategoriaDTO, NombreError
+from modelo.categoria_egreso import ServiceCategoriaEgreso, CategoriaEgresoDTO, NombreError
 
 
 class ControladorCategoriaEgreso:
@@ -13,7 +13,7 @@ class ControladorCategoriaEgreso:
     def __on_registrar(self):
         categoria = self.__vista.obtener_datos()
         try:
-            self.__modelo.registrar_cat_egreso(CategoriaDTO(categoria.nombre, categoria.descripcion))
+            self.__modelo.registrar_cat_egreso(CategoriaEgresoDTO(categoria.nombre, categoria.descripcion))
             self.__vista.verificar_error()
         except NombreError as error:
             self.__vista.verificar_error(error)

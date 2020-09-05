@@ -1,7 +1,7 @@
 from dataclasses import dataclass
-from recursos import Database
-from tipo_transaccion import ServiceTipoTransaccion
-from categoria_ingreso import ServiceCategoriaIngreso
+from modelo.recursos import Database
+from modelo.tipo_transaccion import ServiceTipoTransaccion
+from modelo.categoria_ingreso import ServiceCategoriaIngreso
 
 
 @dataclass
