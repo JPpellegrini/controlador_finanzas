@@ -1,4 +1,3 @@
-import sys
 from PyQt5 import QtCore, QtWidgets, QtGui
 
 
@@ -28,7 +27,6 @@ class ModeloTablaTransaccion(QtCore.QAbstractTableModel):
 
 class VistaPrincipal(QtWidgets.QWidget):
 
-    # SIGNALS
     agregar_ingreso = QtCore.pyqtSignal()
     agregar_egreso = QtCore.pyqtSignal()
     agregar_tipo_transaccion = QtCore.pyqtSignal()
@@ -46,7 +44,6 @@ class VistaPrincipal(QtWidgets.QWidget):
         self.__cal_layout = QtWidgets.QVBoxLayout()
         self.__opcion_layout = QtWidgets.QHBoxLayout()
 
-        # WIDGETS
         self.__line_balance = QtWidgets.QLineEdit()
         self.__btn_ingreso = QtWidgets.QPushButton("Nuevo Ingreso")
         self.__btn_egreso = QtWidgets.QPushButton("Nuevo Egreso")
@@ -64,13 +61,11 @@ class VistaPrincipal(QtWidgets.QWidget):
             0, 0, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding
         )
 
-        # CONFIG WIDGETS
         self.__line_balance.setReadOnly(True)
         self.__btn_editar.setEnabled(False)
         self.__btn_eliminar.setEnabled(False)
         self.__label_transaccion.setStyleSheet("color: #1E90FF")
 
-        # IPLEMENTACION WIDGETS
         self.__btn_layout.addWidget(self.__btn_ingreso)
         self.__btn_layout.addWidget(self.__btn_egreso)
         self.__btn_layout.addWidget(self.__btn_tipo_transaccion)
@@ -84,7 +79,6 @@ class VistaPrincipal(QtWidgets.QWidget):
         self.__opcion_layout.addWidget(self.__btn_editar)
         self.__opcion_layout.addWidget(self.__btn_eliminar)
 
-        # BOTONES
         self.__btn_ingreso.clicked.connect(lambda: self.agregar_ingreso.emit())
         self.__btn_egreso.clicked.connect(lambda: self.agregar_egreso.emit())
         self.__btn_tipo_transaccion.clicked.connect(
@@ -111,6 +105,8 @@ class VistaPrincipal(QtWidgets.QWidget):
 
 
 if __name__ == "__main__":
+    import sys
+
     app = QtWidgets.QApplication(sys.argv)
     headers = ["Nombre", "Apellido"]
     maps = {0: "nombre", 1: "apellido"}

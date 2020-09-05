@@ -1,4 +1,3 @@
-import sys
 from PyQt5 import QtCore, QtWidgets, QtGui
 from dataclasses import dataclass
 
@@ -20,7 +19,6 @@ class VentanaTipoCategoria(QtWidgets.QDialog):
         self.__contenedor = QtWidgets.QVBoxLayout()
         self.setWindowModality(QtCore.Qt.WindowModal)
 
-        # WIDGETS
         self.__line_nombre = QtWidgets.QLineEdit()
         self.__line_descripcion = QtWidgets.QTextEdit()
         self.__label_error = QtWidgets.QLabel("Campos con * obligatorios")
@@ -91,12 +89,11 @@ class VentanaCategoriaEgreso(VentanaTipoCategoria):
 
 
 if __name__ == "__main__":
+    import sys
+
     app = QtWidgets.QApplication(sys.argv)
     ventana = VentanaCategoriaEgreso()
-
-    def visualizar_datos():
-        print(ventana.obtener_datos())
-
+    ventana.registrar.connect(lambda: print(ventana.obtener_datos()))
     ventana.show()
-    ventana.registrar.connect(lambda: visualizar_datos())
+
     app.exec()
