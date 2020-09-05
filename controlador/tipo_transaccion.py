@@ -27,12 +27,3 @@ class ControladorTipoTransaccion:
 
     def show_vista(self):
         self.__vista.show()
-
-
-if __name__ == "__main__":
-    from PyQt5 import QtWidgets
-
-    app = QtWidgets.QApplication(sys.argv)
-    controlador = ControladorTipoTransaccion()
-    controlador.show_vista()
-    app.exec()
