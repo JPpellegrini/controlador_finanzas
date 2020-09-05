@@ -11,12 +11,12 @@ class ControladorCategoriaEgreso:
         self.__vista.registrar.connect(self.__on_registrar) 
 
     def __on_registrar(self):
-        categoria = self.__vista.obtener_datos()
+        categoria = self.__vista.obtener_cat_egreso()
         try:
             self.__modelo.registrar_cat_egreso(CategoriaEgresoDTO(categoria.nombre, categoria.descripcion))
-            self.__vista.verificar_error()
+            self.__vista.close()
         except NombreError as error:
-            self.__vista.verificar_error(error)
+            self.__vista.mostrar_error(error)
     
     def show_vista(self):
         self.__vista.show()
