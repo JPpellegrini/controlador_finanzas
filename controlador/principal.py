@@ -6,7 +6,7 @@ from controlador.categoria_ingreso import ControladorCategoriaIngreso
 from controlador.egreso import ControladorEgreso
 from controlador.ingreso import ControladorIngreso
 from controlador.tipo_transaccion import ControladorTipoTransaccion
-from modelo.modelo import Balance
+from modelo.recursos import Balance
 
 class ControladorPrincipal:
     def __init__(self):
