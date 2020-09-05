@@ -5,12 +5,18 @@ class Database:
     __conexion = None
 
     @classmethod
-    def get(cls, username = None, password = None): 
-        if not cls.__conexion:  
-            cls.__conexion = pymysql.connect(cursorclass=pymysql.cursors.DictCursor,host="localhost",
-                                            port=3306, user=username, passwd=password, db="finanzas")
+    def get(cls, username=None, password=None):
+        if not cls.__conexion:
+            cls.__conexion = pymysql.connect(
+                cursorclass=pymysql.cursors.DictCursor,
+                host="localhost",
+                port=3306,
+                user=username,
+                passwd=password,
+                db="finanzas",
+            )
         return cls.__conexion
-        
+
 
 class Balance:
     @staticmethod
