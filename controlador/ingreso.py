@@ -35,7 +35,7 @@ class ControladorIngreso(QtCore.QObject):
             )
             self.actualizar_balance.emit()
             self.__vista.close()
-        except Exception as error:
+        except (MontoError, TipoError, CategoriaError) as error:
             self.__vista.mostrar_error(error)
 
     def show_vista(self):
