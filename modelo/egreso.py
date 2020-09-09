@@ -2,6 +2,7 @@ from dataclasses import dataclass
 from modelo.recursos import Database
 from modelo.tipo_transaccion import ServiceTipoTransaccion
 from modelo.categoria_egreso import ServiceCategoriaEgreso
+from datetime import date
 
 
 @dataclass
@@ -10,7 +11,7 @@ class EgresoDTO:
     id_tipo_transaccion: int
     id_categoria: int
     descripcion: str
-    fecha: str
+    fecha: date
     id: int = None
 
 

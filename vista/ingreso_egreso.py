@@ -1,5 +1,6 @@
 from PyQt5 import QtCore, QtWidgets, QtGui
 from dataclasses import dataclass
+from datetime import date
 
 
 @dataclass
@@ -8,7 +9,7 @@ class TransaccionDTO:
     id_tipo_transaccion: int
     id_categoria: int
     descripcion: str
-    fecha: str
+    fecha: date
 
 
 @dataclass
@@ -58,7 +59,6 @@ class VentanaIngresoEgreso(QtWidgets.QDialog):
         self.__contenedor = QtWidgets.QVBoxLayout()
         self.setWindowModality(QtCore.Qt.WindowModal)
 
-        
         self.__line_monto = QtWidgets.QLineEdit()
         self.__cbx_tipo_transaccion = QtWidgets.QComboBox()
         self.__cbx_tipo_transaccion.setModel(self.__modelo_cbx_tipo)
@@ -119,7 +119,7 @@ class VentanaIngresoEgreso(QtWidgets.QDialog):
         id_tipo = self.__cbx_tipo_transaccion.currentData(QtCore.Qt.UserRole)
         id_categoria = self.__cbx_categorias.currentData(QtCore.Qt.UserRole)
         descripcion = self.__line_descripcion.toPlainText()
-        fecha = self.__cal_fecha.selectedDate().toString()
+        fecha = self.__cal_fecha.selectedDate().toPyDate()
         return TransaccionDTO(monto, id_tipo, id_categoria, descripcion, fecha)
 
 
@@ -139,7 +139,7 @@ if __name__ == "__main__":
     import sys
 
     tipos = (TipoCategoriaDTO("efectivo", 1), TipoCategoriaDTO("tarjeta", 2))
-    categoria = (TipoCategoriaDTO("comida", 1), TipoCategoriaDTO("combustible", 2))
+    categorias = (TipoCategoriaDTO("comida", 1), TipoCategoriaDTO("combustible", 2))
 
     app = QtWidgets.QApplication(sys.argv)
     ventana = VentanaIngresoEgreso()
