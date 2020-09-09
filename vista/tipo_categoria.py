@@ -1,5 +1,9 @@
+import sys
+
+sys.path.append("..")
 from PyQt5 import QtCore, QtWidgets, QtGui
 from dataclasses import dataclass
+from ui.tipo_categoria import Ui_VentanaTipoCategoria
 
 
 @dataclass
@@ -8,46 +12,28 @@ class TipoCategoriaDTO:
     descripcion: str
 
 
-class VentanaTipoCategoria(QtWidgets.QDialog):
+class VentanaTipoCategoria(QtWidgets.QWidget):
     registrar = QtCore.pyqtSignal()
 
     def __init__(self, parent=None):
-        QtWidgets.QDialog.__init__(self, parent)
-        self.__setup_ui()
+        super().__init__()
+        self.__ui = Ui_VentanaTipoCategoria()
+        self.__setupUi()
 
-    def __setup_ui(self):
-        self.__contenedor = QtWidgets.QVBoxLayout()
-        self.setWindowModality(QtCore.Qt.WindowModal)
-
-        self.__line_nombre = QtWidgets.QLineEdit()
-        self.__line_descripcion = QtWidgets.QTextEdit()
-        self.__label_error = QtWidgets.QLabel("Campos con * obligatorios")
-        self.__btn_registrar = QtWidgets.QPushButton("Aceptar")
-
-        self.__line_nombre.setPlaceholderText("Nombre*")
-        self.__line_descripcion.setPlaceholderText("Descripción")
-        self.__label_error.setStyleSheet("color: gray")
-
-        self.__contenedor.addWidget(self.__line_nombre)
-        self.__contenedor.addWidget(self.__line_descripcion)
-        self.__contenedor.addWidget(self.__label_error)
-        self.__contenedor.addWidget(self.__btn_registrar)
-
-        self.__btn_registrar.clicked.connect(self.__on_btn_registrar)
-
-        self.setLayout(self.__contenedor)
-
-    def __on_btn_registrar(self):
+    def __setupUi(self):
+        self.__ui.setupUi(self)
+    
+    def _on_button_aceptar(self):
         self.registrar.emit()
-
+    
     def __set_label_error(self, color, mensaje):
-        self.__label_error.setStyleSheet(f"color: {color}")
-        self.__label_error.setText(mensaje)
+        self.__ui._label_error.setStyleSheet(f"color: {color}")
+        self.__ui._label_error.setText(mensaje)
 
     def __limpiar(self):
-        self.__line_nombre.clear()
-        self.__line_descripcion.clear()
-        self.__set_label_error("gray", "Campos con * obligatorios")
+        self.__ui._line_nombre.clear()
+        self.__ui._text_descripcion.clear()
+        self.__ui._label_error.setText("")
 
     def closeEvent(self, evnt):
         self.__limpiar()
@@ -56,8 +42,8 @@ class VentanaTipoCategoria(QtWidgets.QDialog):
         self.__set_label_error("red", str(error))
 
     def obtener_datos(self):
-        nombre = self.__line_nombre.text()
-        descripcion = self.__line_descripcion.toPlainText()
+        nombre = self.__ui._line_nombre.text()
+        descripcion = self.__ui._text_descripcion.toPlainText()
         return TipoCategoriaDTO(nombre, descripcion)
 
 
@@ -92,7 +78,7 @@ if __name__ == "__main__":
     import sys
 
     app = QtWidgets.QApplication(sys.argv)
-    ventana = VentanaCategoriaEgreso()
+    ventana = VentanaTipoCategoria()
     ventana.registrar.connect(lambda: print(ventana.obtener_datos()))
     ventana.show()
 
