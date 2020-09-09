@@ -1,5 +1,9 @@
+import sys
+
+sys.path.append("..")
 from PyQt5 import QtCore, QtWidgets, QtGui
 from dataclasses import dataclass
+from ui.ingreso_egreso import Ui_VentanaIngresoEgreso
 
 
 @dataclass
@@ -45,62 +49,37 @@ class ModeloComboBox(QtCore.QAbstractTableModel):
         return 1
 
 
-class VentanaIngresoEgreso(QtWidgets.QDialog):
+class VentanaIngresoEgreso(QtWidgets.QWidget):
     registrar = QtCore.pyqtSignal()
 
     def __init__(self, parent=None):
-        QtWidgets.QDialog.__init__(self, parent)
-        self.__setup_ui()
+        super().__init__()
+        self.__ui = Ui_VentanaIngresoEgreso()
+        self.__setupUi()
 
-    def __setup_ui(self):
-        self.__modelo_cbx_tipo = ModeloComboBox()
-        self.__modelo_cbx_categoria = ModeloComboBox()
-        self.__contenedor = QtWidgets.QVBoxLayout()
-        self.setWindowModality(QtCore.Qt.WindowModal)
-
+    def __setupUi(self):
+        self.__ui.setupUi(self)
         
-        self.__line_monto = QtWidgets.QLineEdit()
-        self.__cbx_tipo_transaccion = QtWidgets.QComboBox()
-        self.__cbx_tipo_transaccion.setModel(self.__modelo_cbx_tipo)
-        self.__cbx_categorias = QtWidgets.QComboBox()
-        self.__cbx_categorias.setModel(self.__modelo_cbx_categoria)
-        self.__line_descripcion = QtWidgets.QTextEdit()
-        self.__cal_fecha = QtWidgets.QCalendarWidget()
-        self.__label_error = QtWidgets.QLabel("Campos con * obligatorios")
-        self.__boton = QtWidgets.QPushButton("Aceptar")
+        self.__modelo_combobox_tipo = ModeloComboBox()
+        self.__modelo_combobox_categoria = ModeloComboBox()
 
-        self.__line_monto.setPlaceholderText("Monto*")
-        self.__cbx_tipo_transaccion.setPlaceholderText("Tipo de Transaccion*")
-        self.__cbx_categorias.setPlaceholderText("Categoria*")
-        self.__line_descripcion.setPlaceholderText("Descripcion")
-        self.__label_error.setStyleSheet("color: gray")
+        self.__ui._combobox_tipo_transaccion.setModel(self.__modelo_combobox_tipo)
+        self.__ui._combobox_categorias.setModel(self.__modelo_combobox_categoria)
 
-        self.__contenedor.addWidget(self.__line_monto)
-        self.__contenedor.addWidget(self.__cbx_tipo_transaccion)
-        self.__contenedor.addWidget(self.__cbx_categorias)
-        self.__contenedor.addWidget(self.__line_descripcion)
-        self.__contenedor.addWidget(self.__cal_fecha)
-        self.__contenedor.addWidget(self.__label_error)
-        self.__contenedor.addWidget(self.__boton)
-
-        self.__boton.clicked.connect(self.__on_btn_registrar)
-
-        self.setLayout(self.__contenedor)
-
-    def __on_btn_registrar(self):
+    def _on_button_aceptar(self):
         self.registrar.emit()
 
     def __set_label_error(self, color, mensaje):
-        self.__label_error.setStyleSheet(f"color: {color}")
-        self.__label_error.setText(mensaje)
+        self.__ui._label_error.setStyleSheet(f"color: {color}")
+        self.__ui._label_error.setText(mensaje)
 
     def __limpiar(self):
-        self.__line_monto.clear()
-        self.__modelo_cbx_tipo.update_data([])
-        self.__modelo_cbx_categoria.update_data([])
-        self.__line_descripcion.clear()
-        self.__cal_fecha.setSelectedDate(QtCore.QDate.currentDate())
-        self.__set_label_error("gray", "Campos con * obligatorios")
+        self.__ui._line_monto.clear()
+        self.__modelo_combobox_tipo.update_data([])
+        self.__modelo_combobox_categoria.update_data([])
+        self.__ui._text_descripcion.clear()
+        self.__ui._calendar_fecha.setSelectedDate(QtCore.QDate.currentDate())
+        self.__ui._label_error.setText("")
 
     def closeEvent(self, evnt):
         self.__limpiar()
@@ -109,17 +88,18 @@ class VentanaIngresoEgreso(QtWidgets.QDialog):
         self.__set_label_error("red", str(error))
 
     def actualizar_tipos_transaccion(self, tipos):
-        self.__modelo_cbx_tipo.update_data(tipos)
+        self.__modelo_combobox_tipo.update_data(tipos)
+
 
     def actualizar_categorias(self, categorias):
-        self.__modelo_cbx_categoria.update_data(categorias)
+        self.__modelo_combobox_categoria.update_data(categorias)
 
     def obtener_transaccion(self):
-        monto = self.__line_monto.text()
-        id_tipo = self.__cbx_tipo_transaccion.currentData(QtCore.Qt.UserRole)
-        id_categoria = self.__cbx_categorias.currentData(QtCore.Qt.UserRole)
-        descripcion = self.__line_descripcion.toPlainText()
-        fecha = self.__cal_fecha.selectedDate().toString()
+        monto = self.__ui._line_monto.text()
+        id_tipo = self.__ui._combobox_tipo_transaccion.currentData(QtCore.Qt.UserRole)
+        id_categoria = self.__ui._combobox_categorias.currentData(QtCore.Qt.UserRole)
+        descripcion = self.__ui._text_descripcion.toPlainText()
+        fecha = self.__ui._calendar_fecha.selectedDate().toString()
         return TransaccionDTO(monto, id_tipo, id_categoria, descripcion, fecha)
 
 
@@ -139,7 +119,7 @@ if __name__ == "__main__":
     import sys
 
     tipos = (TipoCategoriaDTO("efectivo", 1), TipoCategoriaDTO("tarjeta", 2))
-    categoria = (TipoCategoriaDTO("comida", 1), TipoCategoriaDTO("combustible", 2))
+    categorias = (TipoCategoriaDTO("comida", 1), TipoCategoriaDTO("combustible", 2))
 
     app = QtWidgets.QApplication(sys.argv)
     ventana = VentanaIngresoEgreso()
