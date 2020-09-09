@@ -2,6 +2,7 @@ from dataclasses import dataclass
 from modelo.recursos import Database
 from modelo.tipo_transaccion import ServiceTipoTransaccion
 from modelo.categoria_egreso import ServiceCategoriaEgreso
+from datetime import date
 
 
 @dataclass
@@ -10,7 +11,7 @@ class EgresoDTO:
     id_tipo_transaccion: int
     id_categoria: int
     descripcion: str
-    fecha: str
+    fecha: date
     id: int = None
 
 
@@ -37,46 +38,48 @@ class ServiceEgreso:
         self.svc_categorias = ServiceCategoriaEgreso()
 
     def registrar_egreso(self, data: EgresoDTO):
+        try:
+            float(data.monto)
+        except ValueError:
+            raise MontoError
         if not data.id_tipo_transaccion:
             raise TipoError
         if not data.id_categoria:
             raise CategoriaError
-        try:
-            self.cursor.execute(
-                "INSERT INTO egresos (id, monto, tipo, categoria_egreso, descripcion, fecha) VALUES (%s, %s, %s, %s, %s, %s)",
-                (
-                    data.id,
-                    data.monto,
-                    data.id_tipo_transaccion,
-                    data.id_categoria,
-                    data.descripcion,
-                    data.fecha,
-                ),
-            )
-            self.database.commit()
-        except pymysql.Error:
-            raise MontoError
+        self.cursor.execute(
+            "INSERT INTO egresos (id, monto, tipo, categoria_egreso, descripcion, fecha) VALUES (%s, %s, %s, %s, %s, %s)",
+            (
+                data.id,
+                data.monto,
+                data.id_tipo_transaccion,
+                data.id_categoria,
+                data.descripcion,
+                data.fecha,
+            ),
+        )
+        self.database.commit()
 
     def editar_egreso(self, data: EgresoDTO):
+        try:
+            float(data.monto)
+        except ValueError:
+            raise MontoError
         if not data.id_tipo_transaccion:
             raise TipoError
         if not data.id_categoria:
             raise CategoriaError
-        try:
-            self.cursor.execute(
-                "UPDATE egresos SET monto=%s, tipo=%s, categoria_egreso=%s, descripcion=%s, fecha=%s WHERE id = %s",
-                (
-                    data.monto,
-                    data.id_tipo_transaccion,
-                    data.id_categoria,
-                    data.descripcion,
-                    data.fecha,
-                    data.id,
-                ),
-            )
-            self.database.commit()
-        except pymysql.Error:
-            raise MontoError
+        self.cursor.execute(
+            "UPDATE egresos SET monto=%s, tipo=%s, categoria_egreso=%s, descripcion=%s, fecha=%s WHERE id = %s",
+            (
+                data.monto,
+                data.id_tipo_transaccion,
+                data.id_categoria,
+                data.descripcion,
+                data.fecha,
+                data.id,
+            ),
+        )
+        self.database.commit()
 
     def eliminar_egreso(self, data: EgresoDTO):
         self.cursor.execute("DELETE FROM egresos WHERE id = %s", data.id)

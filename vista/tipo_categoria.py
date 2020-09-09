@@ -22,10 +22,10 @@ class VentanaTipoCategoria(QtWidgets.QWidget):
 
     def __setupUi(self):
         self.__ui.setupUi(self)
-    
+
     def _on_button_aceptar(self):
         self.registrar.emit()
-    
+
     def __set_label_error(self, color, mensaje):
         self.__ui._label_error.setStyleSheet(f"color: {color}")
         self.__ui._label_error.setText(mensaje)

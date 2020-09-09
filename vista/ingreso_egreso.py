@@ -4,6 +4,7 @@ sys.path.append("..")
 from PyQt5 import QtCore, QtWidgets, QtGui
 from dataclasses import dataclass
 from ui.ingreso_egreso import Ui_VentanaIngresoEgreso
+from datetime import date
 
 
 @dataclass
@@ -12,7 +13,7 @@ class TransaccionDTO:
     id_tipo_transaccion: int
     id_categoria: int
     descripcion: str
-    fecha: str
+    fecha: date
 
 
 @dataclass
@@ -59,7 +60,7 @@ class VentanaIngresoEgreso(QtWidgets.QWidget):
 
     def __setupUi(self):
         self.__ui.setupUi(self)
-        
+
         self.__modelo_combobox_tipo = ModeloComboBox()
         self.__modelo_combobox_categoria = ModeloComboBox()
 
@@ -90,7 +91,6 @@ class VentanaIngresoEgreso(QtWidgets.QWidget):
     def actualizar_tipos_transaccion(self, tipos):
         self.__modelo_combobox_tipo.update_data(tipos)
 
-
     def actualizar_categorias(self, categorias):
         self.__modelo_combobox_categoria.update_data(categorias)
 
@@ -99,7 +99,7 @@ class VentanaIngresoEgreso(QtWidgets.QWidget):
         id_tipo = self.__ui._combobox_tipo_transaccion.currentData(QtCore.Qt.UserRole)
         id_categoria = self.__ui._combobox_categorias.currentData(QtCore.Qt.UserRole)
         descripcion = self.__ui._text_descripcion.toPlainText()
-        fecha = self.__ui._calendar_fecha.selectedDate().toString()
+        fecha = self.__ui._calendar_fecha.selectedDate().toPyDate()
         return TransaccionDTO(monto, id_tipo, id_categoria, descripcion, fecha)
 
 

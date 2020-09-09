@@ -41,7 +41,7 @@ class VistaPrincipal(QtWidgets.QMainWindow):
         super().__init__()
         self.__ui = Ui_VistaPrincipal()
         self.__setupUi()
-    
+
     def __setupUi(self):
         self.__ui.setupUi(self)
 
@@ -53,7 +53,7 @@ class VistaPrincipal(QtWidgets.QMainWindow):
 
     def _on_boton_agregar_tipo_transaccion(self):
         self.agregar_tipo_transaccion.emit()
-    
+
     def _on_boton_agregar_categoria_ingreso(self):
         self.agregar_categoria_ingreso.emit()
 
@@ -66,6 +66,7 @@ class VistaPrincipal(QtWidgets.QMainWindow):
     def actualizar_tabla(self, headers: list, maps: dict, data: list):
         self.__modelo = ModeloTablaTransaccion(headers, maps, data)
         self.__ui._table_transaccion.setModel(self.__modelo)
+
 
 if __name__ == "__main__":
     import sys
