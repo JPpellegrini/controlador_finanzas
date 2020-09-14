@@ -12,11 +12,11 @@ class TipoCategoriaDTO:
     descripcion: str
 
 
-class VentanaTipoCategoria(QtWidgets.QWidget):
+class VentanaTipoCategoria(QtWidgets.QDialog):
     registrar = QtCore.pyqtSignal()
 
     def __init__(self, parent=None):
-        super().__init__()
+        super().__init__(parent)
         self.__ui = Ui_VentanaTipoCategoria()
         self.__setupUi()
 

@@ -50,11 +50,11 @@ class ModeloComboBox(QtCore.QAbstractTableModel):
         return 1
 
 
-class VentanaIngresoEgreso(QtWidgets.QWidget):
+class VentanaIngresoEgreso(QtWidgets.QDialog):
     registrar = QtCore.pyqtSignal()
 
     def __init__(self, parent=None):
-        super().__init__()
+        super().__init__(parent)
         self.__ui = Ui_VentanaIngresoEgreso()
         self.__setupUi()
 
