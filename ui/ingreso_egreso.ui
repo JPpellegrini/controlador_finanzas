@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
  <class>VentanaIngresoEgreso</class>
- <widget class="QWidget" name="VentanaIngresoEgreso">
+ <widget class="QDialog" name="VentanaIngresoEgreso">
   <property name="windowModality">
    <enum>Qt::WindowModal</enum>
   </property>
