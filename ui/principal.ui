@@ -25,7 +25,7 @@
   <property name="windowTitle">
    <string>Controlador de Finanzas</string>
   </property>
-  <widget class="QWidget" name="_main_layout">
+  <widget class="QWidget" name="main_layout">
    <layout class="QVBoxLayout" name="verticalLayout">
     <property name="spacing">
      <number>0</number>
@@ -43,17 +43,17 @@
      <number>0</number>
     </property>
     <item>
-     <layout class="QHBoxLayout" name="_central_layout">
+     <layout class="QHBoxLayout" name="central_layout">
       <property name="spacing">
        <number>0</number>
       </property>
       <item>
-       <layout class="QVBoxLayout" name="_button_layout">
+       <layout class="QVBoxLayout" name="button_layout">
         <property name="spacing">
          <number>0</number>
         </property>
         <item>
-         <widget class="QPushButton" name="_button_ingreso">
+         <widget class="QPushButton" name="button_ingreso">
           <property name="sizePolicy">
            <sizepolicy hsizetype="Minimum" vsizetype="Expanding">
             <horstretch>0</horstretch>
@@ -66,7 +66,7 @@
          </widget>
         </item>
         <item>
-         <widget class="QPushButton" name="_button_egreso">
+         <widget class="QPushButton" name="button_egreso">
           <property name="sizePolicy">
            <sizepolicy hsizetype="Minimum" vsizetype="Expanding">
             <horstretch>0</horstretch>
@@ -79,7 +79,7 @@
          </widget>
         </item>
         <item>
-         <widget class="QPushButton" name="_button_tipo_transaccion">
+         <widget class="QPushButton" name="button_tipo_transaccion">
           <property name="sizePolicy">
            <sizepolicy hsizetype="Minimum" vsizetype="Expanding">
             <horstretch>0</horstretch>
@@ -92,7 +92,7 @@
          </widget>
         </item>
         <item>
-         <widget class="QPushButton" name="_button_categoria_ingreso">
+         <widget class="QPushButton" name="button_categoria_ingreso">
           <property name="sizePolicy">
            <sizepolicy hsizetype="Minimum" vsizetype="Expanding">
             <horstretch>0</horstretch>
@@ -105,7 +105,7 @@
          </widget>
         </item>
         <item>
-         <widget class="QPushButton" name="_button_categoria_egreso">
+         <widget class="QPushButton" name="button_categoria_egreso">
           <property name="sizePolicy">
            <sizepolicy hsizetype="Minimum" vsizetype="Expanding">
             <horstretch>0</horstretch>
@@ -118,7 +118,7 @@
          </widget>
         </item>
         <item>
-         <spacer name="_verticalSpacer">
+         <spacer name="verticalSpacer">
           <property name="orientation">
            <enum>Qt::Vertical</enum>
           </property>
@@ -134,7 +134,7 @@
          </spacer>
         </item>
         <item>
-         <widget class="QLineEdit" name="_line_balance">
+         <widget class="QLineEdit" name="line_balance">
           <property name="sizePolicy">
            <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
             <horstretch>0</horstretch>
@@ -268,12 +268,12 @@
          </widget>
         </item>
         <item>
-         <layout class="QHBoxLayout" name="_opcion_layout">
+         <layout class="QHBoxLayout" name="opcion_layout">
           <property name="spacing">
            <number>0</number>
           </property>
           <item>
-           <widget class="QPushButton" name="_button_editar">
+           <widget class="QPushButton" name="button_editar">
             <property name="enabled">
              <bool>false</bool>
             </property>
@@ -283,7 +283,7 @@
            </widget>
           </item>
           <item>
-           <widget class="QPushButton" name="_button_eliminar">
+           <widget class="QPushButton" name="button_eliminar">
             <property name="enabled">
              <bool>false</bool>
             </property>
@@ -297,15 +297,15 @@
        </layout>
       </item>
       <item>
-       <layout class="QVBoxLayout" name="_calendar_layout">
+       <layout class="QVBoxLayout" name="calendar_layout">
         <property name="spacing">
          <number>0</number>
         </property>
         <item>
-         <widget class="QCalendarWidget" name="_calendario"/>
+         <widget class="QCalendarWidget" name="calendario"/>
         </item>
         <item>
-         <widget class="QLabel" name="_label_transaccion">
+         <widget class="QLabel" name="label_transaccion">
           <property name="font">
            <font>
             <pointsize>11</pointsize>
@@ -323,7 +323,7 @@
          </widget>
         </item>
         <item>
-         <widget class="QTableView" name="_table_transaccion"/>
+         <widget class="QTableView" name="table_transaccion"/>
         </item>
        </layout>
       </item>
@@ -335,10 +335,10 @@
  <resources/>
  <connections>
   <connection>
-   <sender>_button_ingreso</sender>
+   <sender>button_ingreso</sender>
    <signal>clicked()</signal>
    <receiver>VistaPrincipal</receiver>
-   <slot>_on_boton_agregar_ingreso()</slot>
+   <slot>on_boton_agregar_ingreso()</slot>
    <hints>
     <hint type="sourcelabel">
      <x>101</x>
@@ -351,10 +351,10 @@
    </hints>
   </connection>
   <connection>
-   <sender>_button_egreso</sender>
+   <sender>button_egreso</sender>
    <signal>clicked()</signal>
    <receiver>VistaPrincipal</receiver>
-   <slot>_on_boton_agregar_egreso()</slot>
+   <slot>on_boton_agregar_egreso()</slot>
    <hints>
     <hint type="sourcelabel">
      <x>101</x>
@@ -367,10 +367,10 @@
    </hints>
   </connection>
   <connection>
-   <sender>_button_tipo_transaccion</sender>
+   <sender>button_tipo_transaccion</sender>
    <signal>clicked()</signal>
    <receiver>VistaPrincipal</receiver>
-   <slot>_on_boton_agregar_tipo_transaccion()</slot>
+   <slot>on_boton_agregar_tipo_transaccion()</slot>
    <hints>
     <hint type="sourcelabel">
      <x>101</x>
@@ -383,10 +383,10 @@
    </hints>
   </connection>
   <connection>
-   <sender>_button_categoria_ingreso</sender>
+   <sender>button_categoria_ingreso</sender>
    <signal>clicked()</signal>
    <receiver>VistaPrincipal</receiver>
-   <slot>_on_boton_agregar_categoria_ingreso()</slot>
+   <slot>on_boton_agregar_categoria_ingreso()</slot>
    <hints>
     <hint type="sourcelabel">
      <x>101</x>
@@ -399,10 +399,10 @@
    </hints>
   </connection>
   <connection>
-   <sender>_button_categoria_egreso</sender>
+   <sender>button_categoria_egreso</sender>
    <signal>clicked()</signal>
    <receiver>VistaPrincipal</receiver>
-   <slot>_on_boton_agregar_categoria_egreso()</slot>
+   <slot>on_boton_agregar_categoria_egreso()</slot>
    <hints>
     <hint type="sourcelabel">
      <x>101</x>
@@ -416,10 +416,10 @@
   </connection>
  </connections>
  <slots>
-  <slot>_on_boton_agregar_ingreso()</slot>
-  <slot>_on_boton_agregar_egreso()</slot>
-  <slot>_on_boton_agregar_tipo_transaccion()</slot>
-  <slot>_on_boton_agregar_categoria_ingreso()</slot>
-  <slot>_on_boton_agregar_categoria_egreso()</slot>
+  <slot>on_boton_agregar_ingreso()</slot>
+  <slot>on_boton_agregar_egreso()</slot>
+  <slot>on_boton_agregar_tipo_transaccion()</slot>
+  <slot>on_boton_agregar_categoria_ingreso()</slot>
+  <slot>on_boton_agregar_categoria_egreso()</slot>
  </slots>
 </ui>

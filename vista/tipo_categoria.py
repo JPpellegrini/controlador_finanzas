@@ -23,17 +23,17 @@ class VentanaTipoCategoria(QtWidgets.QDialog):
     def __setupUi(self):
         self.__ui.setupUi(self)
 
-    def _on_button_aceptar(self):
+    def on_button_aceptar(self):
         self.registrar.emit()
 
     def __set_label_error(self, color, mensaje):
-        self.__ui._label_error.setStyleSheet(f"color: {color}")
-        self.__ui._label_error.setText(mensaje)
+        self.__ui.label_error.setStyleSheet(f"color: {color}")
+        self.__ui.label_error.setText(mensaje)
 
     def __limpiar(self):
-        self.__ui._line_nombre.clear()
-        self.__ui._text_descripcion.clear()
-        self.__ui._label_error.setText("")
+        self.__ui.line_nombre.clear()
+        self.__ui.text_descripcion.clear()
+        self.__ui.label_error.setText("")
 
     def closeEvent(self, evnt):
         self.__limpiar()
@@ -42,8 +42,8 @@ class VentanaTipoCategoria(QtWidgets.QDialog):
         self.__set_label_error("red", str(error))
 
     def obtener_datos(self):
-        nombre = self.__ui._line_nombre.text()
-        descripcion = self.__ui._text_descripcion.toPlainText()
+        nombre = self.__ui.line_nombre.text()
+        descripcion = self.__ui.text_descripcion.toPlainText()
         return TipoCategoriaDTO(nombre, descripcion)
 
 

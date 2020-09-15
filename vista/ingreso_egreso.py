@@ -64,23 +64,23 @@ class VentanaIngresoEgreso(QtWidgets.QDialog):
         self.__modelo_combobox_tipo = ModeloComboBox()
         self.__modelo_combobox_categoria = ModeloComboBox()
 
-        self.__ui._combobox_tipo_transaccion.setModel(self.__modelo_combobox_tipo)
-        self.__ui._combobox_categorias.setModel(self.__modelo_combobox_categoria)
+        self.__ui.combobox_tipo_transaccion.setModel(self.__modelo_combobox_tipo)
+        self.__ui.combobox_categorias.setModel(self.__modelo_combobox_categoria)
 
-    def _on_button_aceptar(self):
+    def on_button_aceptar(self):
         self.registrar.emit()
 
     def __set_label_error(self, color, mensaje):
-        self.__ui._label_error.setStyleSheet(f"color: {color}")
-        self.__ui._label_error.setText(mensaje)
+        self.__ui.label_error.setStyleSheet(f"color: {color}")
+        self.__ui.label_error.setText(mensaje)
 
     def __limpiar(self):
-        self.__ui._line_monto.clear()
+        self.__ui.line_monto.clear()
         self.__modelo_combobox_tipo.update_data([])
         self.__modelo_combobox_categoria.update_data([])
-        self.__ui._text_descripcion.clear()
-        self.__ui._calendar_fecha.setSelectedDate(QtCore.QDate.currentDate())
-        self.__ui._label_error.setText("")
+        self.__ui.text_descripcion.clear()
+        self.__ui.calendar_fecha.setSelectedDate(QtCore.QDate.currentDate())
+        self.__ui.label_error.setText("")
 
     def closeEvent(self, evnt):
         self.__limpiar()
@@ -95,11 +95,11 @@ class VentanaIngresoEgreso(QtWidgets.QDialog):
         self.__modelo_combobox_categoria.update_data(categorias)
 
     def obtener_transaccion(self):
-        monto = self.__ui._line_monto.text()
-        id_tipo = self.__ui._combobox_tipo_transaccion.currentData(QtCore.Qt.UserRole)
-        id_categoria = self.__ui._combobox_categorias.currentData(QtCore.Qt.UserRole)
-        descripcion = self.__ui._text_descripcion.toPlainText()
-        fecha = self.__ui._calendar_fecha.selectedDate().toPyDate()
+        monto = self.__ui.line_monto.text()
+        id_tipo = self.__ui.combobox_tipo_transaccion.currentData(QtCore.Qt.UserRole)
+        id_categoria = self.__ui.combobox_categorias.currentData(QtCore.Qt.UserRole)
+        descripcion = self.__ui.text_descripcion.toPlainText()
+        fecha = self.__ui.calendar_fecha.selectedDate().toPyDate()
         return TransaccionDTO(monto, id_tipo, id_categoria, descripcion, fecha)
 
 

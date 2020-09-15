@@ -45,27 +45,27 @@ class VistaPrincipal(QtWidgets.QMainWindow):
     def __setupUi(self):
         self.__ui.setupUi(self)
 
-    def _on_boton_agregar_ingreso(self):
+    def on_boton_agregar_ingreso(self):
         self.agregar_ingreso.emit()
 
-    def _on_boton_agregar_egreso(self):
+    def on_boton_agregar_egreso(self):
         self.agregar_egreso.emit()
 
-    def _on_boton_agregar_tipo_transaccion(self):
+    def on_boton_agregar_tipo_transaccion(self):
         self.agregar_tipo_transaccion.emit()
 
-    def _on_boton_agregar_categoria_ingreso(self):
+    def on_boton_agregar_categoria_ingreso(self):
         self.agregar_categoria_ingreso.emit()
 
-    def _on_boton_agregar_categoria_egreso(self):
+    def on_boton_agregar_categoria_egreso(self):
         self.agregar_categoria_egreso.emit()
 
     def actualizar_balance(self, valor):
-        self.__ui._line_balance.setText(f"Balance: ${valor}")
+        self.__ui.line_balance.setText(f"Balance: ${valor}")
 
     def actualizar_tabla(self, headers: list, maps: dict, data: list):
         self.__modelo = ModeloTablaTransaccion(headers, maps, data)
-        self.__ui._table_transaccion.setModel(self.__modelo)
+        self.__ui.table_transaccion.setModel(self.__modelo)
 
 
 if __name__ == "__main__":

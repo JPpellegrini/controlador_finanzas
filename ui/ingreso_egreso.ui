@@ -30,7 +30,7 @@
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <item>
-    <widget class="QLineEdit" name="_line_monto">
+    <widget class="QLineEdit" name="line_monto">
      <property name="text">
       <string/>
      </property>
@@ -40,38 +40,38 @@
     </widget>
    </item>
    <item>
-    <widget class="QComboBox" name="_combobox_tipo_transaccion">
+    <widget class="QComboBox" name="combobox_tipo_transaccion">
      <property name="placeholderText">
       <string>Tipo de Transacción (obligatorio)</string>
      </property>
     </widget>
    </item>
    <item>
-    <widget class="QComboBox" name="_combobox_categorias">
+    <widget class="QComboBox" name="combobox_categorias">
      <property name="placeholderText">
       <string>Categoría (obligatorio)</string>
      </property>
     </widget>
    </item>
    <item>
-    <widget class="QTextEdit" name="_text_descripcion">
+    <widget class="QTextEdit" name="text_descripcion">
      <property name="placeholderText">
       <string>Descripción</string>
      </property>
     </widget>
    </item>
    <item>
-    <widget class="QCalendarWidget" name="_calendar_fecha"/>
+    <widget class="QCalendarWidget" name="calendar_fecha"/>
    </item>
    <item>
-    <widget class="QLabel" name="_label_error">
+    <widget class="QLabel" name="label_error">
      <property name="text">
       <string/>
      </property>
     </widget>
    </item>
    <item>
-    <widget class="QPushButton" name="_button_aceptar">
+    <widget class="QPushButton" name="button_aceptar">
      <property name="palette">
       <palette>
        <active>
@@ -146,10 +146,10 @@
  <resources/>
  <connections>
   <connection>
-   <sender>_button_aceptar</sender>
+   <sender>button_aceptar</sender>
    <signal>clicked()</signal>
    <receiver>VentanaIngresoEgreso</receiver>
-   <slot>_on_button_aceptar()</slot>
+   <slot>on_button_aceptar()</slot>
    <hints>
     <hint type="sourcelabel">
      <x>164</x>
@@ -163,6 +163,6 @@
   </connection>
  </connections>
  <slots>
-  <slot>_on_button_aceptar()</slot>
+  <slot>on_button_aceptar()</slot>
  </slots>
 </ui>
