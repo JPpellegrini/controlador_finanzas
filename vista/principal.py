@@ -1,4 +1,8 @@
+import sys
+
+sys.path.append("..")
 from PyQt5 import QtCore, QtWidgets, QtGui
+from ui.principal import Ui_VistaPrincipal
 
 
 class ModeloTablaTransaccion(QtCore.QAbstractTableModel):
@@ -25,7 +29,7 @@ class ModeloTablaTransaccion(QtCore.QAbstractTableModel):
             return self.__headers[section]
 
 
-class VistaPrincipal(QtWidgets.QWidget):
+class VistaPrincipal(QtWidgets.QMainWindow):
 
     agregar_ingreso = QtCore.pyqtSignal()
     agregar_egreso = QtCore.pyqtSignal()
@@ -34,74 +38,34 @@ class VistaPrincipal(QtWidgets.QWidget):
     agregar_categoria_egreso = QtCore.pyqtSignal()
 
     def __init__(self):
-        QtWidgets.QWidget.__init__(self)
-        self.__setup_ui()
+        super().__init__()
+        self.__ui = Ui_VistaPrincipal()
+        self.__setupUi()
 
-    def __setup_ui(self):
-        self.setWindowTitle("Controlador de Finanzas")
-        self.__main_layout = QtWidgets.QHBoxLayout()
-        self.__btn_layout = QtWidgets.QVBoxLayout()
-        self.__cal_layout = QtWidgets.QVBoxLayout()
-        self.__opcion_layout = QtWidgets.QHBoxLayout()
+    def __setupUi(self):
+        self.__ui.setupUi(self)
 
-        self.__line_balance = QtWidgets.QLineEdit()
-        self.__btn_ingreso = QtWidgets.QPushButton("Nuevo Ingreso")
-        self.__btn_egreso = QtWidgets.QPushButton("Nuevo Egreso")
-        self.__btn_tipo_transaccion = QtWidgets.QPushButton("Nuevo Tipo de Transaccion")
-        self.__btn_categoria_ingreso = QtWidgets.QPushButton(
-            "Nueva Categoria de Ingreso"
-        )
-        self.__btn_categoria_egreso = QtWidgets.QPushButton("Nueva Categoria de Egreso")
-        self.__calendario = QtWidgets.QCalendarWidget()
-        self.__label_transaccion = QtWidgets.QLabel("Transacciones")
-        self.__table_transaccion = QtWidgets.QTableView()
-        self.__btn_editar = QtWidgets.QPushButton("Editar")
-        self.__btn_eliminar = QtWidgets.QPushButton("Eliminar")
-        self.__spacer = QtWidgets.QSpacerItem(
-            0, 0, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding
-        )
+    def on_boton_agregar_ingreso(self):
+        self.agregar_ingreso.emit()
 
-        self.__line_balance.setReadOnly(True)
-        self.__btn_editar.setEnabled(False)
-        self.__btn_eliminar.setEnabled(False)
-        self.__label_transaccion.setStyleSheet("color: #1E90FF")
+    def on_boton_agregar_egreso(self):
+        self.agregar_egreso.emit()
 
-        self.__btn_layout.addWidget(self.__btn_ingreso)
-        self.__btn_layout.addWidget(self.__btn_egreso)
-        self.__btn_layout.addWidget(self.__btn_tipo_transaccion)
-        self.__btn_layout.addWidget(self.__btn_categoria_ingreso)
-        self.__btn_layout.addWidget(self.__btn_categoria_egreso)
-        self.__btn_layout.addSpacerItem(self.__spacer)
-        self.__btn_layout.addWidget(self.__line_balance)
-        self.__cal_layout.addWidget(self.__calendario)
-        self.__cal_layout.addWidget(self.__label_transaccion)
-        self.__cal_layout.addWidget(self.__table_transaccion)
-        self.__opcion_layout.addWidget(self.__btn_editar)
-        self.__opcion_layout.addWidget(self.__btn_eliminar)
+    def on_boton_agregar_tipo_transaccion(self):
+        self.agregar_tipo_transaccion.emit()
 
-        self.__btn_ingreso.clicked.connect(lambda: self.agregar_ingreso.emit())
-        self.__btn_egreso.clicked.connect(lambda: self.agregar_egreso.emit())
-        self.__btn_tipo_transaccion.clicked.connect(
-            lambda: self.agregar_tipo_transaccion.emit()
-        )
-        self.__btn_categoria_ingreso.clicked.connect(
-            lambda: self.agregar_categoria_ingreso.emit()
-        )
-        self.__btn_categoria_egreso.clicked.connect(
-            lambda: self.agregar_categoria_egreso.emit()
-        )
+    def on_boton_agregar_categoria_ingreso(self):
+        self.agregar_categoria_ingreso.emit()
 
-        self.__main_layout.addLayout(self.__btn_layout)
-        self.__main_layout.addLayout(self.__cal_layout)
-        self.__btn_layout.addLayout(self.__opcion_layout)
-        self.setLayout(self.__main_layout)
+    def on_boton_agregar_categoria_egreso(self):
+        self.agregar_categoria_egreso.emit()
 
     def actualizar_balance(self, valor):
-        self.__line_balance.setText(f"Balance: {valor}")
+        self.__ui.line_balance.setText(f"Balance: ${valor}")
 
-    def setear_tabla(self, headers: list, maps: dict, data: list):
+    def actualizar_tabla(self, headers: list, maps: dict, data: list):
         self.__modelo = ModeloTablaTransaccion(headers, maps, data)
-        self.__table_transaccion.setModel(self.__modelo)
+        self.__ui.table_transaccion.setModel(self.__modelo)
 
 
 if __name__ == "__main__":
@@ -116,6 +80,6 @@ if __name__ == "__main__":
     ]
     ventana = VistaPrincipal()
     ventana.actualizar_balance(1000)
-    ventana.setear_tabla(headers, maps, data)
+    ventana.actualizar_tabla(headers, maps, data)
     ventana.show()
     app.exec()
