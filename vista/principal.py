@@ -3,6 +3,7 @@ import sys
 sys.path.append("..")
 from PyQt5 import QtCore, QtWidgets, QtGui
 from ui.principal import Ui_VistaPrincipal
+from dataclasses import dataclass
 
 
 @dataclass
@@ -17,12 +18,12 @@ class TransaccionDTO:
 
 
 class ModeloTablaTransaccion(QtCore.QAbstractTableModel):
-    def __init__(self, data):
+    def __init__(self, data: list):
         super().__init__()
         self.__headers = ("Monto", "Tipo", "Categoria", "Descripcion")
         self.__data = data
 
-    def get_cell_data(self, data_row, index):
+    def get_cell_data(self, data_row: object, index: int):
         column_field_map = {
             0: data_row.monto,
             1: data_row.tipo_transaccion,
@@ -70,6 +71,7 @@ class VistaPrincipal(QtWidgets.QMainWindow):
 
     def __setupUi(self):
         self.__ui.setupUi(self)
+        self.__selected_date = False
 
     def on_boton_agregar_ingreso(self):
         self.agregar_ingreso.emit()
@@ -86,12 +88,26 @@ class VistaPrincipal(QtWidgets.QMainWindow):
     def on_boton_agregar_categoria_egreso(self):
         self.agregar_categoria_egreso.emit()
 
-    def actualizar_balance(self, valor):
-        self.__ui.line_balance.setText(f"Balance: ${valor}")
+    def __actualizar_tabla(self, selected_date: bool):
+        data = self.__transacciones
+        if selected_date:
+            fecha = self.__ui.calendario.selectedDate()
+            data = [
+                transaccion
+                for transaccion in self.__transacciones
+                if transaccion.fecha == fecha.toPyDate()
+            ]
+        self.__modelo = ModeloTablaTransaccion(data)
+        self.__table_transaccion.setModel(self.__modelo)
 
-    def actualizar_tabla(self, headers: list, maps: dict, data: list):
-        self.__modelo = ModeloTablaTransaccion(headers, maps, data)
-        self.__ui.table_transaccion.setModel(self.__modelo)
+    def actualizar_transacciones(self, transacciones: list):
+        self.__transacciones = transacciones
+        self.__actualizar_tabla(self.__selected_date)
+        if not self.__selected_date:
+            self.__selected_date = True
+
+    def actualizar_balance(self, valor: float):
+        self.__ui.line_balance.setText(f"Balance: ${valor}")
 
 
 if __name__ == "__main__":
