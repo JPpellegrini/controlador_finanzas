@@ -5,18 +5,44 @@ from PyQt5 import QtCore, QtWidgets, QtGui
 from ui.principal import Ui_VistaPrincipal
 
 
+@dataclass
+class TransaccionDTO:
+    clasificacion: str
+    monto: str
+    tipo_transaccion: str
+    categoria: str
+    descripcion: str
+    fecha: str
+    id: int
+
+
 class ModeloTablaTransaccion(QtCore.QAbstractTableModel):
-    def __init__(self, headers, maps, data):
+    def __init__(self, data):
         super().__init__()
-        self.__headers = headers
-        self.__column_field_map = maps
+        self.__headers = ("Monto", "Tipo", "Categoria", "Descripcion")
         self.__data = data
 
+    def get_cell_data(self, data_row, index):
+        column_field_map = {
+            0: data_row.monto,
+            1: data_row.tipo_transaccion,
+            2: data_row.categoria,
+            3: data_row.descripcion,
+        }
+        return column_field_map[index]
+
     def data(self, index: QtCore.QModelIndex, role):
+        data_row = self.__data[index.row()]
+
         if role == QtCore.Qt.DisplayRole:
-            row_data = self.__data[index.row()]
-            column_key = self.__column_field_map[index.column()]
-            return row_data[column_key]
+            data_cell = self.get_cell_data(data_row, index.column())
+            return data_cell
+
+        if role == QtCore.Qt.BackgroundRole:
+            if data_row.clasificacion == "ingreso":
+                return QtGui.QColor("#aeebab")
+            if data_row.clasificacion == "egreso":
+                return QtGui.QColor("#f0c5c2")
 
     def rowCount(self, index):
         return len(self.__data)
@@ -72,14 +98,7 @@ if __name__ == "__main__":
     import sys
 
     app = QtWidgets.QApplication(sys.argv)
-    headers = ["Nombre", "Apellido"]
-    maps = {0: "nombre", 1: "apellido"}
-    data = [
-        dict(nombre="Juan Pablo", apellido="Pellegrini"),
-        dict(nombre="Pablo", apellido="Ingegnieri"),
-    ]
     ventana = VistaPrincipal()
     ventana.actualizar_balance(1000)
-    ventana.actualizar_tabla(headers, maps, data)
     ventana.show()
     app.exec()
