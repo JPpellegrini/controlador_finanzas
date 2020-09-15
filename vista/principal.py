@@ -88,6 +88,9 @@ class VistaPrincipal(QtWidgets.QMainWindow):
     def on_boton_agregar_categoria_egreso(self):
         self.agregar_categoria_egreso.emit()
 
+    def on_click_calendario(self):
+        self.__actualizar_tabla(self.__selected_date)
+
     def __actualizar_tabla(self, selected_date: bool):
         data = self.__transacciones
         if selected_date:
@@ -98,7 +101,7 @@ class VistaPrincipal(QtWidgets.QMainWindow):
                 if transaccion.fecha == fecha.toPyDate()
             ]
         self.__modelo = ModeloTablaTransaccion(data)
-        self.__table_transaccion.setModel(self.__modelo)
+        self.__ui.table_transaccion.setModel(self.__modelo)
 
     def actualizar_transacciones(self, transacciones: list):
         self.__transacciones = transacciones
