@@ -414,6 +414,22 @@
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>calendario</sender>
+   <signal>clicked(QDate)</signal>
+   <receiver>VistaPrincipal</receiver>
+   <slot>on_click_calendario()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>375</x>
+     <y>113</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>274</x>
+     <y>234</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>on_boton_agregar_ingreso()</slot>
@@ -421,5 +437,6 @@
   <slot>on_boton_agregar_tipo_transaccion()</slot>
   <slot>on_boton_agregar_categoria_ingreso()</slot>
   <slot>on_boton_agregar_categoria_egreso()</slot>
+  <slot>on_click_calendario()</slot>
  </slots>
 </ui>
