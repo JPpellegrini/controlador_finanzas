@@ -3,20 +3,47 @@ import sys
 sys.path.append("..")
 from PyQt5 import QtCore, QtWidgets, QtGui
 from ui.principal import Ui_VistaPrincipal
+from dataclasses import dataclass
+
+
+@dataclass
+class TransaccionDTO:
+    clasificacion: str
+    monto: str
+    tipo_transaccion: str
+    categoria: str
+    descripcion: str
+    fecha: str
+    id: int
 
 
 class ModeloTablaTransaccion(QtCore.QAbstractTableModel):
-    def __init__(self, headers, maps, data):
+    def __init__(self, data: list):
         super().__init__()
-        self.__headers = headers
-        self.__column_field_map = maps
+        self.__headers = ("Monto", "Tipo", "Categoria", "Descripcion")
         self.__data = data
 
+    def get_cell_data(self, data_row: object, index: int):
+        column_field_map = {
+            0: data_row.monto,
+            1: data_row.tipo_transaccion,
+            2: data_row.categoria,
+            3: data_row.descripcion,
+        }
+        return column_field_map[index]
+
     def data(self, index: QtCore.QModelIndex, role):
+        data_row = self.__data[index.row()]
+
         if role == QtCore.Qt.DisplayRole:
-            row_data = self.__data[index.row()]
-            column_key = self.__column_field_map[index.column()]
-            return row_data[column_key]
+            data_cell = self.get_cell_data(data_row, index.column())
+            return data_cell
+
+        if role == QtCore.Qt.BackgroundRole:
+            if data_row.clasificacion == "ingreso":
+                return QtGui.QColor("#aeebab")
+            if data_row.clasificacion == "egreso":
+                return QtGui.QColor("#f0c5c2")
 
     def rowCount(self, index):
         return len(self.__data)
@@ -44,6 +71,7 @@ class VistaPrincipal(QtWidgets.QMainWindow):
 
     def __setupUi(self):
         self.__ui.setupUi(self)
+        self.__selected_date = False
 
     def on_boton_agregar_ingreso(self):
         self.agregar_ingreso.emit()
@@ -60,26 +88,36 @@ class VistaPrincipal(QtWidgets.QMainWindow):
     def on_boton_agregar_categoria_egreso(self):
         self.agregar_categoria_egreso.emit()
 
-    def actualizar_balance(self, valor):
-        self.__ui.line_balance.setText(f"Balance: ${valor}")
+    def on_click_calendario(self):
+        self.__actualizar_tabla(self.__selected_date)
 
-    def actualizar_tabla(self, headers: list, maps: dict, data: list):
-        self.__modelo = ModeloTablaTransaccion(headers, maps, data)
+    def __actualizar_tabla(self, selected_date: bool):
+        data = self.__transacciones
+        if selected_date:
+            fecha = self.__ui.calendario.selectedDate()
+            data = [
+                transaccion
+                for transaccion in self.__transacciones
+                if transaccion.fecha == fecha.toPyDate()
+            ]
+        self.__modelo = ModeloTablaTransaccion(data)
         self.__ui.table_transaccion.setModel(self.__modelo)
+
+    def actualizar_transacciones(self, transacciones: list):
+        self.__transacciones = transacciones
+        self.__actualizar_tabla(self.__selected_date)
+        if not self.__selected_date:
+            self.__selected_date = True
+
+    def actualizar_balance(self, valor: float):
+        self.__ui.line_balance.setText(f"Balance: ${valor}")
 
 
 if __name__ == "__main__":
     import sys
 
     app = QtWidgets.QApplication(sys.argv)
-    headers = ["Nombre", "Apellido"]
-    maps = {0: "nombre", 1: "apellido"}
-    data = [
-        dict(nombre="Juan Pablo", apellido="Pellegrini"),
-        dict(nombre="Pablo", apellido="Ingegnieri"),
-    ]
     ventana = VistaPrincipal()
     ventana.actualizar_balance(1000)
-    ventana.actualizar_tabla(headers, maps, data)
     ventana.show()
     app.exec()
