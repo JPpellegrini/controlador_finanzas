@@ -4,31 +4,34 @@ sys.path.append("..")
 from PyQt5 import QtCore, QtWidgets, QtGui
 from ui.principal import Ui_VistaPrincipal
 from dataclasses import dataclass
+from datetime import date
 
 
 @dataclass
 class TransaccionDTO:
     clasificacion: str
-    monto: str
+    monto: float
     tipo_transaccion: str
     categoria: str
     descripcion: str
-    fecha: str
+    fecha: date
     id: int
 
 
 class ModeloTablaTransaccion(QtCore.QAbstractTableModel):
-    def __init__(self, data: list):
+    def __init__(self, data: list, selected_date: bool):
         super().__init__()
-        self.__headers = ("Monto", "Tipo", "Categoria", "Descripcion")
+        self.__headers = ("Monto", "Tipo", "Categoria", "Descripcion", "Fecha")
         self.__data = data
+        self.__selected_date = selected_date
 
     def get_cell_data(self, data_row: object, index: int):
         column_field_map = {
-            0: data_row.monto,
+            0: "$ " + str(data_row.monto),
             1: data_row.tipo_transaccion,
             2: data_row.categoria,
             3: data_row.descripcion,
+            4: data_row.fecha.strftime("%d/%m/%Y"),
         }
         return column_field_map[index]
 
@@ -39,17 +42,21 @@ class ModeloTablaTransaccion(QtCore.QAbstractTableModel):
             data_cell = self.get_cell_data(data_row, index.column())
             return data_cell
 
-        if role == QtCore.Qt.BackgroundRole:
-            if data_row.clasificacion == "ingreso":
-                return QtGui.QColor("#aeebab")
-            if data_row.clasificacion == "egreso":
-                return QtGui.QColor("#f0c5c2")
+        if role == QtCore.Qt.ForegroundRole:
+            if index.column() == 0:
+                if data_row.clasificacion == "ingreso":
+                    return QtGui.QColor("#11a64f")
+                if data_row.clasificacion == "egreso":
+                    return QtGui.QColor("#a61111")
+            return QtGui.QColor("#000000")
 
     def rowCount(self, index):
         return len(self.__data)
 
     def columnCount(self, parent):
-        return len(self.__headers)
+        if not self.__selected_date:
+            return len(self.__headers)
+        return len(self.__headers) - 1
 
     def headerData(self, section, orientation, role):
         if role == QtCore.Qt.DisplayRole and orientation == QtCore.Qt.Horizontal:
@@ -100,7 +107,7 @@ class VistaPrincipal(QtWidgets.QMainWindow):
                 for transaccion in self.__transacciones
                 if transaccion.fecha == fecha.toPyDate()
             ]
-        self.__modelo = ModeloTablaTransaccion(data)
+        self.__modelo = ModeloTablaTransaccion(data, self.__selected_date)
         self.__ui.table_transaccion.setModel(self.__modelo)
 
     def actualizar_transacciones(self, transacciones: list):
