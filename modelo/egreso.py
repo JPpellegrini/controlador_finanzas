@@ -2,7 +2,12 @@ from dataclasses import dataclass
 from modelo.recursos import Database
 from modelo.tipo_transaccion import ServiceTipoTransaccion
 from modelo.categoria_egreso import ServiceCategoriaEgreso
-from datetime import date
+from datetime import datetime, date
+
+
+@dataclass
+class FiltroDTO:
+    fecha: date
 
 
 @dataclass
@@ -11,7 +16,7 @@ class EgresoDTO:
     id_tipo_transaccion: int
     id_categoria: int
     descripcion: str
-    fecha: date
+    fecha: datetime
     id: int = None
 
 
@@ -34,8 +39,6 @@ class ServiceEgreso:
     def __init__(self):
         self.database = Database.get()
         self.cursor = self.database.cursor()
-        self.svc_tipos = ServiceTipoTransaccion()
-        self.svc_categorias = ServiceCategoriaEgreso()
 
     def registrar_egreso(self, data: EgresoDTO):
         try:
@@ -85,10 +88,20 @@ class ServiceEgreso:
         self.cursor.execute("DELETE FROM egresos WHERE id = %s", data.id)
         self.database.commit()
 
-    def obtener_egresos(self):
+    def obtener_egresos(self, filtro: FiltroDTO = FiltroDTO(None)):
+        condiciones = []
+        parametros = []
+
+        if filtro.fecha:
+            condiciones.append("DATE(e.fecha) = %s")
+            parametros.append(filtro.fecha)
+        condiciones_unidas = "AND".join(condiciones) or True
+
         self.cursor.execute(
-            "SELECT e.id, e.monto, t.nombre as tipo, c.nombre as categoria, e.descripcion, e.fecha FROM egresos e JOIN\
-             tipos_transaccion t ON e.tipo=t.id JOIN categorias_egreso c ON e.categoria_egreso=c.id"
+            f"SELECT e.id, e.monto, t.nombre as tipo, c.nombre as categoria, e.descripcion, e.fecha FROM egresos e\
+              JOIN tipos_transaccion t ON e.tipo=t.id JOIN categorias_egreso c ON e.categoria_egreso=c.id\
+              WHERE {condiciones_unidas}",
+            parametros,
         )
         return [
             EgresoDTO(
@@ -101,9 +114,3 @@ class ServiceEgreso:
             )
             for egreso in self.cursor.fetchall()
         ]
-
-    def obtener_tipos_categorias(self):
-        return dict(
-            tipos=self.svc_tipos.obtener_tipos(),
-            categorias=self.svc_categorias.obtener_cat_egreso(),
-        )

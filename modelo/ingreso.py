@@ -1,8 +1,16 @@
+import sys
+
+sys.path.append("..")
 from dataclasses import dataclass
 from modelo.recursos import Database
 from modelo.tipo_transaccion import ServiceTipoTransaccion
 from modelo.categoria_ingreso import ServiceCategoriaIngreso
-from datetime import date
+from datetime import datetime, date
+
+
+@dataclass
+class FiltroDTO:
+    fecha: date
 
 
 @dataclass
@@ -11,7 +19,7 @@ class IngresoDTO:
     id_tipo_transaccion: int
     id_categoria: int
     descripcion: str
-    fecha: date
+    fecha: datetime
     id: int = None
 
 
@@ -34,8 +42,6 @@ class ServiceIngreso:
     def __init__(self):
         self.database = Database.get()
         self.cursor = self.database.cursor()
-        self.srv_tipos = ServiceTipoTransaccion()
-        self.srv_categorias = ServiceCategoriaIngreso()
 
     def registrar_ingreso(self, data: IngresoDTO):
         try:
@@ -85,10 +91,20 @@ class ServiceIngreso:
         self.cursor.execute("DELETE FROM ingresos WHERE id = %s", data.id)
         self.database.commit()
 
-    def obtener_ingresos(self):
+    def obtener_ingresos(self, filtro: FiltroDTO = FiltroDTO(None)):
+        condiciones = []
+        parametros = []
+
+        if filtro.fecha:
+            condiciones.append("DATE(i.fecha) = %s")
+            parametros.append(filtro.fecha)
+        condiciones_unidas = "AND".join(condiciones) or True
+
         self.cursor.execute(
-            "SELECT i.id, i.monto, t.nombre as tipo, c.nombre as categoria, i.descripcion, i.fecha FROM ingresos i JOIN\
-             tipos_transaccion t ON i.tipo=t.id JOIN categorias_ingreso c ON i.categoria_ingreso=c.id"
+            f"SELECT i.id, i.monto, t.nombre as tipo, c.nombre as categoria, i.descripcion, i.fecha\
+              FROM ingresos i JOIN tipos_transaccion t ON i.tipo=t.id JOIN categorias_ingreso c ON i.categoria_ingreso=c.id\
+              WHERE {condiciones_unidas}",
+            parametros,
         )
         return [
             IngresoDTO(
@@ -101,9 +117,3 @@ class ServiceIngreso:
             )
             for ingreso in self.cursor.fetchall()
         ]
-
-    def obtener_tipos_categorias(self):
-        return dict(
-            tipos=self.srv_tipos.obtener_tipos(),
-            categorias=self.srv_categorias.obtener_cat_ingreso(),
-        )
