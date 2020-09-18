@@ -78,13 +78,13 @@ CREATE TABLE `egresos` (
   `tipo` int(11) DEFAULT NULL,
   `categoria_egreso` int(11) DEFAULT NULL,
   `descripcion` varchar(250) DEFAULT NULL,
-  `fecha` date NOT NULL,
+  `fecha` datetime NOT NULL,
   PRIMARY KEY (`id`),
   KEY `id_mov_idx` (`tipo`),
   KEY `id_cat_egr_idx` (`categoria_egreso`),
   CONSTRAINT `id_cat_egr` FOREIGN KEY (`categoria_egreso`) REFERENCES `categorias_egreso` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   CONSTRAINT `id_tipos` FOREIGN KEY (`tipo`) REFERENCES `tipos_transaccion` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -93,7 +93,7 @@ CREATE TABLE `egresos` (
 
 LOCK TABLES `egresos` WRITE;
 /*!40000 ALTER TABLE `egresos` DISABLE KEYS */;
-INSERT INTO `egresos` VALUES (2,200,2,3,'','2020-09-18');
+INSERT INTO `egresos` VALUES (2,200,2,3,'','2020-09-18 00:00:00'),(4,100,2,2,'','2020-09-15 00:00:00');
 /*!40000 ALTER TABLE `egresos` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -110,13 +110,13 @@ CREATE TABLE `ingresos` (
   `tipo` int(11) DEFAULT NULL,
   `categoria_ingreso` int(11) DEFAULT NULL,
   `descripcion` varchar(250) DEFAULT NULL,
-  `fecha` date NOT NULL,
+  `fecha` datetime NOT NULL,
   PRIMARY KEY (`id`),
   KEY `id_categotia_ing_idx` (`categoria_ingreso`),
   KEY `id_movimiento_idx` (`tipo`),
   CONSTRAINT `id_categotia_ing` FOREIGN KEY (`categoria_ingreso`) REFERENCES `categorias_ingreso` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   CONSTRAINT `id_tipo` FOREIGN KEY (`tipo`) REFERENCES `tipos_transaccion` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -125,7 +125,7 @@ CREATE TABLE `ingresos` (
 
 LOCK TABLES `ingresos` WRITE;
 /*!40000 ALTER TABLE `ingresos` DISABLE KEYS */;
-INSERT INTO `ingresos` VALUES (2,1000,1,2,'','2020-09-16');
+INSERT INTO `ingresos` VALUES (2,1000,1,2,'','2020-09-16 00:00:00'),(3,200,1,1,'Asd','2020-09-16 17:56:23');
 /*!40000 ALTER TABLE `ingresos` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -163,4 +163,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2020-09-09 17:48:17
+-- Dump completed on 2020-09-18 15:48:45
