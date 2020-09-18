@@ -10,6 +10,8 @@ from modelo.egreso import (
     TipoError,
     CategoriaError,
 )
+from modelo.tipo_transaccion import ServiceTipoTransaccion as TipoTransaccion
+from modelo.categoria_egreso import ServiceCategoriaEgreso as CategoriaEgreso
 
 
 class ControladorEgreso(QtCore.QObject):
@@ -38,8 +40,10 @@ class ControladorEgreso(QtCore.QObject):
         except (MontoError, TipoError, CategoriaError) as error:
             self.__vista.mostrar_error(error)
 
+    def __actualizar_tipos_categorias(self):
+        self.__vista.actualizar_tipos_transaccion(TipoTransaccion().obtener_tipos())
+        self.__vista.actualizar_categorias(CategoriaEgreso().obtener_cat_egreso())
+
     def show_vista(self):
-        tipos_categorias = self.__modelo.obtener_tipos_categorias()
-        self.__vista.actualizar_tipos_transaccion(tipos_categorias["tipos"])
-        self.__vista.actualizar_categorias(tipos_categorias["categorias"])
+        self.__actualizar_tipos_categorias()
         self.__vista.show()
