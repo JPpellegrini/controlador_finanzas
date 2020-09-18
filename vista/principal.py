@@ -4,7 +4,7 @@ sys.path.append("..")
 from PyQt5 import QtCore, QtWidgets, QtGui
 from ui.principal import Ui_VistaPrincipal
 from dataclasses import dataclass
-from datetime import date
+from datetime import datetime, date
 
 
 @dataclass
@@ -14,12 +14,12 @@ class TransaccionDTO:
     tipo_transaccion: str
     categoria: str
     descripcion: str
-    fecha: date
+    fecha: datetime
     id: int
 
 
 class ModeloTablaTransaccion(QtCore.QAbstractTableModel):
-    def __init__(self, data: list, selected_date: bool):
+    def __init__(self, data: list, selected_date):
         super().__init__()
         self.__headers = ("Monto", "Tipo", "Categoria", "Descripcion", "Fecha")
         self.__data = data
@@ -70,6 +70,7 @@ class VistaPrincipal(QtWidgets.QMainWindow):
     agregar_tipo_transaccion = QtCore.pyqtSignal()
     agregar_categoria_ingreso = QtCore.pyqtSignal()
     agregar_categoria_egreso = QtCore.pyqtSignal()
+    actualizar_transacciones = QtCore.pyqtSignal()
 
     def __init__(self):
         super().__init__()
@@ -78,7 +79,7 @@ class VistaPrincipal(QtWidgets.QMainWindow):
 
     def __setupUi(self):
         self.__ui.setupUi(self)
-        self.__selected_date = False
+        self.__selected_date = None
 
     def on_boton_agregar_ingreso(self):
         self.agregar_ingreso.emit()
@@ -96,28 +97,19 @@ class VistaPrincipal(QtWidgets.QMainWindow):
         self.agregar_categoria_egreso.emit()
 
     def on_click_calendario(self):
-        self.__actualizar_tabla(self.__selected_date)
+        self.__selected_date = self.__ui.calendario.selectedDate()
+        self.actualizar_transacciones.emit()
 
-    def __actualizar_tabla(self, selected_date: bool):
-        data = self.__transacciones
-        if selected_date:
-            fecha = self.__ui.calendario.selectedDate()
-            data = [
-                transaccion
-                for transaccion in self.__transacciones
-                if transaccion.fecha == fecha.toPyDate()
-            ]
-        self.__modelo = ModeloTablaTransaccion(data, self.__selected_date)
+    def actualizar_tabla(self, data: list):
+        self.__transacciones = data
+        self.__modelo = ModeloTablaTransaccion(self.__transacciones, self.__selected_date)
         self.__ui.table_transaccion.setModel(self.__modelo)
-
-    def actualizar_transacciones(self, transacciones: list):
-        self.__transacciones = transacciones
-        self.__actualizar_tabla(self.__selected_date)
-        if not self.__selected_date:
-            self.__selected_date = True
 
     def actualizar_balance(self, valor: float):
         self.__ui.line_balance.setText(f"Balance: ${valor}")
+    
+    def obtener_fecha(self):
+        return self.__selected_date.toPyDate()
 
 
 if __name__ == "__main__":
