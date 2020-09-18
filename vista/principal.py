@@ -97,7 +97,6 @@ class VistaPrincipal(QtWidgets.QMainWindow):
         self.agregar_categoria_egreso.emit()
 
     def on_click_calendario(self):
-        self.__selected_date = self.__ui.calendario.selectedDate()
         self.actualizar_transacciones.emit()
 
     def actualizar_tabla(self, data: list):
@@ -109,6 +108,7 @@ class VistaPrincipal(QtWidgets.QMainWindow):
         self.__ui.line_balance.setText(f"Balance: ${valor}")
     
     def obtener_fecha(self):
+        self.__selected_date = self.__ui.calendario.selectedDate()
         return self.__selected_date.toPyDate()
 
 

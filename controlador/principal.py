@@ -100,7 +100,7 @@ class ControladorPrincipal:
             )
             for egreso in lista_egresos
         ]
-        return ingresos + egresos
+        return sorted(ingresos + egresos, key=lambda transaccion: transaccion.fecha, reverse=True)
 
     def show_vista(self):
         self.__vista.show()

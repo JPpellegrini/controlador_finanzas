@@ -4,7 +4,7 @@ sys.path.append("..")
 from PyQt5 import QtCore, QtWidgets, QtGui
 from dataclasses import dataclass
 from ui.ingreso_egreso import Ui_VentanaIngresoEgreso
-from datetime import date
+from datetime import datetime
 
 
 @dataclass
@@ -13,7 +13,7 @@ class TransaccionDTO:
     id_tipo_transaccion: int
     id_categoria: int
     descripcion: str
-    fecha: date
+    fecha: datetime
 
 
 @dataclass
@@ -99,7 +99,11 @@ class VentanaIngresoEgreso(QtWidgets.QDialog):
         id_tipo = self.__ui.combobox_tipo_transaccion.currentData(QtCore.Qt.UserRole)
         id_categoria = self.__ui.combobox_categorias.currentData(QtCore.Qt.UserRole)
         descripcion = self.__ui.text_descripcion.toPlainText()
-        fecha = self.__ui.calendar_fecha.selectedDate().toPyDate()
+        selected_date = self.__ui.calendar_fecha.selectedDate().toPyDate()
+        current_datetime = datetime.now()
+        fecha = current_datetime.replace(
+            year=selected_date.year, month=selected_date.month, day=selected_date.day
+        )
         return TransaccionDTO(monto, id_tipo, id_categoria, descripcion, fecha)
 
 
