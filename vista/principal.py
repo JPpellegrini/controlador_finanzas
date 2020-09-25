@@ -48,7 +48,6 @@ class ModeloTablaTransaccion(QtCore.QAbstractTableModel):
                     return QtGui.QColor("#11a64f")
                 if data_row.clasificacion == "egreso":
                     return QtGui.QColor("#a61111")
-            return QtGui.QColor("#000000")
 
     def rowCount(self, index):
         return len(self.__data)
@@ -101,12 +100,14 @@ class VistaPrincipal(QtWidgets.QMainWindow):
 
     def actualizar_tabla(self, data: list):
         self.__transacciones = data
-        self.__modelo = ModeloTablaTransaccion(self.__transacciones, self.__selected_date)
+        self.__modelo = ModeloTablaTransaccion(
+            self.__transacciones, self.__selected_date
+        )
         self.__ui.table_transaccion.setModel(self.__modelo)
 
     def actualizar_balance(self, valor: float):
         self.__ui.line_balance.setText(f"Balance: ${valor}")
-    
+
     def obtener_fecha(self):
         self.__selected_date = self.__ui.calendario.selectedDate()
         return self.__selected_date.toPyDate()
