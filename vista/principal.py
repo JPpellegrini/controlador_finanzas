@@ -19,11 +19,10 @@ class TransaccionDTO:
 
 
 class ModeloTablaTransaccion(QtCore.QAbstractTableModel):
-    def __init__(self, data: list, selected_date):
+    def __init__(self, data: list):
         super().__init__()
         self.__headers = ("Monto", "Tipo", "Categoria", "Descripcion", "Fecha")
         self.__data = data
-        self.__selected_date = selected_date
 
     def get_cell_data(self, data_row: object, index: int):
         column_field_map = {
@@ -53,9 +52,7 @@ class ModeloTablaTransaccion(QtCore.QAbstractTableModel):
         return len(self.__data)
 
     def columnCount(self, parent):
-        if not self.__selected_date:
-            return len(self.__headers)
-        return len(self.__headers) - 1
+        return len(self.__headers)
 
     def headerData(self, section, orientation, role):
         if role == QtCore.Qt.DisplayRole and orientation == QtCore.Qt.Horizontal:
@@ -100,9 +97,7 @@ class VistaPrincipal(QtWidgets.QMainWindow):
 
     def actualizar_tabla(self, data: list):
         self.__transacciones = data
-        self.__modelo = ModeloTablaTransaccion(
-            self.__transacciones, self.__selected_date
-        )
+        self.__modelo = ModeloTablaTransaccion(self.__transacciones)
         self.__ui.table_transaccion.setModel(self.__modelo)
 
     def actualizar_balance(self, valor: float):
