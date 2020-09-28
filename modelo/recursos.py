@@ -2,7 +2,7 @@ import os
 
 import pymysql
 from dotenv import load_dotenv
-from sqlalchemy import create_engine
+from sqlalchemy import create_engine, Column, Integer, String
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 
@@ -13,8 +13,15 @@ password = os.getenv("MYSQL_PASSWORD")
 engine = create_engine(f"mysql+pymysql://{username}:{password}@localhost/finanzas")
 
 Session = sessionmaker(bind=engine)
-
 Base = declarative_base()
+
+
+class TipoTransaccion(Base):
+    __tablename__ = "tipos_transaccion"
+
+    id = Column(Integer, primary_key=True)
+    nombre = Column(String)
+    descripcion = Column(String)
 
 
 class Database:
