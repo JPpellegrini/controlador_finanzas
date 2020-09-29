@@ -1,9 +1,10 @@
 from dataclasses import dataclass
-from modelo.recursos import Database
+
+from app.modelo.recursos import Database
 
 
 @dataclass
-class CategoriaIngresoDTO:
+class CategoriaEgresoDTO:
     nombre: str
     descripcion: str
     id: int = None
@@ -19,40 +20,40 @@ class CategoriaUsoError(Exception):
         return "Error, categoria/s en uso"
 
 
-class ServiceCategoriaIngreso:
+class ServiceCategoriaEgreso:
     def __init__(self):
         self.database = Database.get()
         self.cursor = self.database.cursor()
 
-    def registrar_cat_ingreso(self, data: CategoriaIngresoDTO):
+    def registrar_cat_egreso(self, data: CategoriaEgresoDTO):
         if data.nombre == "":
             raise NombreError
         self.cursor.execute(
-            "INSERT INTO categorias_ingreso (id, nombre, descripcion) VALUES (%s, %s, %s)",
+            "INSERT INTO categorias_egreso (id, nombre, descripcion) VALUES (%s, %s, %s)",
             (data.id, data.nombre, data.descripcion),
         )
         self.database.commit()
 
-    def editar_cat_ingreso(self, data: CategoriaIngresoDTO):
+    def editar_cat_egreso(self, data: CategoriaEgresoDTO):
         if data.nombre == "":
             raise NombreError
         self.cursor.execute(
-            "UPDATE categorias_ingreso SET nombre=%s, descripcion=%s WHERE id = %s",
+            "UPDATE categorias_egreso SET nombre=%s, descripcion=%s WHERE id = %s",
             (data.nombre, data.descripcion, data.id),
         )
         self.database.commit()
 
-    def eliminar_cat_ingreso(self, data: CategoriaIngresoDTO):
+    def eliminar_cat_egreso(self, data: CategoriaEgresoDTO):
         try:
-            self.cursor.execute("DELETE FROM categorias_ingreso WHERE id = %s", data.id)
+            self.cursor.execute("DELETE FROM categorias_egreso WHERE id = %s", data.id)
             self.database.commit()
         except pymysql.Error:
             raise CategoriaUsoError
 
-    def obtener_cat_ingreso(self):
-        self.cursor.execute("SELECT id, nombre, descripcion FROM categorias_ingreso")
+    def obtener_cat_egreso(self):
+        self.cursor.execute("SELECT id, nombre, descripcion FROM categorias_egreso")
         return [
-            CategoriaIngresoDTO(
+            CategoriaEgresoDTO(
                 categoria["nombre"], categoria["descripcion"], categoria["id"]
             )
             for categoria in self.cursor.fetchall()

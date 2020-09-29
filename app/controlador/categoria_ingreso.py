@@ -1,8 +1,5 @@
-import sys
-
-sys.path.append("..")
-from vista.tipo_categoria import VentanaCategoriaIngreso
-from modelo.categoria_ingreso import (
+from app.vista.tipo_categoria import VentanaCategoriaIngreso
+from app.modelo.categoria_ingreso import (
     ServiceCategoriaIngreso,
     CategoriaIngresoDTO,
     NombreError,

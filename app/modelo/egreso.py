@@ -1,8 +1,9 @@
 from dataclasses import dataclass
-from modelo.recursos import Database
-from modelo.tipo_transaccion import ServiceTipoTransaccion
-from modelo.categoria_egreso import ServiceCategoriaEgreso
 from datetime import datetime, date
+
+from app.modelo.recursos import Database
+from app.modelo.tipo_transaccion import ServiceTipoTransaccion
+from app.modelo.categoria_egreso import ServiceCategoriaEgreso
 
 
 @dataclass
