@@ -37,7 +37,9 @@ class ControladorPrincipal:
         self.__vista.agregar_categoria_egreso.connect(
             self.__on_agregar_categoria_egreso
         )
-        self.__vista.actualizar_transacciones.connect(self.__on_actualizar_transacciones)
+        self.__vista.actualizar_transacciones.connect(
+            self.__on_actualizar_transacciones
+        )
 
     def __on_agregar_ingreso(self):
         self.__ctl_ingreso.show_vista()
@@ -60,14 +62,16 @@ class ControladorPrincipal:
 
     def __calcular_balance(self):
         self.__vista.actualizar_balance(Balance.calcular())
-    
+
     def __on_actualizar_transacciones(self):
         fecha = self.__vista.obtener_fecha()
         self.__vista.actualizar_tabla(self.__obtener_transacciones(fecha))
 
     def __obtener_transacciones(self, fecha=None):
         if fecha:
-            lista_ingresos = self.__modelo_ingreso.obtener_ingresos(FiltroIngresoDTO(fecha))
+            lista_ingresos = self.__modelo_ingreso.obtener_ingresos(
+                FiltroIngresoDTO(fecha)
+            )
             lista_egresos = self.__modelo_egreso.obtener_egresos(FiltroEgresoDTO(fecha))
         else:
             lista_ingresos = self.__modelo_ingreso.obtener_ingresos()
@@ -97,7 +101,9 @@ class ControladorPrincipal:
             )
             for egreso in lista_egresos
         ]
-        return sorted(ingresos + egresos, key=lambda transaccion: transaccion.fecha, reverse=True)
+        return sorted(
+            ingresos + egresos, key=lambda transaccion: transaccion.fecha, reverse=True
+        )
 
     def show_vista(self):
         self.__vista.show()

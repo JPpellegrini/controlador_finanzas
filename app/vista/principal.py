@@ -1,7 +1,6 @@
 from PyQt5 import QtCore, QtWidgets, QtGui
+
 from app.ui.principal import Ui_VistaPrincipal
-from dataclasses import dataclass
-from datetime import datetime, date
 
 
 @dataclass

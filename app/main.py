@@ -1,12 +1,14 @@
 import sys
 import os
+
 from PyQt5 import QtWidgets
-from app.controlador.principal import ControladorPrincipal
-from app.modelo.recursos import Database
 from dotenv import load_dotenv
 
-load_dotenv()
+from app.controlador.principal import ControladorPrincipal
+from app.modelo.recursos import Database
 
+
+load_dotenv()
 
 db_user = dict(
     username=os.getenv("MYSQL_USERNAME"),
