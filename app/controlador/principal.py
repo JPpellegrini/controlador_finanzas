@@ -1,12 +1,12 @@
-from vista.principal import VistaPrincipal, TransaccionDTO
-from controlador.categoria_egreso import ControladorCategoriaEgreso
-from controlador.categoria_ingreso import ControladorCategoriaIngreso
-from controlador.egreso import ControladorEgreso
-from controlador.ingreso import ControladorIngreso
-from controlador.tipo_transaccion import ControladorTipoTransaccion
-from modelo.recursos import Balance
-from modelo.ingreso import ServiceIngreso, FiltroDTO as FiltroIngresoDTO
-from modelo.egreso import ServiceEgreso, FiltroDTO as FiltroEgresoDTO
+from app.vista.principal import VistaPrincipal, TransaccionDTO
+from app.controlador.categoria_egreso import ControladorCategoriaEgreso
+from app.controlador.categoria_ingreso import ControladorCategoriaIngreso
+from app.controlador.egreso import ControladorEgreso
+from app.controlador.ingreso import ControladorIngreso
+from app.controlador.tipo_transaccion import ControladorTipoTransaccion
+from app.modelo.recursos import Balance
+from app.modelo.ingreso import ServiceIngreso, FiltroDTO as FiltroIngresoDTO
+from app.modelo.egreso import ServiceEgreso, FiltroDTO as FiltroEgresoDTO
 
 
 class ControladorPrincipal:

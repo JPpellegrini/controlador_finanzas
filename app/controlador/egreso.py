@@ -1,15 +1,15 @@
 from PyQt5 import QtCore
 
-from vista.ingreso_egreso import VentanaEgreso, TipoCategoriaDTO
-from modelo.egreso import (
+from app.vista.ingreso_egreso import VentanaEgreso, TipoCategoriaDTO
+from app.modelo.egreso import (
     ServiceEgreso,
     EgresoDTO,
     MontoError,
     TipoError,
     CategoriaError,
 )
-from modelo.tipo_transaccion import ServiceTipoTransaccion as TipoTransaccion
-from modelo.categoria_egreso import ServiceCategoriaEgreso as CategoriaEgreso
+from app.modelo.tipo_transaccion import ServiceTipoTransaccion as TipoTransaccion
+from app.modelo.categoria_egreso import ServiceCategoriaEgreso as CategoriaEgreso
 
 
 class ControladorEgreso(QtCore.QObject):

@@ -1,7 +1,7 @@
 from dataclasses import dataclass
-from modelo.recursos import Database
-from modelo.tipo_transaccion import ServiceTipoTransaccion
-from modelo.categoria_ingreso import ServiceCategoriaIngreso
+from app.modelo.recursos import Database
+from app.modelo.tipo_transaccion import ServiceTipoTransaccion
+from app.modelo.categoria_ingreso import ServiceCategoriaIngreso
 from datetime import datetime, date
 
 

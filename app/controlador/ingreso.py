@@ -1,15 +1,15 @@
 from PyQt5 import QtCore
 
-from vista.ingreso_egreso import VentanaIngreso, TipoCategoriaDTO
-from modelo.ingreso import (
+from app.vista.ingreso_egreso import VentanaIngreso, TipoCategoriaDTO
+from app.modelo.ingreso import (
     ServiceIngreso,
     IngresoDTO,
     MontoError,
     TipoError,
     CategoriaError,
 )
-from modelo.tipo_transaccion import ServiceTipoTransaccion as TipoTransaccion
-from modelo.categoria_ingreso import ServiceCategoriaIngreso as CategoriaIngreso
+from app.modelo.tipo_transaccion import ServiceTipoTransaccion as TipoTransaccion
+from app.modelo.categoria_ingreso import ServiceCategoriaIngreso as CategoriaIngreso
 
 
 class ControladorIngreso(QtCore.QObject):

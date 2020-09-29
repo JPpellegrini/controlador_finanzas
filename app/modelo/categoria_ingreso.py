@@ -1,5 +1,5 @@
 from dataclasses import dataclass
-from modelo.recursos import Database
+from app.modelo.recursos import Database
 
 
 @dataclass

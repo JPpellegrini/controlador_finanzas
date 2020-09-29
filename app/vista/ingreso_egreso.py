@@ -1,6 +1,6 @@
 from PyQt5 import QtCore, QtWidgets, QtGui
 from dataclasses import dataclass
-from ui.ingreso_egreso import Ui_VentanaIngresoEgreso
+from app.ui.ingreso_egreso import Ui_VentanaIngresoEgreso
 from datetime import datetime
 
 

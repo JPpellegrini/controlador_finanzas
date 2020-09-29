@@ -1,5 +1,5 @@
-from vista.tipo_categoria import VentanaCategoriaEgreso
-from modelo.categoria_egreso import (
+from app.vista.tipo_categoria import VentanaCategoriaEgreso
+from app.modelo.categoria_egreso import (
     ServiceCategoriaEgreso,
     CategoriaEgresoDTO,
     NombreError,

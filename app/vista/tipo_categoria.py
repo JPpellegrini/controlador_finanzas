@@ -1,6 +1,6 @@
 from PyQt5 import QtCore, QtWidgets, QtGui
 from dataclasses import dataclass
-from ui.tipo_categoria import Ui_VentanaTipoCategoria
+from app.ui.tipo_categoria import Ui_VentanaTipoCategoria
 
 
 @dataclass

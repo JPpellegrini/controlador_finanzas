@@ -1,5 +1,5 @@
-from vista.tipo_categoria import VentanaTipo
-from modelo.tipo_transaccion import (
+from app.vista.tipo_categoria import VentanaTipo
+from app.modelo.tipo_transaccion import (
     ServiceTipoTransaccion,
     TipoTransaccionDTO,
     NombreError,
