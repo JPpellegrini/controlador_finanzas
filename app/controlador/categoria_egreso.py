@@ -1,6 +1,3 @@
-import sys
-
-sys.path.append("..")
 from vista.tipo_categoria import VentanaCategoriaEgreso
 from modelo.categoria_egreso import (
     ServiceCategoriaEgreso,

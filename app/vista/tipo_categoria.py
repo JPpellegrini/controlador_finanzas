@@ -1,6 +1,3 @@
-import sys
-
-sys.path.append("..")
 from PyQt5 import QtCore, QtWidgets, QtGui
 from dataclasses import dataclass
 from ui.tipo_categoria import Ui_VentanaTipoCategoria

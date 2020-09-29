@@ -1,6 +1,3 @@
-import sys
-
-sys.path.append("..")
 from vista.principal import VistaPrincipal, TransaccionDTO
 from controlador.categoria_egreso import ControladorCategoriaEgreso
 from controlador.categoria_ingreso import ControladorCategoriaIngreso

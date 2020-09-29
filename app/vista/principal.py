@@ -1,6 +1,3 @@
-import sys
-
-sys.path.append("..")
 from PyQt5 import QtCore, QtWidgets, QtGui
 from ui.principal import Ui_VistaPrincipal
 from dataclasses import dataclass

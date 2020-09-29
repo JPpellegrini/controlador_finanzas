@@ -1,7 +1,5 @@
-import sys
 from PyQt5 import QtCore
 
-sys.path.append("..")
 from vista.ingreso_egreso import VentanaIngreso, TipoCategoriaDTO
 from modelo.ingreso import (
     ServiceIngreso,

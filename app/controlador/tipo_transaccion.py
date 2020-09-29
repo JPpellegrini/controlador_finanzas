@@ -1,6 +1,3 @@
-import sys
-
-sys.path.append("..")
 from vista.tipo_categoria import VentanaTipo
 from modelo.tipo_transaccion import (
     ServiceTipoTransaccion,

@@ -1,6 +1,3 @@
-import sys
-
-sys.path.append("..")
 from dataclasses import dataclass
 from modelo.recursos import Database
 from modelo.tipo_transaccion import ServiceTipoTransaccion
