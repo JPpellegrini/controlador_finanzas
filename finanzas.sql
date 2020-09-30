@@ -75,15 +75,15 @@ DROP TABLE IF EXISTS `egresos`;
 CREATE TABLE `egresos` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `monto` float NOT NULL,
-  `tipo` int(11) DEFAULT NULL,
-  `categoria_egreso` int(11) DEFAULT NULL,
+  `id_tipo_transaccion` int(11) NOT NULL,
+  `id_categoria` int(11) NOT NULL,
   `descripcion` varchar(250) DEFAULT NULL,
   `fecha` datetime NOT NULL,
   PRIMARY KEY (`id`),
-  KEY `id_mov_idx` (`tipo`),
-  KEY `id_cat_egr_idx` (`categoria_egreso`),
-  CONSTRAINT `id_cat_egr` FOREIGN KEY (`categoria_egreso`) REFERENCES `categorias_egreso` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  CONSTRAINT `id_tipos` FOREIGN KEY (`tipo`) REFERENCES `tipos_transaccion` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
+  KEY `id_mov_idx` (`id_tipo_transaccion`),
+  KEY `id_cat_egr_idx` (`id_categoria`),
+  CONSTRAINT `egresos-categorias` FOREIGN KEY (`id_categoria`) REFERENCES `categorias_egreso` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  CONSTRAINT `egresos-tipos` FOREIGN KEY (`id_tipo_transaccion`) REFERENCES `tipos_transaccion` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
 ) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -107,15 +107,15 @@ DROP TABLE IF EXISTS `ingresos`;
 CREATE TABLE `ingresos` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `monto` float NOT NULL,
-  `tipo` int(11) DEFAULT NULL,
-  `categoria_ingreso` int(11) DEFAULT NULL,
+  `id_tipo_transaccion` int(11) NOT NULL,
+  `id_categoria` int(11) NOT NULL,
   `descripcion` varchar(250) DEFAULT NULL,
   `fecha` datetime NOT NULL,
   PRIMARY KEY (`id`),
-  KEY `id_categotia_ing_idx` (`categoria_ingreso`),
-  KEY `id_movimiento_idx` (`tipo`),
-  CONSTRAINT `id_categotia_ing` FOREIGN KEY (`categoria_ingreso`) REFERENCES `categorias_ingreso` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  CONSTRAINT `id_tipo` FOREIGN KEY (`tipo`) REFERENCES `tipos_transaccion` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
+  KEY `id_categotia_ing_idx` (`id_categoria`),
+  KEY `id_movimiento_idx` (`id_tipo_transaccion`),
+  CONSTRAINT `ingresos-categoria` FOREIGN KEY (`id_categoria`) REFERENCES `categorias_ingreso` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  CONSTRAINT `ingresos-tipos` FOREIGN KEY (`id_tipo_transaccion`) REFERENCES `tipos_transaccion` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
 ) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -163,4 +163,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2020-09-18 15:48:45
+-- Dump completed on 2020-09-30 21:06:50
