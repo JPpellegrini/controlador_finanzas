@@ -6,6 +6,7 @@ from sqlalchemy import create_engine, Column, Integer, String, DateTime, Foreign
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker, relationship
 
+
 load_dotenv()
 username = getenv("MYSQL_USERNAME")
 password = getenv("MYSQL_PASSWORD")
@@ -32,18 +33,44 @@ class CategoriaIngreso(Base):
     descripcion = Column(String)
 
 
+class CategoriaEgreso(Base):
+    __tablename__ = "categorias_egreso"
+
+    id = Column(Integer, primary_key=True)
+    nombre = Column(String)
+    descripcion = Column(String)
+
+
 class Ingreso(Base):
     __tablename__ = "ingresos"
 
     id = Column(Integer, primary_key=True)
     monto = Column(String)
-    tipo = Column(Integer, ForeignKey("tipos_transaccion.id"))
-    categoria_ingreso = Column(Integer, ForeignKey("categorias_ingreso.id"))
+    id_tipo_transaccion = Column(
+        Integer, ForeignKey("tipos_transaccion.id"), nullable=False
+    )
+    id_categoria = Column(Integer, ForeignKey("categorias_ingreso.id"), nullable=False)
     descripcion = Column(String)
     fecha = Column(DateTime)
 
-    tipos_transaccion = relationship("TipoTransaccion", backref="ingresos")
-    categorias_ingreso = relationship("CategoriaIngreso", backref="ingresos")
+    tipo_transaccion = relationship("TipoTransaccion", backref="ingresos")
+    categoria = relationship("CategoriaIngreso", backref="ingresos")
+
+
+class Egreso(Base):
+    __tablename__ = "egresos"
+
+    id = Column(Integer, primary_key=True)
+    monto = Column(String)
+    id_tipo_transaccion = Column(
+        Integer, ForeignKey("tipos_transaccion.id"), nullable=False
+    )
+    id_categoria = Column(Integer, ForeignKey("categorias_egreso.id"), nullable=False)
+    descripcion = Column(String)
+    fecha = Column(DateTime)
+
+    tipo_transaccion = relationship("TipoTransaccion", backref="egresos")
+    categoria = relationship("CategoriaEgreso", backref="egresos")
 
 
 class Database:
