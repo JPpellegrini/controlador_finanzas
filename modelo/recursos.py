@@ -1,14 +1,14 @@
-import os
+from os import getenv
 
 import pymysql
 from dotenv import load_dotenv
-from sqlalchemy import create_engine, Column, Integer, String
+from sqlalchemy import create_engine, Column, Integer, String, DateTime, ForeignKey
 from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy.orm import sessionmaker
+from sqlalchemy.orm import sessionmaker, relationship
 
 load_dotenv()
-username = os.getenv("MYSQL_USERNAME")
-password = os.getenv("MYSQL_PASSWORD")
+username = getenv("MYSQL_USERNAME")
+password = getenv("MYSQL_PASSWORD")
 
 engine = create_engine(f"mysql+pymysql://{username}:{password}@localhost/finanzas")
 
@@ -22,6 +22,28 @@ class TipoTransaccion(Base):
     id = Column(Integer, primary_key=True)
     nombre = Column(String)
     descripcion = Column(String)
+
+
+class CategoriaIngreso(Base):
+    __tablename__ = "categorias_ingreso"
+
+    id = Column(Integer, primary_key=True)
+    nombre = Column(String)
+    descripcion = Column(String)
+
+
+class Ingreso(Base):
+    __tablename__ = "ingresos"
+
+    id = Column(Integer, primary_key=True)
+    monto = Column(String)
+    tipo = Column(Integer, ForeignKey("tipos_transaccion.id"))
+    categoria_ingreso = Column(Integer, ForeignKey("categorias_ingreso.id"))
+    descripcion = Column(String)
+    fecha = Column(DateTime)
+
+    tipos_transaccion = relationship("TipoTransaccion", backref="ingresos")
+    categorias_ingreso = relationship("CategoriaIngreso", backref="ingresos")
 
 
 class Database:
