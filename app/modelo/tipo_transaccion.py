@@ -1,6 +1,8 @@
 from dataclasses import dataclass
 
-from app.modelo.recursos import Database
+from sqlalchemy import exc
+
+from app.modelo.recursos import Session, TipoTransaccion
 
 
 @dataclass
@@ -21,38 +23,37 @@ class TipoUsoError(Exception):
 
 
 class ServiceTipoTransaccion:
-    def __init__(self):
-        self.database = Database.get()
-        self.cursor = self.database.cursor()
-
     def registrar_tipo(self, data: TipoTransaccionDTO):
         if data.nombre == "":
             raise NombreError
-        self.cursor.execute(
-            "INSERT INTO tipos_transaccion (id, nombre, descripcion) VALUES (%s, %s, %s)",
-            (data.id, data.nombre, data.descripcion),
+        session = Session()
+        tipo = TipoTransaccion(
+            id=data.id, nombre=data.nombre, descripcion=data.descripcion
         )
-        self.database.commit()
+        session.add(tipo)
+        session.commit()
 
     def editar_tipo(self, data: TipoTransaccionDTO):
         if data.nombre == "":
             raise NombreError
-        self.cursor.execute(
-            "UPDATE tipos_transaccion SET nombre=%s, descripcion=%s WHERE id = %s",
-            (data.nombre, data.descripcion, data.id),
-        )
-        self.database.commit()
+        session = Session()
+        tipo = session.query(TipoTransaccion).filter_by(id=data.id).first()
+        tipo.nombre = data.nombre
+        tipo.descripcion = data.descripcion
+        session.commit()
 
     def eliminar_tipo(self, data: TipoTransaccionDTO):
         try:
-            self.cursor.execute("DELETE FROM tipos_transaccion WHERE id = %s", data.id)
-            self.database.commit()
-        except pymysql.Error:
+            session = Session()
+            tipo = session.query(TipoTransaccion).filter_by(id=data.id).first()
+            session.delete(tipo)
+            session.commit()
+        except exc.IntegrityError:
             raise TipoUsoError
 
     def obtener_tipos(self):
-        self.cursor.execute("SELECT id, nombre, descripcion FROM tipos_transaccion")
+        session = Session()
+        tipos = session.query(TipoTransaccion)
         return [
-            TipoTransaccionDTO(tipo["nombre"], tipo["descripcion"], tipo["id"])
-            for tipo in self.cursor.fetchall()
+            TipoTransaccionDTO(tipo.nombre, tipo.descripcion, tipo.id) for tipo in tipos
         ]

@@ -1,14 +1,14 @@
 from dataclasses import dataclass
 from datetime import datetime, date
 
-from app.modelo.recursos import Database
-from app.modelo.tipo_transaccion import ServiceTipoTransaccion
-from app.modelo.categoria_ingreso import ServiceCategoriaIngreso
+from sqlalchemy import func
+
+from app.modelo.recursos import Session, Ingreso
 
 
 @dataclass
 class FiltroDTO:
-    fecha: date
+    fecha: date = None
 
 
 @dataclass
@@ -37,10 +37,6 @@ class CategoriaError(Exception):
 
 
 class ServiceIngreso:
-    def __init__(self):
-        self.database = Database.get()
-        self.cursor = self.database.cursor()
-
     def registrar_ingreso(self, data: IngresoDTO):
         try:
             float(data.monto)
@@ -50,18 +46,17 @@ class ServiceIngreso:
             raise TipoError
         if not data.id_categoria:
             raise CategoriaError
-        self.cursor.execute(
-            "INSERT INTO ingresos (id, monto, tipo, categoria_ingreso, descripcion, fecha) VALUES (%s, %s, %s, %s, %s, %s)",
-            (
-                data.id,
-                data.monto,
-                data.id_tipo_transaccion,
-                data.id_categoria,
-                data.descripcion,
-                data.fecha,
-            ),
+        session = Session()
+        ingreso = Ingreso(
+            id=data.id,
+            monto=data.monto,
+            id_tipo_transaccion=data.id_tipo_transaccion,
+            id_categoria=data.id_categoria,
+            descripcion=data.descripcion,
+            fecha=data.fecha,
         )
-        self.database.commit()
+        session.add(ingreso)
+        session.commit()
 
     def editar_ingreso(self, data: IngresoDTO):
         try:
@@ -72,46 +67,36 @@ class ServiceIngreso:
             raise TipoError
         if not data.id_categoria:
             raise CategoriaError
-        self.cursor.execute(
-            "UPDATE ingresos SET monto=%s, tipo=%s, categoria_ingreso=%s, descripcion=%s, fecha=%s WHERE id = %s",
-            (
-                data.monto,
-                data.id_tipo_transaccion,
-                data.id_categoria,
-                data.descripcion,
-                data.fecha,
-                data.id,
-            ),
-        )
-        self.database.commit()
+        session = Session()
+        ingreso = session.query(Ingreso).filter_by(id=data.id).first()
+        ingreso.monto = (data.monto,)
+        ingreso.id_tipo_transaccion = (data.id_tipo_transaccion,)
+        ingreso.id_categoria = (data.id_categoria,)
+        ingreso.descripcion = (data.descripcion,)
+        ingreso.fecha = (data.fecha,)
+        session.commit()
 
     def eliminar_ingreso(self, data: IngresoDTO):
-        self.cursor.execute("DELETE FROM ingresos WHERE id = %s", data.id)
-        self.database.commit()
+        session = Session()
+        ingreso = session.query(Ingreso).filter_by(id=data.id).first()
+        session.delete(ingreso)
+        session.commit()
 
-    def obtener_ingresos(self, filtro: FiltroDTO = FiltroDTO(None)):
+    def obtener_ingresos(self, filtro: FiltroDTO = FiltroDTO()):
         condiciones = []
-        parametros = []
-
         if filtro.fecha:
-            condiciones.append("DATE(i.fecha) = %s")
-            parametros.append(filtro.fecha)
-        condiciones_unidas = "AND".join(condiciones) or True
+            condiciones.append(func.date(Ingreso.fecha)==filtro.fecha)
+        session = Session()
+        ingresos = session.query(Ingreso).filter(*condiciones)
 
-        self.cursor.execute(
-            f"SELECT i.id, i.monto, t.nombre as tipo, c.nombre as categoria, i.descripcion, i.fecha\
-              FROM ingresos i JOIN tipos_transaccion t ON i.tipo=t.id JOIN categorias_ingreso c ON i.categoria_ingreso=c.id\
-              WHERE {condiciones_unidas}",
-            parametros,
-        )
         return [
             IngresoDTO(
-                ingreso["monto"],
-                ingreso["tipo"],
-                ingreso["categoria"],
-                ingreso["descripcion"],
-                ingreso["fecha"],
-                ingreso["id"],
+                ingreso.monto,
+                ingreso.id_tipo_transaccion,
+                ingreso.id_categoria,
+                ingreso.descripcion,
+                ingreso.fecha,
+                ingreso.id,
             )
-            for ingreso in self.cursor.fetchall()
+            for ingreso in ingresos
         ]
