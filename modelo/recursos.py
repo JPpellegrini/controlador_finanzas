@@ -1,6 +1,5 @@
 from os import getenv
 
-import pymysql
 from dotenv import load_dotenv
 from sqlalchemy import (
     create_engine,
@@ -79,23 +78,6 @@ class Egreso(Base):
 
     tipo_transaccion = relationship("TipoTransaccion", backref="egresos")
     categoria = relationship("CategoriaEgreso", backref="egresos")
-
-
-class Database:
-    __conexion = None
-
-    @classmethod
-    def get(cls, username=None, password=None):
-        if not cls.__conexion:
-            cls.__conexion = pymysql.connect(
-                cursorclass=pymysql.cursors.DictCursor,
-                host="localhost",
-                port=3306,
-                user=username,
-                passwd=password,
-                db="finanzas",
-            )
-        return cls.__conexion
 
 
 class Balance:
