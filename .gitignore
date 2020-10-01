@@ -8,4 +8,4 @@ __pycache__/
 
 .vscode/
 
-ui/*.py
+app/ui/*.py

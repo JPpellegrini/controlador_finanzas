@@ -1,7 +1,8 @@
 from dataclasses import dataclass
-from modelo.recursos import Session, TipoTransaccion
 
 from sqlalchemy import exc
+
+from app.modelo.recursos import Session, TipoTransaccion
 
 
 @dataclass
@@ -49,7 +50,7 @@ class ServiceTipoTransaccion:
             session.commit()
         except exc.IntegrityError:
             raise TipoUsoError
-        
+
     def obtener_tipos(self):
         session = Session()
         tipos = session.query(TipoTransaccion)

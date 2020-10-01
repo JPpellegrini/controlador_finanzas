@@ -1,11 +1,7 @@
-import sys
-
-sys.path.append("..")
 from dataclasses import dataclass
-from modelo.recursos import Session, Ingreso
-from modelo.tipo_transaccion import ServiceTipoTransaccion
-from modelo.categoria_ingreso import ServiceCategoriaIngreso
 from datetime import datetime, date
+
+from app.modelo.recursos import Session, Ingreso
 
 
 @dataclass

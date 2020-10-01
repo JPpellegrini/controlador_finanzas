@@ -6,19 +6,19 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>550</width>
+    <width>715</width>
     <height>470</height>
    </rect>
   </property>
   <property name="minimumSize">
    <size>
-    <width>550</width>
+    <width>715</width>
     <height>470</height>
    </size>
   </property>
   <property name="maximumSize">
    <size>
-    <width>550</width>
+    <width>715</width>
     <height>470</height>
    </size>
   </property>
@@ -302,7 +302,11 @@
          <number>0</number>
         </property>
         <item>
-         <widget class="QCalendarWidget" name="calendario"/>
+         <widget class="QCalendarWidget" name="calendario">
+          <property name="cursor">
+           <cursorShape>PointingHandCursor</cursorShape>
+          </property>
+         </widget>
         </item>
         <item>
          <widget class="QLabel" name="label_transaccion">
@@ -323,7 +327,17 @@
          </widget>
         </item>
         <item>
-         <widget class="QTableView" name="table_transaccion"/>
+         <widget class="QTableView" name="table_transaccion">
+          <property name="verticalScrollBarPolicy">
+           <enum>Qt::ScrollBarAlwaysOn</enum>
+          </property>
+          <property name="selectionMode">
+           <enum>QAbstractItemView::SingleSelection</enum>
+          </property>
+          <property name="selectionBehavior">
+           <enum>QAbstractItemView::SelectRows</enum>
+          </property>
+         </widget>
         </item>
        </layout>
       </item>

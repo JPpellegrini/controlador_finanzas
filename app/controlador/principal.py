@@ -1,15 +1,12 @@
-import sys
-
-sys.path.append("..")
-from vista.principal import VistaPrincipal, TransaccionDTO
-from controlador.categoria_egreso import ControladorCategoriaEgreso
-from controlador.categoria_ingreso import ControladorCategoriaIngreso
-from controlador.egreso import ControladorEgreso
-from controlador.ingreso import ControladorIngreso
-from controlador.tipo_transaccion import ControladorTipoTransaccion
-from modelo.recursos import Balance
-from modelo.ingreso import ServiceIngreso, FiltroDTO as FiltroIngresoDTO
-from modelo.egreso import ServiceEgreso, FiltroDTO as FiltroEgresoDTO
+from app.vista.principal import VistaPrincipal, TransaccionDTO
+from app.controlador.categoria_egreso import ControladorCategoriaEgreso
+from app.controlador.categoria_ingreso import ControladorCategoriaIngreso
+from app.controlador.egreso import ControladorEgreso
+from app.controlador.ingreso import ControladorIngreso
+from app.controlador.tipo_transaccion import ControladorTipoTransaccion
+from app.modelo.recursos import Balance
+from app.modelo.ingreso import ServiceIngreso, FiltroDTO as FiltroIngresoDTO
+from app.modelo.egreso import ServiceEgreso, FiltroDTO as FiltroEgresoDTO
 
 
 class ControladorPrincipal:
@@ -40,7 +37,9 @@ class ControladorPrincipal:
         self.__vista.agregar_categoria_egreso.connect(
             self.__on_agregar_categoria_egreso
         )
-        self.__vista.actualizar_transacciones.connect(self.__on_actualizar_transacciones)
+        self.__vista.actualizar_transacciones.connect(
+            self.__on_actualizar_transacciones
+        )
 
     def __on_agregar_ingreso(self):
         self.__ctl_ingreso.show_vista()
@@ -63,14 +62,16 @@ class ControladorPrincipal:
 
     def __calcular_balance(self):
         self.__vista.actualizar_balance(Balance.calcular())
-    
+
     def __on_actualizar_transacciones(self):
         fecha = self.__vista.obtener_fecha()
         self.__vista.actualizar_tabla(self.__obtener_transacciones(fecha))
 
     def __obtener_transacciones(self, fecha=None):
         if fecha:
-            lista_ingresos = self.__modelo_ingreso.obtener_ingresos(FiltroIngresoDTO(fecha))
+            lista_ingresos = self.__modelo_ingreso.obtener_ingresos(
+                FiltroIngresoDTO(fecha)
+            )
             lista_egresos = self.__modelo_egreso.obtener_egresos(FiltroEgresoDTO(fecha))
         else:
             lista_ingresos = self.__modelo_ingreso.obtener_ingresos()
@@ -100,7 +101,9 @@ class ControladorPrincipal:
             )
             for egreso in lista_egresos
         ]
-        return sorted(ingresos + egresos, key=lambda transaccion: transaccion.fecha, reverse=True)
+        return sorted(
+            ingresos + egresos, key=lambda transaccion: transaccion.fecha, reverse=True
+        )
 
     def show_vista(self):
         self.__vista.show()

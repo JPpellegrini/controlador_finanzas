@@ -1,7 +1,8 @@
 from dataclasses import dataclass
-from modelo.recursos import Session, CategoriaIngreso
 
 from sqlalchemy import exc
+
+from app.modelo.recursos import Session, CategoriaIngreso
 
 
 @dataclass
