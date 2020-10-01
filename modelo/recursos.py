@@ -2,7 +2,15 @@ from os import getenv
 
 import pymysql
 from dotenv import load_dotenv
-from sqlalchemy import create_engine, Column, Integer, String, DateTime, ForeignKey
+from sqlalchemy import (
+    create_engine,
+    Column,
+    Integer,
+    String,
+    DateTime,
+    ForeignKey,
+    func,
+)
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker, relationship
 
@@ -93,17 +101,11 @@ class Database:
 class Balance:
     @staticmethod
     def calcular():
-        database = Database.get()
-        cursor = database.cursor()
-        try:
-            cursor.execute("SELECT SUM(monto) as total FROM ingresos")
-            ingresos = cursor.fetchone()["total"]
-            cursor.execute("SELECT SUM(monto) as total FROM egresos")
-            egresos = cursor.fetchone()["total"]
-            return ingresos - egresos
-        except TypeError:
-            if ingresos != None:
-                return 0 + ingresos
-            elif egresos != None:
-                return 0 - egresos
-            return 0
+        session = Session()
+        ingresos = session.query(func.sum(Ingreso.monto)).scalar()
+        egresos = session.query(func.sum(Egreso.monto)).scalar()
+        if not ingresos:
+            ingresos = 0
+        if not egresos:
+            egresos = 0
+        return round(ingresos - egresos, 2)
