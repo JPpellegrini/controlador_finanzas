@@ -1,5 +1,5 @@
 from dataclasses import dataclass
-from modelo.recursos import Database
+from modelo.recursos import Session, Egreso
 from modelo.tipo_transaccion import ServiceTipoTransaccion
 from modelo.categoria_egreso import ServiceCategoriaEgreso
 from datetime import datetime, date
@@ -7,7 +7,7 @@ from datetime import datetime, date
 
 @dataclass
 class FiltroDTO:
-    fecha: date
+    fecha: date = None
 
 
 @dataclass
@@ -36,10 +36,6 @@ class CategoriaError(Exception):
 
 
 class ServiceEgreso:
-    def __init__(self):
-        self.database = Database.get()
-        self.cursor = self.database.cursor()
-
     def registrar_egreso(self, data: EgresoDTO):
         try:
             float(data.monto)
@@ -49,18 +45,17 @@ class ServiceEgreso:
             raise TipoError
         if not data.id_categoria:
             raise CategoriaError
-        self.cursor.execute(
-            "INSERT INTO egresos (id, monto, tipo, categoria_egreso, descripcion, fecha) VALUES (%s, %s, %s, %s, %s, %s)",
-            (
-                data.id,
-                data.monto,
-                data.id_tipo_transaccion,
-                data.id_categoria,
-                data.descripcion,
-                data.fecha,
-            ),
+        session = Session()
+        egreso = Egreso(
+            id=data.id,
+            monto=data.monto,
+            id_tipo_transaccion=data.id_tipo_transaccion,
+            id_categoria=data.id_categoria,
+            descripcion=data.descripcion,
+            fecha=data.fecha,
         )
-        self.database.commit()
+        session.add(egreso)
+        session.commit()
 
     def editar_egreso(self, data: EgresoDTO):
         try:
@@ -71,46 +66,36 @@ class ServiceEgreso:
             raise TipoError
         if not data.id_categoria:
             raise CategoriaError
-        self.cursor.execute(
-            "UPDATE egresos SET monto=%s, tipo=%s, categoria_egreso=%s, descripcion=%s, fecha=%s WHERE id = %s",
-            (
-                data.monto,
-                data.id_tipo_transaccion,
-                data.id_categoria,
-                data.descripcion,
-                data.fecha,
-                data.id,
-            ),
-        )
-        self.database.commit()
+        session = Session()
+        egreso = session.query(Egreso).filter_by(id=data.id).first()
+        egreso.monto = (data.monto,)
+        egreso.id_tipo_transaccion = (data.id_tipo_transaccion,)
+        egreso.id_categoria = (data.id_categoria,)
+        egreso.descripcion = (data.descripcion,)
+        egreso.fecha = (data.fecha,)
+        session.commit()
 
     def eliminar_egreso(self, data: EgresoDTO):
-        self.cursor.execute("DELETE FROM egresos WHERE id = %s", data.id)
-        self.database.commit()
+        session = Session()
+        egreso = session.query(Egreso).filter_by(id=data.id).first()
+        session.delete(egreso)
+        session.commit()
 
-    def obtener_egresos(self, filtro: FiltroDTO = FiltroDTO(None)):
-        condiciones = []
-        parametros = []
-
+    def obtener_egresos(self, filtro: FiltroDTO = FiltroDTO()):
+        condiciones = {}
         if filtro.fecha:
-            condiciones.append("DATE(e.fecha) = %s")
-            parametros.append(filtro.fecha)
-        condiciones_unidas = "AND".join(condiciones) or True
+            condiciones["fecha"] = filtro.fecha
+        session = Session()
+        egresos = session.query(Egreso).filter_by(**condiciones)
 
-        self.cursor.execute(
-            f"SELECT e.id, e.monto, t.nombre as tipo, c.nombre as categoria, e.descripcion, e.fecha FROM egresos e\
-              JOIN tipos_transaccion t ON e.tipo=t.id JOIN categorias_egreso c ON e.categoria_egreso=c.id\
-              WHERE {condiciones_unidas}",
-            parametros,
-        )
         return [
             EgresoDTO(
-                egreso["monto"],
-                egreso["tipo"],
-                egreso["categoria"],
-                egreso["descripcion"],
-                egreso["fecha"],
-                egreso["id"],
+                egreso.monto,
+                egreso.id_tipo_transaccion,
+                egreso.id_categoria,
+                egreso.descripcion,
+                egreso.fecha,
+                egreso.id,
             )
-            for egreso in self.cursor.fetchall()
+            for egreso in egresos
         ]
