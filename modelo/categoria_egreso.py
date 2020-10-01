@@ -1,5 +1,7 @@
 from dataclasses import dataclass
-from modelo.recursos import Database
+from modelo.recursos import Session, CategoriaEgreso
+
+from sqlalchemy import exc
 
 
 @dataclass
@@ -20,40 +22,38 @@ class CategoriaUsoError(Exception):
 
 
 class ServiceCategoriaEgreso:
-    def __init__(self):
-        self.database = Database.get()
-        self.cursor = self.database.cursor()
-
     def registrar_cat_egreso(self, data: CategoriaEgresoDTO):
         if data.nombre == "":
             raise NombreError
-        self.cursor.execute(
-            "INSERT INTO categorias_egreso (id, nombre, descripcion) VALUES (%s, %s, %s)",
-            (data.id, data.nombre, data.descripcion),
+        session = Session()
+        categoria = CategoriaEgreso(
+            id=data.id, nombre=data.nombre, descripcion=data.descripcion
         )
-        self.database.commit()
+        session.add(categoria)
+        session.commit()
 
     def editar_cat_egreso(self, data: CategoriaEgresoDTO):
         if data.nombre == "":
             raise NombreError
-        self.cursor.execute(
-            "UPDATE categorias_egreso SET nombre=%s, descripcion=%s WHERE id = %s",
-            (data.nombre, data.descripcion, data.id),
-        )
-        self.database.commit()
+        session = Session()
+        categoria = session.query(CategoriaEgreso).filter_by(id=data.id).first()
+        categoria.nombre = data.nombre
+        categoria.descripcion = data.descripcion
+        session.commit()
 
     def eliminar_cat_egreso(self, data: CategoriaEgresoDTO):
         try:
-            self.cursor.execute("DELETE FROM categorias_egreso WHERE id = %s", data.id)
-            self.database.commit()
-        except pymysql.Error:
+            session = Session()
+            categoria = session.query(CategoriaEgreso).filter_by(id=data.id).first()
+            session.delete(categoria)
+            session.commit()
+        except exc.IntegrityError:
             raise CategoriaUsoError
 
     def obtener_cat_egreso(self):
-        self.cursor.execute("SELECT id, nombre, descripcion FROM categorias_egreso")
+        session = Session()
+        categorias = session.query(CategoriaEgreso)
         return [
-            CategoriaEgresoDTO(
-                categoria["nombre"], categoria["descripcion"], categoria["id"]
-            )
-            for categoria in self.cursor.fetchall()
+            CategoriaEgresoDTO(categoria.nombre, categoria.descripcion, categoria.id)
+            for categoria in categorias
         ]
