@@ -1,6 +1,8 @@
 from dataclasses import dataclass
 from datetime import datetime, date
 
+from sqlalchemy import func
+
 from app.modelo.recursos import Session, Egreso
 
 
@@ -81,11 +83,11 @@ class ServiceEgreso:
         session.commit()
 
     def obtener_egresos(self, filtro: FiltroDTO = FiltroDTO()):
-        condiciones = {}
+        condiciones = []
         if filtro.fecha:
-            condiciones["fecha"] = filtro.fecha
+            condiciones.append(func.date(Egreso.fecha)==filtro.fecha)
         session = Session()
-        egresos = session.query(Egreso).filter_by(**condiciones)
+        egresos = session.query(Egreso).filter(*condiciones)
 
         return [
             EgresoDTO(

@@ -1,6 +1,8 @@
 from dataclasses import dataclass
 from datetime import datetime, date
 
+from sqlalchemy import func
+
 from app.modelo.recursos import Session, Ingreso
 
 
@@ -81,11 +83,11 @@ class ServiceIngreso:
         session.commit()
 
     def obtener_ingresos(self, filtro: FiltroDTO = FiltroDTO()):
-        condiciones = {}
+        condiciones = []
         if filtro.fecha:
-            condiciones["fecha"] = filtro.fecha
+            condiciones.append(func.date(Ingreso.fecha)==filtro.fecha)
         session = Session()
-        ingresos = session.query(Ingreso).filter_by(**condiciones)
+        ingresos = session.query(Ingreso).filter(*condiciones)
 
         return [
             IngresoDTO(

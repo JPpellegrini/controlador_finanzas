@@ -6,6 +6,7 @@ from sqlalchemy import (
     Column,
     Integer,
     String,
+    Float,
     DateTime,
     ForeignKey,
     func,
@@ -52,7 +53,7 @@ class Ingreso(Base):
     __tablename__ = "ingresos"
 
     id = Column(Integer, primary_key=True)
-    monto = Column(String)
+    monto = Column(Float)
     id_tipo_transaccion = Column(
         Integer, ForeignKey("tipos_transaccion.id"), nullable=False
     )
@@ -68,7 +69,7 @@ class Egreso(Base):
     __tablename__ = "egresos"
 
     id = Column(Integer, primary_key=True)
-    monto = Column(String)
+    monto = Column(Float)
     id_tipo_transaccion = Column(
         Integer, ForeignKey("tipos_transaccion.id"), nullable=False
     )
